@@ -1,0 +1,325 @@
+/* Hevium design tokens.
+   Three layers: primitive -> semantic -> component.
+   Components read semantic or component tokens only, never a primitive or a raw value.
+   Brand values come from hevium-brand-kit/BRAND_GUIDELINES.md, checked against
+   hevium.xyz/brand and the app at hevium.xyz on 2026-11-21.
+
+   Themes: Obsidian (dark) is the page. One section, the roadmap, sets data-theme="light".
+   Views:  <html data-view="onchain"> is the on-chain view, entered by holding left click. */
+
+/* Declared on :root and on every themed scope, so component tokens resolve again
+   against that scope's colour roles. */
+:root,
+[data-theme] {
+  /* ============ 1. PRIMITIVES ============ */
+
+  /* Brand */
+  --mint-200: #B4FDED;
+  --mint-300: #97FBE3; /* Hevium Mint */
+  --teal-400: #1CD8B3; /* Deep Teal */
+  --teal-600: #0D9488; /* brand teal for light surfaces */
+
+  /* Neutrals. Surfaces are the brand kit's Obsidian and Carbon. Text greys are the app's. */
+  --n-950: #07080B; /* Obsidian */
+  --n-900: #0E1117; /* Carbon Surface */
+  --n-850: #141922;
+  --n-800: #1B212C;
+  --n-700: #2A3240;
+  --n-600: #3D4757;
+  --n-500: #71717A; /* the app's muted text. 4.1 to 1 on Obsidian, so disabled text only here */
+  --n-400: #8B8B95; /* the same grey lifted to 5.9 to 1, for small labels */
+  --n-300: #A1A1AA; /* the app's secondary text */
+  --n-200: #D4D4D8;
+  --white: #FFFFFF;
+
+  /* Roadmap phase colours. The same colour families the app's stylesheet carries,
+     at the depth that holds on the light canvas. */
+  --blue-600: #155DFC;
+  --purple-600: #9810FA;
+  --pink-600: #E60076;
+  --orange-600: #F54A00;
+
+  /* Signals, as the app sets them */
+  --emerald-400: #34D399;
+  --rose-400: #FF637E;
+  --amber-400: #FFB900;
+
+  /* --font-jetbrains and --font-jakarta are set by the site's self-hosted fonts. The preview page has no such variable and falls back to the family name. */
+  --font-mono: var(--font-jetbrains, "JetBrains Mono"), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-fallback: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Space, 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-40: 10rem;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Time and easing */
+  --dur-press: 120ms;
+  --dur-fast: 160ms;
+  --dur-base: 220ms;
+  --dur-slow: 400ms;
+  --dur-reveal: 700ms;
+  --stagger: 60ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* ============ 2. SEMANTIC ============ */
+
+  /* Colour roles are set in the theme blocks below. */
+
+  /* Type sizes, fluid from a 360px viewport to 1600px */
+  --text-display-xl: clamp(2.75rem, 1.661rem + 4.839vw, 6.5rem); /* 44 -> 104 */
+  --text-display-lg: clamp(2.125rem, 1.436rem + 3.065vw, 4.5rem); /* 34 -> 72 */
+  --text-display-md: clamp(1.75rem, 1.387rem + 1.613vw, 3rem); /* 28 -> 48 */
+  --text-title: clamp(1.25rem, 1.105rem + 0.645vw, 1.75rem); /* 20 -> 28 */
+  --text-body-lg: clamp(1.0625rem, 0.99rem + 0.323vw, 1.3125rem); /* 17 -> 21 */
+  --text-body: clamp(1rem, 0.982rem + 0.081vw, 1.0625rem); /* 16 -> 17 */
+  --text-small: 0.875rem; /* 14 */
+  --text-caption: 0.8125rem; /* 13 */
+  --text-eyebrow: 0.75rem; /* 12 */
+  --text-stat: clamp(2.5rem, 1.629rem + 3.871vw, 5.5rem); /* 40 -> 88 */
+
+  --leading-display-xl: 1.04;
+  --leading-display-lg: 1.08;
+  --leading-display-md: 1.15;
+  --leading-title: 1.25;
+  --leading-body: 1.6;
+  --leading-body-lg: 1.5;
+  --leading-tight: 1.1;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --tracking-title: -0.01em;
+  --tracking-eyebrow: 0.14em;
+
+  /* Type: Plus Jakarta Sans for everything set in words, as in the app and the brand kit.
+     JetBrains Mono for labels and data. Weights and tracking follow hevium.xyz/brand. */
+  --font-display: var(--font-jakarta, "Plus Jakarta Sans"), var(--font-fallback);
+  --font-sans: var(--font-jakarta, "Plus Jakarta Sans"), var(--font-fallback);
+  --weight-display: 700;
+  --weight-display-strong: 800;
+  --tracking-display-xl: -0.035em;
+  --tracking-display-lg: -0.03em;
+  --tracking-display-md: -0.025em;
+
+  /* Layout */
+  --container-max: 100rem; /* 1600px */
+  --gutter: clamp(1rem, 4vw, 4rem);
+  --section-y: clamp(4.5rem, 10vw, 10rem);
+  --grid-gap: clamp(1rem, 2vw, 2rem);
+  --measure: 68ch;
+
+  /* Motion roles */
+  --motion-press: var(--dur-press) var(--ease-out);
+  --motion-hover: var(--dur-fast) ease;
+  --motion-ui: var(--dur-base) var(--ease-out);
+  --motion-panel: var(--dur-slow) var(--ease-out);
+  --motion-reveal: var(--dur-reveal) var(--ease-out);
+  --press-scale: 0.97;
+  --reveal-distance: 12px;
+
+  /* Layers */
+  --z-scene: 0;
+  --z-content: 1;
+  --z-cta-bar: 90;
+  --z-nav: 100;
+  --z-loader: 1000;
+
+  /* ============ 3. COMPONENT ============ */
+
+  /* Focus */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+  --focus-ring-color: var(--color-focus);
+
+  /* Button */
+  --button-height: 3rem;
+  --button-height-sm: 2.5rem;
+  --button-pad-x: var(--space-6);
+  --button-radius: var(--radius-md);
+  --button-secondary-border: var(--color-border-strong);
+  --button-secondary-bg-hover: var(--color-surface-hover);
+  --button-secondary-text: var(--color-text);
+  --button-weight: var(--weight-bold);
+  /* Tonal: tinted fill, accent text, hairline edge. Measured from the app's active tab. */
+  --button-tonal-bg: var(--color-accent-tint);
+  --button-tonal-bg-hover: var(--color-accent-tint-strong);
+  --button-tonal-border: var(--color-border);
+  --button-tonal-text: var(--color-accent-text);
+
+  /* Nav */
+  --nav-height: 3.5rem;
+  --nav-bg: var(--color-surface-glass);
+  --nav-border: var(--color-border);
+  --nav-radius: var(--radius-pill);
+  --nav-link: var(--color-text-secondary);
+  --nav-link-hover: var(--color-text);
+
+  /* Eyebrow and section header */
+  --eyebrow-color: var(--color-accent-text);
+  --heading-highlight: var(--color-accent);
+
+  /* Card and callout */
+  --card-bg: var(--color-surface);
+  --card-border: var(--color-border);
+  --card-radius: var(--radius-lg);
+  --card-pad: clamp(1.25rem, 2vw, 2rem);
+  --callout-bg: var(--color-surface);
+  --callout-rule: var(--color-accent);
+
+  /* Stat */
+  --stat-value: var(--color-text);
+  --stat-value-accent: var(--color-accent);
+  --stat-label: var(--color-text-muted);
+
+  /* Chip and ticker */
+  --chip-bg: var(--color-surface);
+  --chip-border: var(--color-border-strong);
+  --chip-text: var(--color-text);
+  --ticker-dim: var(--color-text-disabled);
+
+  /* Table */
+  --table-head: var(--color-text-muted);
+  --table-row-border: var(--color-border);
+
+  /* Bar (fairness split) */
+  --bar-fill: var(--gradient-brand);
+  --bar-height: 0.75rem;
+
+  /* Roadmap: a ladder of rungs with skewed phase cards, after taiko.xyz.
+     Idle rungs are always drawn. Colour wipes down them on scroll, running through the phase colours in order. */
+  --rung-idle: var(--color-border-strong);
+  --rung-width: 1.5px;
+  --phase-skew: -5deg; /* the slope of the rungs in the body of the ladder */
+  --phase-skew-fan: -18deg; /* the slope of the rungs across the top */
+  /* One colour per phase, none repeated. On the light canvas they measure 3.5, 4.8, 5.1, 4.2 and 3.3 to 1. */
+  --phase-tone-1: var(--color-accent);
+  --phase-tone-2: var(--blue-600);
+  --phase-tone-3: var(--purple-600);
+  --phase-tone-4: var(--pink-600);
+  --phase-tone-5: var(--orange-600);
+  --phase-fill-strength: 10%;
+
+  /* Scene overlay */
+  --grain-opacity: 0.06;
+
+  /* On-chain view (hold left click, no button) */
+  --hold-delay: 350ms;
+  --hold-move-tolerance: 6px;
+  --hold-ring-size: 2.5rem;
+  --onchain-line: var(--color-accent);
+  --onchain-grid: var(--color-border);
+  --onchain-grid-size: 3rem;
+  --onchain-in: 600ms;
+  --onchain-out: 300ms;
+
+  /* ascii-reveal (loading and reveal). These are the package's own property names. */
+  --ascii-accent: var(--color-accent);
+  --ascii-flash: var(--color-accent);
+  --ascii-glyph: var(--color-text-muted);
+  --ascii-skeleton: var(--color-text-muted);
+  --ascii-font: var(--font-mono);
+  --ascii-surface: var(--color-bg);
+}
+
+/* ============ THEMES ============
+   Colour follows 60-30-10:
+     60  canvas                    --color-bg
+     30  surfaces and structure    --color-surface*, borders, secondary text
+     10  accent                    --color-accent*, for the primary action, one highlighted
+                                   phrase per headline, and current state */
+
+/* Obsidian: the page. A light section also takes these roles in the on-chain view. */
+:root,
+[data-theme="dark"],
+[data-view="onchain"] [data-theme="light"] {
+  --color-bg: var(--n-950);
+  --color-surface: var(--n-900);
+  --color-surface-raised: var(--n-850);
+  --color-surface-hover: var(--n-800);
+  --color-surface-glass: rgb(14 17 23 / 0.72);
+  --color-border: rgb(255 255 255 / 0.08);
+  --color-border-strong: rgb(255 255 255 / 0.16);
+  --color-text: var(--white);
+  --color-text-secondary: var(--n-300);
+  --color-text-muted: var(--n-400);
+  --color-text-disabled: var(--n-500);
+  --color-accent: var(--mint-300);
+  --color-accent-hover: var(--mint-200);
+  --color-accent-deep: var(--teal-400);
+  --color-accent-text: var(--mint-300); /* accent used as small text */
+  --color-on-accent: var(--n-950);
+  --color-accent-soft: rgb(151 251 227 / 0.1);
+  --color-accent-tint: rgb(151 251 227 / 0.15);
+  --color-accent-tint-strong: rgb(151 251 227 / 0.2);
+  --gradient-brand: linear-gradient(135deg, var(--mint-300) 0%, var(--teal-400) 100%);
+  --glow-accent: 0 0 24px rgb(151 251 227 / 0.35);
+  --color-up: var(--emerald-400);
+  --color-down: var(--rose-400);
+  --color-warning: var(--amber-400);
+  --color-focus: var(--mint-300);
+  --button-primary-bg: var(--gradient-brand); /* the app's primary button */
+  --button-primary-bg-hover: var(--mint-200);
+  --button-primary-text: var(--n-950);
+  --bar-track: var(--n-700);
+}
+
+/* Light: the brand kit's light theme, used by the roadmap section only.
+   Teal replaces mint, which fails contrast on light. */
+[data-theme="light"] {
+  --color-bg: #F4F6F5;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+  --color-surface-hover: #E6EBE9;
+  --color-surface-glass: rgb(255 255 255 / 0.78);
+  --color-border: rgb(10 12 16 / 0.1);
+  --color-border-strong: rgb(10 12 16 / 0.22);
+  --color-text: #0A0C10;
+  --color-text-secondary: #47505D;
+  --color-text-muted: #5B6573;
+  --color-text-disabled: var(--n-300);
+  --color-accent: var(--teal-600); /* large text and graphics only: 3.5 to 1 on the canvas */
+  --color-accent-hover: #0B7F75;
+  --color-accent-deep: #14C8A5;
+  --color-accent-text: #0B6E66; /* 5.6 to 1, for small text */
+  --color-on-accent: var(--white);
+  --color-accent-soft: rgb(13 148 136 / 0.08);
+  --color-accent-tint: rgb(13 148 136 / 0.12);
+  --color-accent-tint-strong: rgb(13 148 136 / 0.2);
+  --gradient-brand: linear-gradient(135deg, #14C8A5 0%, var(--teal-600) 100%);
+  --glow-accent: 0 0 0 transparent;
+  --color-up: #0B6E66;
+  --color-down: #C8324A;
+  --color-warning: #8A5A00;
+  --color-focus: #0B6E66;
+  --button-primary-bg: #0A0C10;
+  --button-primary-bg-hover: var(--n-800);
+  --button-primary-text: var(--white);
+  --bar-track: rgb(10 12 16 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  [data-theme] {
+    --reveal-distance: 0px;
+    --press-scale: 1;
+    --dur-reveal: 200ms;
+  }
+}

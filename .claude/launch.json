@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "design-system",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4173"],
+      "port": 4173
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "site", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "hero-scene",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4174"],
+      "port": 4174
+    }
+  ]
+}

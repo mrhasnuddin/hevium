@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hevium design system preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Preview only: the site self-hosts these fonts. -->
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- The tokens live in the site. This page reads the same file. -->
+<link rel="stylesheet" href="../site/src/styles/tokens.css">
+<style>
+html, body { background: var(--color-bg); }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { margin: 0; color: var(--color-text); font-family: var(--font-sans); font-size: var(--text-body); line-height: var(--leading-body); overflow-wrap: break-word; }
+h1, h2, h3, p, figure, ul, ol, table { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: var(--radius-sm); }
+::selection { background: var(--color-accent); color: var(--color-on-accent); }
+
+/* layout */
+.container { max-width: var(--container-max); margin-inline: auto; padding-inline: var(--gutter); }
+.section { padding-block: var(--section-y); border-top: 1px solid var(--color-border); }
+.block-head { margin-bottom: var(--space-12); }
+.block-head h2 { margin-top: var(--space-3); }
+.sub { margin-top: var(--space-16); }
+.sub > .spec { margin-bottom: var(--space-4); }
+
+/* type roles */
+.display-xl { font: var(--weight-display-strong) var(--text-display-xl)/var(--leading-display-xl) var(--font-display); letter-spacing: var(--tracking-display-xl); text-wrap: balance; }
+.display-lg { font: var(--weight-display) var(--text-display-lg)/var(--leading-display-lg) var(--font-display); letter-spacing: var(--tracking-display-lg); text-wrap: balance; }
+.display-md { font: var(--weight-display) var(--text-display-md)/var(--leading-display-md) var(--font-display); letter-spacing: var(--tracking-display-md); text-wrap: balance; }
+.title { font: var(--weight-semibold) var(--text-title)/var(--leading-title) var(--font-sans); letter-spacing: var(--tracking-title); }
+.lead { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); color: var(--color-text-secondary); max-width: var(--measure); text-wrap: pretty; }
+.body { color: var(--color-text-secondary); max-width: var(--measure); text-wrap: pretty; }
+.small { font-size: var(--text-small); line-height: 1.5; }
+.eyebrow { font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--eyebrow-color); }
+.spec { font: var(--weight-regular) var(--text-caption)/1.5 var(--font-mono); color: var(--color-text-muted); }
+.hl { color: var(--heading-highlight); }
+
+/* nav */
+.nav-wrap { position: sticky; top: var(--space-4); z-index: var(--z-nav); padding-top: var(--space-4); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); height: var(--nav-height); padding-inline: var(--space-6) var(--space-2); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); }
+.nav { transition: background-color var(--motion-ui), border-color var(--motion-ui); }
+.nav img { height: 1.5rem; width: auto; }
+/* The nav takes a section's theme while it sits over it (set by script), and swaps to the matching logo. */
+.nav .logo-on-light, .nav[data-theme="light"] .logo-on-dark { display: none; }
+.nav[data-theme="light"] .logo-on-light { display: block; }
+.nav-links { display: none; gap: var(--space-8); font-size: var(--text-small); }
+.nav-links a { color: var(--nav-link); text-decoration: none; transition: color var(--motion-hover); }
+.nav-links a[aria-current] { color: var(--color-accent); }
+@media (min-width: 64rem) { .nav-links { display: flex; } }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; height: var(--button-height); padding-inline: var(--button-pad-x); border: 1px solid transparent; border-radius: var(--button-radius); font: var(--button-weight) var(--text-small)/1 var(--font-sans); text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform var(--motion-press), background-color var(--motion-hover), border-color var(--motion-hover); }
+.btn:active { transform: scale(var(--press-scale)); }
+.btn-sm { height: var(--button-height-sm); padding-inline: var(--space-4); }
+.btn-primary { background: var(--button-primary-bg); color: var(--button-primary-text); }
+.btn-secondary { background: transparent; color: var(--button-secondary-text); border-color: var(--button-secondary-border); }
+.link { color: var(--color-accent); text-decoration-thickness: from-font; text-underline-position: from-font; transition: color var(--motion-hover); }
+@media (hover: hover) and (pointer: fine) {
+  .nav-links a:hover { color: var(--nav-link-hover); }
+  .btn-primary:hover { background: var(--button-primary-bg-hover); }
+  .btn-secondary:hover { background: var(--button-secondary-bg-hover); }
+  .link:hover { color: var(--color-accent-hover); }
+  a.card:hover { background: var(--color-surface-hover); }
+}
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+
+/* hero specimen */
+.hero { padding-block: clamp(4rem, 9vw, 9rem) var(--section-y); }
+.hero .lead { margin-top: var(--space-6); }
+.hero .row { margin-top: var(--space-8); }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8) var(--grid-gap); margin-top: var(--space-16); padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
+@media (min-width: 64rem) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.stat-value { font: var(--weight-display-strong) var(--text-display-md)/var(--leading-tight) var(--font-display); letter-spacing: var(--tracking-display-md); font-variant-numeric: tabular-nums; color: var(--stat-value); }
+.stat:nth-child(odd) .stat-value { color: var(--stat-value-accent); }
+.stat-label { margin-top: var(--space-2); font: var(--weight-regular) var(--text-eyebrow)/1.5 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stat-label); }
+.stat-num { font: var(--weight-display-strong) var(--text-stat)/1 var(--font-display); letter-spacing: var(--tracking-display-lg); font-variant-numeric: tabular-nums; color: var(--color-accent); }
+
+/* colour */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--grid-gap); }
+.chip { height: 4.5rem; border: 1px solid var(--color-border-strong); border-radius: var(--radius-lg); }
+.swatch .small { margin-top: var(--space-3); font-weight: var(--weight-semibold); }
+
+/* type table */
+.type-row { display: grid; gap: var(--space-2) var(--grid-gap); padding-block: var(--space-6); border-top: 1px solid var(--color-border); }
+@media (min-width: 64rem) { .type-row { grid-template-columns: 16rem minmax(0, 1fr); align-items: baseline; } }
+
+/* scales */
+.scale { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4); }
+.scale i { display: block; width: 1.5rem; background: var(--color-accent-soft); border: 1px solid var(--color-accent); border-radius: 2px; }
+.radii { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+.radii div { width: 5rem; height: 5rem; display: grid; place-items: center; background: var(--color-surface); border: 1px solid var(--color-border-strong); }
+
+/* cards and callout */
+.cards { display: grid; gap: var(--grid-gap); }
+@media (min-width: 48rem) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.card { display: block; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--card-radius); padding: var(--card-pad); text-decoration: none; transition: background-color var(--motion-hover); }
+.card .title { margin-block: var(--space-3) var(--space-2); }
+.card p { color: var(--color-text-secondary); }
+.callout { background: var(--callout-bg); border-left: 2px solid var(--callout-rule); padding: var(--space-4) var(--space-6); color: var(--color-text-secondary); }
+.callout strong { color: var(--color-text); font-weight: var(--weight-semibold); }
+
+/* ticker wall */
+.tickers { font: var(--weight-display-strong) var(--text-display-md)/1.25 var(--font-display); letter-spacing: var(--tracking-display-md); }
+.tickers span { display: block; }
+.t1 { color: var(--color-accent); }
+.t3 { color: var(--ticker-dim); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip-tag { display: inline-flex; align-items: center; height: 2rem; padding-inline: var(--space-3); background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: var(--radius-pill); font: var(--weight-medium) var(--text-caption)/1 var(--font-mono); color: var(--chip-text); white-space: nowrap; }
+
+/* table */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; min-width: 40rem; border-collapse: collapse; font-size: var(--text-small); }
+th { text-align: start; padding-block: var(--space-3); font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--table-head); }
+td { padding-block: var(--space-4); padding-inline-end: var(--space-6); border-top: 1px solid var(--table-row-border); color: var(--color-text-secondary); }
+td:first-child { color: var(--color-text); font-weight: var(--weight-semibold); }
+td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--color-accent); white-space: nowrap; }
+
+/* fairness bar */
+.bar-labels { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-3); }
+.bar { height: var(--bar-height); background: var(--bar-track); border-radius: var(--radius-pill); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 80%; background: var(--bar-fill); transform-origin: left; transition: transform var(--motion-reveal); }
+.bar.is-reset i { transform: scaleX(0.02); transition: none; }
+
+/* roadmap, after taiko.xyz: idle rungs are always drawn, colour wipes down them on scroll, and each card grows up from the rung it stands on. The one light section. */
+.journey { position: relative; overflow: hidden; padding-block: var(--section-y); border-radius: var(--radius-xl); background-color: var(--color-bg); color: var(--color-text); transition: background-color var(--onchain-out) var(--ease-out), color var(--onchain-out) var(--ease-out); }
+/* Flex centring lets a map wider than a phone crop evenly on both sides. */
+.journey > .container { display: flex; flex-direction: column; align-items: center; }
+.journey-label, .journey-title { text-align: center; }
+.journey-title { margin-top: var(--space-3); }
+/* Card sizes are in em, so the map's font-size scales them with the ladder. The top margin is room for the first cards to grow into. */
+.journey-map { position: relative; flex: none; width: 36rem; aspect-ratio: 893 / 1067; margin-top: 9.5rem; font-size: 0.75rem; }
+.journey-rungs { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.journey-list { margin: 0; }
+.rung { stroke: var(--rung-idle); stroke-width: var(--rung-width); vector-effect: non-scaling-stroke; transition: stroke var(--motion-ui); }
+.rung.is-on { stroke: color-mix(in oklab, var(--b) var(--mix), var(--a)); }
+/* Each phase has its own colour, in --tone. */
+.phase { --tone: var(--phase-tone-1); --skew: var(--phase-skew); position: absolute; transform: skewY(var(--skew)); }
+.phase:nth-child(1) { left: 22%; bottom: 94%; width: 13.5em; --skew: var(--phase-skew-fan); transform-origin: left center; }
+.phase:nth-child(2) { right: 22%; bottom: 91.8%; width: 12.5em; --skew: -16deg; --tone: var(--phase-tone-2); }
+.phase:nth-child(3) { right: 48%; bottom: 64.5%; width: 14em; --tone: var(--phase-tone-3); }
+.phase:nth-child(4) { left: 28%; bottom: 39.5%; width: 12.5em; --tone: var(--phase-tone-4); }
+.phase:nth-child(5) { right: 22%; bottom: 20.6%; width: 15em; --tone: var(--phase-tone-5); }
+.phase-meta { margin: 0 0 0.5em; padding-left: 0.75em; font: var(--weight-medium) max(0.6875em, 0.625rem)/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); }
+.phase.is-current .phase-meta { color: var(--color-accent-text); }
+.phase-title { position: relative; z-index: 2; margin: 0; padding-left: 0.54em; font: var(--weight-display) 1.375em/0.9 var(--font-display); letter-spacing: -0.02em; }
+/* The label and title lie on the rungs with no panel behind them. A halo in the canvas colour keeps the lines off the letters. */
+.phase-meta, .phase-title { text-shadow: 0 0 2px var(--color-bg), 0 0 4px var(--color-bg), 0 0 6px var(--color-bg), 0 0 8px var(--color-bg); }
+/* Closed until the wipe reaches the card. A noscript rule after this stylesheet opens them all. */
+.phase-reveal { display: grid; grid-template-rows: 0fr; transform: translateY(-0.6875em); -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); transition: grid-template-rows var(--motion-reveal); }
+.phase.is-on .phase-reveal { grid-template-rows: 1fr; }
+.phase-body { min-height: 0; overflow: hidden; }
+.phase-body ul { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 1.5em 1.125em 0.875em; border: 1px solid transparent; border-image: linear-gradient(transparent, var(--tone)) 1; background: linear-gradient(transparent, color-mix(in srgb, var(--tone) var(--phase-fill-strength), transparent) 120%); }
+.phase-body li { display: flex; align-items: flex-start; gap: 8px; font-size: max(0.875em, 0.75rem); font-weight: var(--weight-medium); line-height: 1.6; letter-spacing: -0.01em; color: var(--color-text-secondary); }
+.phase-body li::before { content: "+"; flex: none; font-family: var(--font-mono); color: var(--tone); }
+.phase-body .phase-chain { display: none; margin-top: 0.5em; font: var(--weight-regular) max(0.6875em, 0.625rem)/1.5 var(--font-mono); letter-spacing: 0.04em; color: var(--onchain-line); }
+.phase-body .phase-chain::before { content: none; }
+@media (min-width: 35.375rem) {
+  .journey-map { width: 42.5rem; }
+  .phase:nth-child(1) { left: 18%; }
+  .phase:nth-child(2) { right: 17%; width: 17.5em; }
+  .phase:nth-child(5) { right: 13%; }
+}
+@media (min-width: 62rem) {
+  .journey-map { width: 55.6875rem; font-size: 1rem; }
+  .phase:nth-child(1) { left: 0; bottom: 95%; width: 15.5em; }
+  .phase:nth-child(5) { right: 5%; }
+}
+@media (min-width: 68rem) { .phase:nth-child(1) { left: -8%; } }
+
+/* faq */
+.faq details { border-top: 1px solid var(--color-border); }
+.faq details:last-child { border-bottom: 1px solid var(--color-border); }
+.faq summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); padding-block: var(--space-6); cursor: pointer; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; font: var(--weight-regular) 1.5rem/1 var(--font-mono); color: var(--color-accent); transition: transform var(--motion-ui); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq p { padding-bottom: var(--space-6); }
+
+/* loading demo */
+.loading-grid { display: grid; gap: var(--grid-gap); }
+@media (min-width: 64rem) { .loading-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.loading-grid .card { min-height: 12rem; }
+.loading-grid .spec { margin-bottom: var(--space-4); }
+
+/* pairing and scheme comparison (preview only) */
+.link, td.mono, .faq summary::after, .roadmap .is-current .eyebrow { color: var(--color-accent-text); }
+.scheme-grid { display: grid; gap: var(--grid-gap); margin-bottom: var(--space-16); }
+@media (min-width: 48rem) { .scheme-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.scheme { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+.scheme .btn { margin-top: auto; }
+.scheme { background: var(--color-bg); color: var(--color-text); border-color: var(--color-border-strong); }
+.scheme .display-md { color: var(--color-text); }
+.scheme .body { color: var(--color-text-secondary); }
+.scheme .spec { color: var(--color-text-muted); }
+.scheme .hl { color: var(--color-accent); }
+.scheme .btn-secondary { color: var(--color-text); border-color: var(--color-border-strong); }
+.scheme button[aria-pressed="true"] { border-color: var(--color-accent); }
+.ratio { display: flex; width: 100%; height: 3rem; border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); overflow: hidden; }
+.ratio i { display: block; }
+.ratio-sm { height: 1.25rem; }
+.ratio-labels { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-8); margin-block: var(--space-3) var(--space-12); }
+.switcher { position: fixed; left: 50%; bottom: var(--space-4); transform: translateX(-50%); z-index: var(--z-nav); display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-6); width: max-content; max-width: calc(100% - 2rem); padding: var(--space-2) var(--space-4); background: var(--color-surface-glass); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--color-border-strong); border-radius: var(--radius-lg); }
+.switcher-group { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-1); }
+.switcher button { height: 2rem; padding-inline: var(--space-3); border: 1px solid transparent; border-radius: var(--radius-pill); background: transparent; color: var(--color-text-secondary); font: var(--weight-medium) var(--text-caption)/1 var(--font-mono); white-space: nowrap; cursor: pointer; transition: background-color var(--motion-hover), color var(--motion-hover); }
+.switcher button[aria-pressed="true"] { background: var(--color-text); color: var(--color-bg); }
+
+/* third button: tinted fill with accent text and edge, as on the app's active tab */
+.btn-tonal { background: var(--button-tonal-bg); color: var(--button-tonal-text); border-color: var(--button-tonal-border); }
+@media (hover: hover) and (pointer: fine) { .btn-tonal:hover { background: var(--button-tonal-bg-hover); } }
+
+/* on-chain view: entered by holding left click. One attribute on <html>, each section responds. */
+.hold-ring { position: fixed; left: 0; top: 0; z-index: var(--z-loader); width: var(--hold-ring-size); height: var(--hold-ring-size); pointer-events: none; opacity: 0; mix-blend-mode: difference; transition: opacity var(--motion-hover); }
+.hold-ring circle { fill: none; stroke: var(--white); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; transform: rotate(-90deg); transform-origin: center; }
+.hold-ring.is-holding { opacity: 1; }
+.hold-ring.is-holding circle { stroke-dashoffset: 0; transition: stroke-dashoffset var(--hold-delay) linear; }
+.onchain-toggle { position: fixed; left: var(--space-4); top: var(--space-4); z-index: var(--z-loader); transform: translateY(-200%); }
+.onchain-toggle:focus-visible { transform: none; }
+[data-view="onchain"] { user-select: none; -webkit-user-select: none; }
+[data-view="onchain"] body, [data-view="onchain"] .journey { background-image: linear-gradient(var(--onchain-grid) 1px, transparent 1px), linear-gradient(90deg, var(--onchain-grid) 1px, transparent 1px); background-size: var(--onchain-grid-size) var(--onchain-grid-size); }
+[data-view="onchain"] .journey { transition-duration: var(--onchain-in); }
+[data-view="onchain"] .card, [data-view="onchain"] .callout, [data-view="onchain"] .chip-tag, [data-view="onchain"] .nav, [data-view="onchain"] .btn { background: transparent; border-color: var(--onchain-line); }
+[data-view="onchain"] .btn-primary { color: var(--onchain-line); }
+[data-view="onchain"] .nav .logo-on-dark { display: block; }
+[data-view="onchain"] .nav .logo-on-light { display: none; }
+[data-view="onchain"] .bar i { background: transparent; box-shadow: inset 0 0 0 1px var(--onchain-line); }
+[data-view="onchain"] .phase-reveal { -webkit-backdrop-filter: none; backdrop-filter: none; }
+[data-view="onchain"] .phase-body ul { background: var(--color-bg); border: 1px solid var(--onchain-line); border-image: none; } /* solid, so the rungs do not run through the text */
+[data-view="onchain"] .phase:not(.is-current) .phase-body ul { border-style: dashed; }
+[data-view="onchain"] .phase-body .phase-chain { display: block; }
+[data-view="onchain"] .rung.is-on { stroke: var(--onchain-line); }
+[data-view="onchain"] .rung:not(.is-mined) { stroke-dasharray: 6 6; }
+
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
+</style>
+<noscript><style>.phase-reveal { grid-template-rows: 1fr; }</style></noscript>
+</head>
+<body>
+
+<div class="container nav-wrap">
+  <nav class="nav" aria-label="Main">
+    <a href="#top" aria-label="Hevium"><img class="logo-on-dark" src="../hevium-brand-kit/02-horizontal-lockup/hevium-logo-dark.svg" alt="Hevium" width="132" height="36"><img class="logo-on-light" src="../hevium-brand-kit/02-horizontal-lockup/hevium-logo-light.svg" alt="Hevium" width="132" height="36"></a>
+    <ul class="nav-links">
+      <li><a href="#colour" aria-current="true">Colour</a></li>
+      <li><a href="#type">Type</a></li>
+      <li><a href="#layout">Layout</a></li>
+      <li><a href="#components">Components</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#loading">Loading</a></li>
+    </ul>
+    <a class="btn btn-primary btn-sm" href="https://hevium.xyz/">Launch app</a>
+  </nav>
+</div>
+
+<main id="top">
+  <header class="container hero">
+    <p class="eyebrow">Live on 5 chains</p>
+    <h1 class="display-xl" style="margin-top: var(--space-4)">The multi-chain <span class="hl">stock &amp; fair-launch</span> terminal.</h1>
+    <p class="lead">Fair-launch tokens paired directly with NVDA, TSLA and digital dollars. Built for everyday traders and 24/7 AI agents.</p>
+    <div class="row">
+      <a class="btn btn-primary" href="https://hevium.xyz/">Launch app</a>
+      <a class="btn btn-secondary" href="#components">How it works</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><p class="stat-value">5 Chains</p><p class="stat-label">Base · Robinhood · BNB · Solana · Elysium</p></div>
+      <div class="stat"><p class="stat-value">1.0% Fee</p><p class="stat-label">0.80% protocol · 0.20% affiliate</p></div>
+      <div class="stat"><p class="stat-value">17+ Pairs</p><p class="stat-label">NVDA · TSLA · AAPL · COIN · USD+</p></div>
+      <div class="stat"><p class="stat-value">AI-Native</p><p class="stat-label">24/7 autonomous orderflow</p></div>
+    </div>
+  </header>
+
+  <section class="section" id="colour">
+    <div class="container">
+      <div class="block-head"><p class="eyebrow">01 · Colour</p><h2 class="display-lg">Sixty, thirty, <span class="hl">ten</span>.</h2><p class="lead" style="margin-top: var(--space-6)">60% canvas, 30% surfaces and structure, 10% accent. Obsidian is the page. One section, the roadmap, flips to the light theme.</p></div>
+      <div class="ratio" role="img" aria-label="60 percent canvas, 30 percent surfaces, 10 percent accent"><i style="flex:60;background:var(--color-bg)"></i><i style="flex:30;background:var(--color-surface-hover)"></i><i style="flex:10;background:var(--color-accent)"></i></div>
+      <div class="ratio-labels spec"><span>60 · canvas</span><span>30 · surfaces, lines, secondary text</span><span>10 · accent: primary action, one headline phrase, current state</span></div>
+      <div class="swatches">
+        <div class="swatch"><div class="chip" style="background: var(--color-bg)"></div><p class="small">Background</p><p class="spec">--color-bg #07080B</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-surface)"></div><p class="small">Surface</p><p class="spec">--color-surface #0E1117</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-surface-raised)"></div><p class="small">Raised</p><p class="spec">--color-surface-raised #141922</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-surface-hover)"></div><p class="small">Hover</p><p class="spec">--color-surface-hover #1B212C</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-text)"></div><p class="small">Text</p><p class="spec">--color-text #FFFFFF</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-text-secondary)"></div><p class="small">Text secondary</p><p class="spec">--color-text-secondary #A1A1AA</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-text-muted)"></div><p class="small">Text muted</p><p class="spec">--color-text-muted #8B8B95</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-accent)"></div><p class="small">Accent</p><p class="spec">--color-accent #97FBE3</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-accent-deep)"></div><p class="small">Accent deep</p><p class="spec">--color-accent-deep #1CD8B3</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--gradient-brand)"></div><p class="small">Brand gradient</p><p class="spec">--gradient-brand</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-up)"></div><p class="small">Up</p><p class="spec">--color-up #34D399</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-down)"></div><p class="small">Down</p><p class="spec">--color-down #FF637E</p></div>
+        <div class="swatch"><div class="chip" style="background: var(--color-warning)"></div><p class="small">Warning</p><p class="spec">--color-warning #FFB900</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="type">
+    <div class="container">
+      <div class="block-head"><p class="eyebrow">02 · Type</p><h2 class="display-lg">Plus Jakarta Sans and <span class="hl">JetBrains Mono</span>.</h2><p class="lead" style="margin-top: var(--space-6)">Plus Jakarta Sans sets headlines, numerals, text and UI, as in the app. JetBrains Mono sets labels and data.</p></div>
+      <div class="type-row"><p class="spec">--text-display-xl<br>44 to 104px · Plus Jakarta Sans</p><p class="display-xl">Meme speed meets Wall Street</p></div>
+      <div class="type-row"><p class="spec">--text-display-lg<br>34 to 72px · Plus Jakarta Sans</p><p class="display-lg">Built for 24/7 AI orderflow</p></div>
+      <div class="type-row"><p class="spec">--text-display-md<br>28 to 48px · Plus Jakarta Sans</p><p class="display-md">One terminal. Four core engines.</p></div>
+      <div class="type-row"><p class="spec">--text-stat<br>40 to 88px · Plus Jakarta Sans · tabular</p><p class="stat-num">24/7 · 80% · 1.0%</p></div>
+      <div class="type-row"><p class="spec">--text-title<br>20 to 28px · Plus Jakarta Sans · 600</p><p class="title">15-second Token Studio</p></div>
+      <div class="type-row"><p class="spec">--text-body-lg<br>17 to 21px · Plus Jakarta Sans · 400</p><p class="lead">Quarterly tech earnings create viral spikes on X. Hevium turns Wall Street catalysts into trading volume.</p></div>
+      <div class="type-row"><p class="spec">--text-body<br>16 to 17px · Plus Jakarta Sans · 400</p><p class="body">Hevium never holds user deposits. Every trade and liquidity lock settles publicly on-chain, and successful launches migrate automatically into leading public exchanges.</p></div>
+      <div class="type-row"><p class="spec">--text-eyebrow<br>12px · JetBrains Mono · 500</p><p class="eyebrow">03 · Unfair advantage</p></div>
+      <div class="type-row"><p class="spec">mono data<br>13px · JetBrains Mono · 400</p><p class="spec" style="color: var(--color-text)">0x5f8dDBA84D3E7f4cdcF43c8841722Ae75e66DEA4</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="layout">
+    <div class="container">
+      <div class="block-head"><p class="eyebrow">03 · Layout</p><h2 class="display-lg">1600 wide, <span class="hl">360 and up</span>.</h2><p class="lead" style="margin-top: var(--space-6)">Content caps at 1600px with a 16 to 64px gutter. Backgrounds and the 3D canvas run full bleed. Breakpoints at 768, 1024, 1280 and 1600px.</p></div>
+      <p class="spec" style="margin-bottom: var(--space-4)">Spacing: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160</p>
+      <div class="scale" aria-hidden="true">
+        <i style="height: var(--space-1)"></i><i style="height: var(--space-2)"></i><i style="height: var(--space-3)"></i><i style="height: var(--space-4)"></i><i style="height: var(--space-6)"></i><i style="height: var(--space-8)"></i><i style="height: var(--space-12)"></i><i style="height: var(--space-16)"></i><i style="height: var(--space-24)"></i><i style="height: var(--space-32)"></i><i style="height: var(--space-40)"></i>
+      </div>
+      <div class="sub">
+        <p class="spec">Radius: 6, 10, 16, 24, pill</p>
+        <div class="radii">
+          <div class="spec" style="border-radius: var(--radius-sm)">sm</div>
+          <div class="spec" style="border-radius: var(--radius-md)">md</div>
+          <div class="spec" style="border-radius: var(--radius-lg)">lg</div>
+          <div class="spec" style="border-radius: var(--radius-xl)">xl</div>
+          <div class="spec" style="border-radius: var(--radius-pill)">pill</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="components">
+    <div class="container">
+      <div class="block-head"><p class="eyebrow">04 · Components</p><h2 class="display-lg">Built from the <span class="hl">deck's own habits</span>.</h2></div>
+
+      <p class="spec" style="margin-bottom: var(--space-4)">Buttons and link</p>
+      <div class="row">
+        <a class="btn btn-primary" href="#components">Launch app</a>
+        <a class="btn btn-secondary" href="#components">How it works</a>
+        <a class="btn btn-tonal" href="#components">Become an affiliate</a>
+        <a class="link small" href="#components">Read the docs</a>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Cards</p>
+        <div class="cards">
+          <a class="card" href="#components"><p class="eyebrow">01 · Fair launchpad</p><h3 class="title">15-second Token Studio</h3><p>Instant community token launches with locked exchange liquidity and zero insider pre-mine.</p></a>
+          <a class="card" href="#components"><p class="eyebrow">02 · Equity pairs</p><h3 class="title">Stock-paired trading</h3><p>Pair tokens directly with NVDA, TSLA, AAPL, COIN and yield-bearing digital dollars.</p></a>
+          <a class="card" href="#components"><p class="eyebrow">03 · Creator revenue</p><h3 class="title">Instant 20% commissions</h3><p>Creators and referrers earn a 20% on-chain fee split on every trade, paid automatically.</p></a>
+          <a class="card" href="#components"><p class="eyebrow">04 · Access</p><h3 class="title">Google login and AI ready</h3><p>One-click Google login for traders. Direct API and bot connection for AI agents.</p></a>
+        </div>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Callout</p>
+        <p class="callout"><strong>Non-custodial.</strong> Hevium never holds user deposits. Every trade and liquidity lock settles publicly on-chain.</p>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Ticker wall and chips</p>
+        <p class="tickers"><span class="t1">NVDA · TSLA · AAPL · SPY</span><span>COIN · USD+ · USDC · USDG</span><span class="t3">AMZN · MSFT · PLTR · AMD · DIS</span></p>
+        <div class="chips" style="margin-top: var(--space-6)"><span class="chip-tag">Live mainnet</span><span class="chip-tag">Phase 0</span><span class="chip-tag">Audit in progress</span></div>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Chain table</p>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Chains">
+          <table>
+            <thead><tr><th scope="col">Ecosystem</th><th scope="col">Status</th><th scope="col">Built for</th><th scope="col">Assets</th></tr></thead>
+            <tbody>
+              <tr><td>Base</td><td class="mono">LIVE MAINNET</td><td>Coinbase retail users and yield-stable holders</td><td>COIN, Treasury ETFs, USD+, ETH</td></tr>
+              <tr><td>Robinhood Chain</td><td class="mono">LIVE MAINNET</td><td>Stock-crossover traders seeking 24/7 equities</td><td>NVDA, TSLA, AAPL, SPY</td></tr>
+              <tr><td>BNB Chain</td><td class="mono">LIVE MAINNET</td><td>Global and Asian high-velocity launchpad volume</td><td>BNB, PancakeSwap LP</td></tr>
+              <tr><td>Solana</td><td class="mono">LIVE MAINNET</td><td>High-frequency meme traders and algorithmic bots</td><td>SOL, Meteora and Jupiter LP</td></tr>
+              <tr><td>Elysium</td><td class="mono">LIVE MAINNET</td><td>Next-gen DeFi traders and early adopters</td><td>HYPE, USDC</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Fairness bar <button class="btn btn-secondary btn-sm" id="bar-replay" type="button" style="margin-left: var(--space-3)">Replay</button></p>
+        <div class="bar-labels"><span class="eyebrow" style="color: var(--color-text)">Fixed supply · zero pre-mine</span><span class="eyebrow">80% public launch · 20% locked LP · 0% insider</span></div>
+        <div class="bar" id="bar" role="img" aria-label="80 percent public launch, 20 percent locked liquidity, 0 percent insider"><i></i></div>
+      </div>
+
+      <div class="sub">
+        <p class="spec">FAQ</p>
+        <div class="faq">
+          <details open><summary class="title">Does Hevium hold my funds?</summary><p class="body">No. Hevium is non-custodial. Every trade and liquidity lock settles publicly on-chain.</p></details>
+          <details><summary class="title">What does a trade cost?</summary><p class="body">1.0% per trade. 0.80% goes to the protocol and 0.20% to the referrer or creator.</p></details>
+          <details><summary class="title">Which chains are live?</summary><p class="body">Base, Robinhood Chain, BNB Chain, Solana and Elysium.</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="journey" id="roadmap" data-theme="light" aria-labelledby="roadmap-title">
+    <div class="container">
+      <p class="eyebrow journey-label">Roadmap</p>
+      <h2 class="display-lg journey-title" id="roadmap-title">Where Hevium <span class="hl">goes next</span></h2>
+      <div class="journey-map">
+        <svg class="journey-rungs" viewBox="0 0 893 1067" fill="none" aria-hidden="true"></svg>
+        <ol class="journey-list">
+          <li class="phase is-current">
+            <p class="phase-meta">Phase 0 · Nov to Dec 2026 · Now</p><h3 class="phase-title">Ignition</h3>
+            <div class="phase-reveal"><div class="phase-body"><ul><li>Five-chain public rollout</li><li>Tier-1 security audit</li><li class="phase-chain">LIVE · Base 8453 · BNB 56 · Robinhood 4663 · Solana · Elysium</li></ul></div></div>
+          </li>
+          <li class="phase">
+            <p class="phase-meta">Phase 1 · Q1 2027</p><h3 class="phase-title">Stock Wedge</h3>
+            <div class="phase-reveal"><div class="phase-body"><ul><li>Earnings-season sprints</li><li>Audit completion badge</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
+          </li>
+          <li class="phase">
+            <p class="phase-meta">Phase 2 · Q2 2027</p><h3 class="phase-title">AI Wave</h3>
+            <div class="phase-reveal"><div class="phase-body"><ul><li>Starter AI bot kits</li><li>Developer buildathons</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
+          </li>
+          <li class="phase">
+            <p class="phase-meta">Phase 3 · Q3 2027</p><h3 class="phase-title">Affiliate Arena</h3>
+            <div class="phase-reveal"><div class="phase-body"><ul><li>Affiliate leaderboards</li><li>Cross-chain trading cups</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
+          </li>
+          <li class="phase">
+            <p class="phase-meta">Phase 4 · Q4 2027</p><h3 class="phase-title">Market Leader</h3>
+            <div class="phase-reveal"><div class="phase-body"><ul><li>Institutional API feeds</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="loading">
+    <div class="container">
+      <div class="block-head"><p class="eyebrow">05 · Loading</p><h2 class="display-lg">Skeletons that <span class="hl">decode</span> into data.</h2><p class="lead" style="margin-top: var(--space-6)">Live demo of <code class="spec">ascii-reveal</code> 0.3.0 with the Hevium tokens. Glyphs in JetBrains Mono, accent in mint.</p></div>
+      <div class="loading-grid" id="loading-demo">
+        <div class="card"><p class="spec">AsciiSkeleton · scan (proposed default)</p><div id="sk-scan"></div></div>
+        <div class="card"><p class="spec">AsciiSkeleton · terminal</p><div id="sk-terminal"></div></div>
+        <div class="card" id="reveal-card">
+          <p class="spec">AsciiReveal · decode <button class="btn btn-secondary btn-sm" id="reveal-replay" type="button" style="margin-left: var(--space-3)">Replay</button></p>
+          <div id="reveal-target"><p class="stat-num">$2.5M</p><p class="stat-label">Sample daily volume</p><p class="body small" style="margin-top: var(--space-3)">Sample numbers for the demo only.</p></div>
+        </div>
+      </div>
+      <p class="spec" id="ascii-status" style="margin-top: var(--space-6)"></p>
+    </div>
+  </section>
+</main>
+
+<button class="btn btn-secondary btn-sm onchain-toggle" type="button" id="onchain-toggle" aria-pressed="false">Toggle on-chain view</button>
+<div class="hold-ring" aria-hidden="true"><svg viewBox="0 0 40 40" width="100%" height="100%"><circle cx="20" cy="20" r="17" pathLength="1"/></svg></div>
+
+<script>
+// Roadmap ladder, after taiko.xyz. Rungs are drawn between waypoints of [x, y, slope in degrees, length, rungs to the next waypoint].
+// Colour wipes down them as the section scrolls, and each card opens when the wipe reaches the rung it stands on.
+(function () {
+  var map = document.querySelector('.journey-map');
+  if (!map) return;
+  var svg = map.querySelector('.journey-rungs');
+  var phases = [].slice.call(map.querySelectorAll('.phase'));
+  var H = 1067, MID = 440, RAD = Math.PI / 180;
+  var route = [
+    [52, 18, 19, 109, 4], [330, 26, 16, 166, 4], [590, 56, 16, 250, 3], [619, 116, 14, 210, 3], [600, 189, 10, 210, 3],
+    [499, 277, 6, 192, 3], [360, 366, 5, 192, 2], [240, 426, 5, 192, 4], [144, 546, 5, 192, 2], [192, 604, 5, 192, 6],
+    [648, 691, 5, 192, 2], [754, 728, 5, 192, 2], [797, 782, 5, 192, 2], [736, 836, 5, 192, 8], [303, 1055, 5, 192, 1]
+  ];
+  // The wipe front runs parallel to the rungs, so a rung's turn is where its line crosses the middle of the ladder.
+  function turn(x, y, deg) { return y + (x - MID) * Math.tan(deg * RAD); }
+  var rungs = [];
+  route.forEach(function (a, i) {
+    var b = route[i + 1] || a;
+    for (var k = 0; k < a[4]; k++) {
+      var v = a.map(function (n, j) { return n + (b[j] - n) * k / a[4]; });
+      var hx = Math.cos(v[2] * RAD) * v[3] / 2, hy = Math.sin(v[2] * RAD) * v[3] / 2;
+      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', (v[0] - hx).toFixed(1)); line.setAttribute('y1', (v[1] + hy).toFixed(1));
+      line.setAttribute('x2', (v[0] + hx).toFixed(1)); line.setAttribute('y2', (v[1] - hy).toFixed(1));
+      line.setAttribute('class', 'rung');
+      svg.appendChild(line); rungs.push({ el: line, at: turn(v[0], v[1], v[2]) });
+    }
+  });
+  rungs.forEach(function (r, n) {
+    if (n < 8) r.el.classList.add('is-mined'); // the stretch the current phase covers
+    if (n > rungs.length - 7) r.el.style.opacity = (rungs.length - n) / 7; // no card stands on the tail, so it fades out
+  });
+  var nav = document.querySelector('.nav'), sheet = map.closest('[data-theme]');
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches, queued = false, scale = 1, turns = [];
+  function measure() {
+    scale = map.offsetHeight / H;
+    // A card stands on its bottom edge, which stays put while the card grows upward.
+    turns = phases.map(function (ph) {
+      var deg = -parseFloat(getComputedStyle(ph).getPropertyValue('--skew')) || 5;
+      return turn((ph.offsetLeft + ph.offsetWidth / 2) / scale, (ph.offsetTop + ph.offsetHeight) / scale, deg);
+    });
+    // A rung takes the colour of the card it passes and blends toward the next card's colour on the way there.
+    rungs.forEach(function (r) {
+      var i = 0;
+      while (i < turns.length - 2 && r.at >= turns[i + 1]) i++;
+      var mix = Math.max(0, Math.min(1, (r.at - turns[i]) / (turns[i + 1] - turns[i])));
+      r.el.style.setProperty('--a', 'var(--phase-tone-' + (i + 1) + ')');
+      r.el.style.setProperty('--b', 'var(--phase-tone-' + (i + 2) + ')');
+      r.el.style.setProperty('--mix', Math.round(mix * 100) + '%');
+    });
+    update();
+  }
+  function update() {
+    queued = false;
+    // The front sits just below the middle of the viewport, in ladder units.
+    var front = still ? Infinity : (innerHeight * 0.55 - map.getBoundingClientRect().top) / scale;
+    rungs.forEach(function (r) { r.el.classList.toggle('is-on', r.at <= front); });
+    phases.forEach(function (ph, n) { ph.classList.toggle('is-on', turns[n] <= front); });
+    // The nav takes this section's theme while it sits over it.
+    var bar = nav.getBoundingClientRect(), box = sheet.getBoundingClientRect(), mid = (bar.top + bar.bottom) / 2;
+    if (box.top < mid && box.bottom > mid) nav.dataset.theme = sheet.dataset.theme; else delete nav.dataset.theme;
+  }
+  function queue() { if (!queued) { queued = true; requestAnimationFrame(update); } }
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', measure);
+  measure();
+})();
+
+// On-chain view: hold left click on a non-interactive area. Touch long-press works the same way.
+(function () {
+  var root = document.documentElement, ring = document.querySelector('.hold-ring'), toggle = document.getElementById('onchain-toggle');
+  var styles = getComputedStyle(root);
+  var delay = parseFloat(styles.getPropertyValue('--hold-delay')) || 350;
+  var tolerance = parseFloat(styles.getPropertyValue('--hold-move-tolerance')) || 6;
+  var timer = null, held = false, sx = 0, sy = 0;
+  function place(x, y) { var half = ring.offsetWidth / 2; ring.style.transform = 'translate(' + (x - half) + 'px,' + (y - half) + 'px)'; }
+  function set(on) { if (on) root.dataset.view = 'onchain'; else delete root.dataset.view; toggle.setAttribute('aria-pressed', String(on)); }
+  function release() {
+    clearTimeout(timer); timer = null;
+    ring.classList.remove('is-holding');
+    if (held) { held = false; set(false); }
+  }
+  document.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0 || e.target.closest('a, button, input, select, textarea, summary, label, [role="button"]')) return;
+    sx = e.clientX; sy = e.clientY; place(sx, sy);
+    ring.classList.add('is-holding');
+    timer = setTimeout(function () { timer = null; held = true; set(true); }, delay);
+  });
+  document.addEventListener('pointermove', function (e) {
+    if (timer && Math.hypot(e.clientX - sx, e.clientY - sy) > tolerance) release(); // a drag or text selection, not a hold
+    else if (held) place(e.clientX, e.clientY);
+  });
+  ['pointerup', 'pointercancel'].forEach(function (type) { document.addEventListener(type, release); });
+  addEventListener('blur', release);
+  document.addEventListener('contextmenu', function (e) { if (timer || held) e.preventDefault(); });
+  toggle.addEventListener('click', function () { set(root.dataset.view !== 'onchain'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
+document.getElementById('bar-replay').addEventListener('click', function () {
+  var bar = document.getElementById('bar');
+  bar.classList.add('is-reset');
+  requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.remove('is-reset'); }); });
+});
+</script>
+<script type="module">
+// Preview only: loaded from a CDN. The site installs the package from npm.
+const status = document.getElementById('ascii-status');
+try {
+  const m = await import('https://cdn.jsdelivr.net/npm/ascii-reveal@0.3.0/dist/core.js');
+  document.getElementById('sk-scan').innerHTML = m.asciiSkeletonHTML({ lines: 4, variant: 'scan' });
+  document.getElementById('sk-terminal').innerHTML = m.asciiSkeletonHTML({ lines: 4, variant: 'terminal' });
+  m.animateSkeletons(document.getElementById('loading-demo'));
+  await document.fonts.ready;
+  const reveal = m.createAsciiReveal(document.getElementById('reveal-target'), { preset: 'decode', duration: 'cinematic' });
+  reveal.reveal();
+  document.getElementById('reveal-replay').addEventListener('click', async () => {
+    await reveal.hide({ instant: true });
+    reveal.reveal();
+  });
+  status.textContent = 'ascii-reveal loaded.';
+} catch (e) {
+  status.textContent = 'ascii-reveal did not load here: ' + e.message;
+}
+</script>
+</body>
+</html>
