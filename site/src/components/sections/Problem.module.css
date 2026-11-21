@@ -1,0 +1,7 @@
+/* The plain statement of what Hevium is. Larger than body copy and in the primary text colour, set apart from the walls below. */
+.whatIs { margin-bottom: var(--space-24); }
+/* 46ch at this size is about 65 characters a line; --measure is tuned for body copy and runs far too wide here. */
+.statement { margin-top: var(--space-3); max-width: 46ch; font-size: var(--text-title); line-height: var(--leading-body-lg); color: var(--color-text); text-wrap: pretty; }
+
+.walls { display: grid; gap: var(--grid-gap); }
+@media (min-width: 64rem) { .walls { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

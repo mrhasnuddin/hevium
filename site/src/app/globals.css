@@ -17,6 +17,7 @@ a { color: inherit; }
 .section { padding-block: var(--section-y); border-top: 1px solid var(--color-border); }
 .block-head { margin-bottom: var(--space-12); }
 .block-head h2 { margin-top: var(--space-3); }
+.block-head .lead { margin-top: var(--space-6); }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 
 /* type roles */
@@ -29,6 +30,11 @@ a { color: inherit; }
 .small { font-size: var(--text-small); line-height: 1.5; }
 .eyebrow { font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--eyebrow-color); }
 .hl { color: var(--heading-highlight); }
+
+/* card */
+.card { display: block; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--card-radius); padding: var(--card-pad); text-decoration: none; transition: background-color var(--motion-hover); }
+.card .title { margin-block: var(--space-3) var(--space-2); }
+.card p { color: var(--color-text-secondary); }
 
 /* buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; height: var(--button-height); padding-inline: var(--button-pad-x); border: 1px solid transparent; border-radius: var(--button-radius); font: var(--button-weight) var(--text-small)/1 var(--font-sans); text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform var(--motion-press), background-color var(--motion-hover), border-color var(--motion-hover); }
