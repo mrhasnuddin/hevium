@@ -1,0 +1,11 @@
+# Confidential or local-only files. The investor deck must never be committed.
+hevium-pitch-deck.pdf
+hero.mp4
+font ref.jpg
+
+node_modules/
+site/.next/
+site/out/
+site/test-results/
+site/playwright-report/
+.superpowers/
