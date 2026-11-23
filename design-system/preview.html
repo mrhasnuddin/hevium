@@ -206,6 +206,35 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
 @media (hover: hover) and (pointer: fine) { .btn-tonal:hover { background: var(--button-tonal-bg-hover); } }
 
 /* pixels demo (preview only): the canvas has no frame, so it reads as part of the page */
+/* Language switch (site/src/components/LangSwitch.module.css): a small secondary button and a list in the bar's glass. */
+.lang { position: relative; display: inline-flex; }
+.lang .btn { gap: 0.3em; padding-inline: var(--space-3); font-weight: var(--weight-medium); }
+.lang .btn svg { width: 0.9em; height: 0.9em; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: rotate var(--motion-ui); }
+.lang:has(.lang-list:popover-open) .btn svg { rotate: 180deg; }
+.lang-list { position: static; inset: auto; margin: 0; padding: calc(var(--nav-inset) - 1px); min-width: 13rem; overflow: visible; color: inherit; background: color-mix(in srgb, var(--color-bg) 94%, transparent); border: 1px solid var(--color-border-strong); border-radius: var(--nav-radius); }
+.lang-list:popover-open { position: fixed; }
+.lang-list a { display: flex; justify-content: space-between; align-items: center; gap: var(--space-6); min-height: 2.75rem; padding-inline: var(--space-3); border-radius: var(--button-radius); color: var(--color-text-secondary); font-size: var(--text-small); text-decoration: none; }
+.lang-list a[aria-current] { color: var(--color-accent-text); }
+.lang-list a span:last-child { font: var(--weight-medium) var(--text-eyebrow)/1 var(--font-mono); letter-spacing: 0.08em; color: var(--color-text-muted); }
+.lang-list a[aria-current] span:last-child { color: inherit; }
+@media (hover: hover) and (pointer: fine) { .lang-list a:hover { background: var(--color-surface-hover); color: var(--color-text); } }
+/* Token (the Stocks coin, the Final tokens): a rim of star pixels, the logo in its middle at 54%. */
+.token { position: relative; display: inline-block; width: var(--s, 7.5rem); aspect-ratio: 1; border-radius: 50%; perspective: 24rem; cursor: pointer; color: var(--color-accent); }
+.token canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.token-flip { position: absolute; left: 50%; top: 50%; width: 54%; aspect-ratio: 1; translate: -50% -50%; transform-style: preserve-3d; transition: transform 0.6s var(--ease-out); }
+.token:hover .token-flip { transform: rotateY(180deg); }
+.token-flip img, .token-flip i { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.token-flip img { object-fit: cover; background: var(--color-surface); }
+.token-flip i { transform: rotateY(180deg); background: var(--gradient-brand); }
+.token-flip i::after { content: ""; position: absolute; inset: 24%; background: var(--color-on-accent); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
+.token-pulse, .token-pulse::after { position: absolute; inset: 14%; border: var(--line-drawn) solid var(--color-accent); border-radius: 50%; opacity: 0; pointer-events: none; }
+.token-pulse::after { content: ""; inset: calc(-1 * var(--line-drawn)); }
+@media (prefers-reduced-motion: no-preference) {
+  .token-pulse { animation: token-ring 0.9s var(--ease-out); }
+  .token-pulse::after { animation: token-ring 0.9s var(--ease-out) 0.16s; }
+}
+@media (prefers-reduced-motion: reduce) { .token-flip { transition: none; } .token-pulse { display: none; } }
+@keyframes token-ring { from { scale: 1; opacity: 0.9; } to { scale: 2.4; opacity: 0; } }
 .pixel-stage { display: block; width: 100%; height: clamp(20rem, 46vw, 34rem); touch-action: pan-y; }
 
 @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
@@ -345,6 +374,41 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
           <a class="card" href="#components"><div class="card-body"><p class="label">03 · Creator revenue</p><div class="card-text"><h3 class="card-title">Instant 20% commissions</h3><p>Creators and referrers earn a 20% on-chain fee split on every trade, paid automatically.</p></div></div></a>
           <a class="card" href="#components"><div class="card-body"><p class="label">04 · Access</p><div class="card-text"><h3 class="card-title">Google login and AI ready</h3><p>One-click Google login for traders. Direct API and bot connection for AI agents.</p></div></div></a>
         </div>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Language switch · in the bar before Launch app, at every width. Two letters and a chevron; the list is a popover of plain links, eight rows of 44px, the language in use in mint. On the site a pick changes the page's words in place, with nothing loaded again</p>
+        <div class="row" style="align-items: flex-start; gap: var(--space-8)">
+          <div class="lang">
+            <button class="btn btn-secondary btn-sm" type="button" popovertarget="ds-lang" aria-label="Language">EN<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6.25 8 10.25 12 6.25"/></svg></button>
+            <div class="lang-list" id="ds-lang" popover="auto" ontoggle="var b=this.previousElementSibling.getBoundingClientRect();this.style.top=b.bottom+8+'px';this.style.left=b.left+'px'">
+              <a href="#components" aria-current="true"><span>English</span><span>EN</span></a>
+              <a href="#components" lang="ms"><span>Bahasa Melayu</span><span>BM</span></a>
+              <a href="#components" lang="id"><span>Bahasa Indonesia</span><span>ID</span></a>
+              <a href="#components" lang="vi"><span>Tiếng Việt</span><span>VN</span></a>
+              <a href="#components" lang="zh-Hans"><span>简体中文</span><span>CN</span></a>
+              <a href="#components" lang="zh-Hant"><span>繁體中文</span><span>TW</span></a>
+              <a href="#components" lang="ja"><span>日本語</span><span>JP</span></a>
+              <a href="#components" lang="ko"><span>한국어</span><span>KR</span></a>
+            </div>
+          </div>
+          <div class="lang-list" aria-label="The list, open">
+            <a href="#components"><span>English</span><span>EN</span></a>
+            <a href="#components" lang="ms"><span>Bahasa Melayu</span><span>BM</span></a>
+            <a href="#components" lang="ja" aria-current="true"><span>日本語</span><span>JP</span></a>
+            <a href="#components" lang="ko"><span>한국어</span><span>KR</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <p class="spec">Token · an asset or a chain as a coin: a rim of star pixels on a 4 to 5px grid, the logo in its middle at 54% of the token's width. Under the pointer the logo turns over to the Hevium mark; a click sends two rings out (and, on the site, a wave through the star field behind it). Used for the Stocks coin and the Final tokens, never a plain round image</p>
+        <div class="row" style="gap: var(--space-8)" id="ds-tokens">
+          <span class="token" style="--s: 9rem"><canvas aria-hidden="true"></canvas><span class="token-flip"><img src="https://app.hevium.xyz/tokens/nvda.svg" alt="NVDA" width="88" height="88" loading="lazy"><i></i></span></span>
+          <span class="token" style="--s: 7.5rem"><canvas aria-hidden="true"></canvas><span class="token-flip"><img src="https://app.hevium.xyz/chains/base.svg" alt="Base" width="88" height="88" loading="lazy"><i></i></span></span>
+          <span class="token" style="--s: 5.5rem"><canvas aria-hidden="true"></canvas><span class="token-flip"><img src="https://app.hevium.xyz/tokens/tsla.svg" alt="TSLA" width="88" height="88" loading="lazy"><i></i></span></span>
+        </div>
+        <p class="spec" style="margin-top: var(--space-4)">144, 120 and 88px · point at one, then click it</p>
       </div>
 
       <div class="sub">
@@ -553,6 +617,37 @@ document.getElementById('bar-replay').addEventListener('click', function () {
   new IntersectionObserver(function (entries) { seen = entries[0].isIntersecting; wake(); }).observe(canvas);
 })();
 </script>
+<script>
+// Tokens: each rim is a ring of four-point stars on a 4px grid, drawn once; a click sends the rings out.
+(function () {
+  var CELL = 4;
+  document.querySelectorAll('#ds-tokens .token').forEach(function (token) {
+    var canvas = token.querySelector('canvas'), ctx = canvas.getContext('2d');
+    var ratio = Math.min(devicePixelRatio || 1, 2), w = token.clientWidth, n = Math.round(w / CELL);
+    canvas.width = canvas.height = Math.round(w * ratio);
+    ctx.fillStyle = getComputedStyle(token).color;
+    var outer = n * 0.42, inner = outer * 0.68;
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+      var far = Math.hypot(x + 0.5 - n / 2, y + 0.5 - n / 2);
+      if (far > outer || far < inner) continue;
+      var r = CELL * ratio * 0.62, k = r * 0.18;
+      ctx.save();
+      ctx.translate((x + 0.5) * CELL * ratio, (y + 0.5) * CELL * ratio);
+      ctx.beginPath();
+      ctx.moveTo(0, -r); ctx.quadraticCurveTo(k, -k, r, 0); ctx.quadraticCurveTo(k, k, 0, r);
+      ctx.quadraticCurveTo(-k, k, -r, 0); ctx.quadraticCurveTo(-k, -k, 0, -r);
+      ctx.fill();
+      ctx.restore();
+    }
+    token.addEventListener('click', function () {
+      var old = token.querySelector('.token-pulse');
+      if (old) old.remove();
+      token.appendChild(Object.assign(document.createElement('span'), { className: 'token-pulse' }));
+    });
+  });
+})();
+</script>
+
 <script type="module">
 // Preview only: loaded from a CDN. The site installs the package from npm.
 const status = document.getElementById('ascii-status');
