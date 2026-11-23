@@ -1,0 +1,212 @@
+/* Footer: three-band editorial structure — top split (statement + Product & Resources), monumental
+   star-pixel Hevium wordmark in the middle, and a single quiet bottom bar — all built on Hevium's
+   Obsidian canvas, hairline rules and subtle mint floor glow complementing #final above. */
+
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(3.5rem, 6vw, 5.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  background: radial-gradient(ellipse 56% 42% at 50% 62%, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 72%);
+}
+
+/* Soft mint-centred horizon rule connecting smoothly from #final without boxing the section. */
+.seam {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-border) 18%,
+    color-mix(in srgb, var(--color-accent) 40%, transparent) 50%,
+    var(--color-border) 82%,
+    transparent 100%
+  );
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Band 1: top editorial split (50% statement / 50% two link columns) --- */
+.top {
+  display: grid;
+  gap: var(--space-12);
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--grid-gap);
+  }
+}
+
+.statement {
+  font: var(--weight-medium) var(--text-title)/var(--leading-title) var(--font-display);
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-6);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.heading {
+  font: var(--weight-medium) var(--text-small)/1.4 var(--font-sans);
+  color: var(--color-text-muted);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-block: 0.2rem;
+  font: var(--weight-regular) var(--text-small)/1.45 var(--font-sans);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--motion-hover);
+}
+/* 44px vertical touch target without inflating the tight editorial column rhythm. */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2.75rem;
+  translate: 0 -50%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--color-text);
+  }
+}
+
+/* --- Band 2: full-width monumental star-pixel Hevium wordmark --- */
+.wordmark {
+  display: flex;
+  justify-content: center;
+  padding-block: clamp(2rem, 5.5vw, 5rem) clamp(1.5rem, 4.5vw, 3.75rem);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* --- Band 3: quiet single bottom utility row --- */
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 64rem) {
+  .bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-8);
+  }
+}
+
+.bottomLeft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  min-width: 0;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 2.75rem;
+}
+
+.risk {
+  max-width: 60ch;
+  font-size: var(--text-caption);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.legal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.legalLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--motion-hover);
+}
+
+.bottomRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+}
+
+.copy {
+  margin-right: var(--space-2);
+  font: var(--weight-regular) var(--text-caption)/1 var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.iconLink {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--motion-hover), background-color var(--motion-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .legalLink:hover {
+    color: var(--color-text);
+  }
+  .iconLink:hover {
+    color: var(--color-accent);
+    background: var(--color-surface);
+  }
+}
+
+/* On-chain view: clean wireframe seams, no ambient wash. */
+:global([data-view="onchain"]) .footer {
+  background: none;
+}
+:global([data-view="onchain"]) .seam {
+  background: var(--onchain-line);
+}
+:global([data-view="onchain"]) .bottom {
+  border-top-color: var(--onchain-line);
+}

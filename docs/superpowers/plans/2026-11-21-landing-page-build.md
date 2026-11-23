@@ -220,6 +220,8 @@ Pinned copy (`[ ]` marks the highlighted phrase):
 
 ### Task 5: Middle sections
 
+> **Superseded on 2026-11-22.** The user replaced card-based sections with set pieces. Build from `docs/superpowers/specs/2026-11-22-section-set-pieces-design.md` and its own plans (`2026-11-22-set-piece-*.md`), not from the steps below.
+
 **Files:**
 - Create, each with a `.module.css`: `site/src/components/sections/Problem.tsx`, `Stocks.tsx`, `Launch.tsx`, `Agents.tsx`, `Earn.tsx`, `Chains.tsx`, `HowItWorks.tsx`, `Guarantees.tsx`, `Faq.tsx`
 - Modify: `site/src/app/page.tsx` (order: Hero, Problem, Stocks, Launch, Agents, Earn, Chains, HowItWorks, Roadmap slot, Guarantees, Faq, FinalCta)
@@ -341,6 +343,20 @@ export const mountHeroScene: MountHeroScene;
 - [ ] **Step 2: Run `pnpm e2e`.** Expected: FAIL.
 - [ ] **Step 3: Implement** the types, the stub (resolves at once, `onProgress(1)`, `setView` writes `canvas.dataset.view`) and `HeroScene`.
 - [ ] **Step 4: Run `pnpm e2e`.** Expected: PASS. Commit: `feat: hero scene slot with poster fallback`.
+
+**From the hero session, 2026-11-22.** Done, with the real scene in place of the stub, at the user's request. What differs from the task above, with the reasons, is in the ledger (`.superpowers/sdd/2026-11-21-landing-page-build/progress.md`, "Hero session"). In short:
+- `site/src/hero/index.ts` exports the real `mountHeroScene`. The scene's modules are in `site/src/hero/scene/` as plain JavaScript; `hero-scene/` keeps a lab page (`hero.html`) and tools that run the site's copy on its own. `node hero-scene/tools/hero_test.mjs` checks the scene end to end; `site/tests/e2e/hero-scene.spec.ts` checks the slot.
+- The handle also carries `setSpotlight(on)`. `HeroScene` calls it while either Launch app button, marked `data-launch`, is pointed at or focused.
+- The art box starts at the top of the hero and is 24svh taller than it, masked over that stretch, so the floor fades into the next section. `Hero.module.css` lifts the sections after the hero above that tail and removes the first one's top rule.
+- The hero's copy sits above the canvas with `pointer-events: none` on everything but its links. The scene stops a `pointerdown` that lands on a logo from reaching the document, so the hold in Task 7 only starts on empty space.
+- Tasks 2 and 7 were needed and are built too, Task 7 only as far as the sections that exist. Nav and Hero from Task 4 are built; MobileCtaBar, Footer and FinalCta are not.
+- `tests/e2e/fixtures.ts` blocks WebGL2 for every spec except the live-scene ones (`liveTest`): the test browser renders in software, where the scene would starve the other specs.
+- The scene loads only on a GPU: `HeroScene` asks for WebGL2 with `failIfMajorPerformanceCaveat`, so a browser that could only draw it in software keeps the poster.
+- The scene, not the component, writes `data-view` and `data-spotlight` on its canvas when its setters are called. The tests read those, so they fail if the wiring breaks.
+- `playwright.config.ts` has a third project, `gpu`, which runs the tests tagged `@gpu` (the live scene) in the installed Chrome with the GPU on. It needs Chrome on the machine; `--project desktop --project phone` runs the rest without it.
+- Poster. It is the mark, as the task says. A still of the scene would match better and does not exist yet.
+
+**From the hero session, 2026-11-22: the statement.** At the user's request the "What is Hevium" paragraph left `Problem` and became its own section, `sections/WhatIs.tsx`, `<section id="about">`, between the hero and the problem. `#what-is-hevium` is unchanged. The section has its own `h2` ("What is Hevium"), so the page carries one more `h2` than there are `SectionId`s. `FACTS` in `content/meta.ts` holds its three figures. Its tests are in `tests/e2e/statement.spec.ts`. What it is: `DESIGN.md`, Components, "Statement".
 
 ### Task 11: SEO and GEO
 

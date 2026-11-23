@@ -1,0 +1,143 @@
+/* Earn: under the section head, one piece in two parts. On the left a stack of sample share cards the
+   visitor can turn, throw, tilt and put their name on. Each is laid out like the PnL cards traders post:
+   brand, a price line, the pair, one highlighted figure, a few rows, and a referral panel at the foot. The
+   highlighted figure here is the referral fee. On the right the perks in words. */
+
+.stage { display: grid; gap: var(--space-8); align-items: center; }
+@media (min-width: 64rem) { .stage { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--grid-gap); } }
+
+/* --- the stack ---
+   A card stands upright, two wide to three high, as shared cards do. Its type is set in shares of its own
+   width (cqw), so it scales like a picture: --s, --m, --l and --xl are its four sizes. */
+.play {
+  --card-w: min(17rem, 62vw); --ratio: 1.5; --rise: -1.6%;
+  --s: 3.7cqw; --m: 4.5cqw; --l: 6.4cqw; --xl: 11cqw;
+  display: grid; justify-items: center; gap: var(--space-4); min-width: 0;
+}
+/* Room for the cards behind, which step out to the right and a little up. */
+.stack { position: relative; width: calc(var(--card-w) * 1.36); height: calc(var(--card-w) * var(--ratio) * 1.1); }
+.card {
+  position: absolute; left: 0; bottom: 0; width: var(--card-w); aspect-ratio: 1 / var(--ratio); container-type: inline-size;
+  transform-origin: 50% 100%;
+  /* --at is its place in the stack: 0 in front */
+  transform: translate(calc(var(--at) * 7%), calc(var(--at) * var(--rise))) rotate(calc(var(--at) * 1.6deg)) scale(calc(1 - var(--at) * 0.04));
+  filter: brightness(calc(1 - var(--at) * 0.14));
+  transition: transform var(--motion-panel), filter var(--motion-panel);
+  touch-action: pan-y; -webkit-user-select: none; user-select: none; cursor: pointer;
+}
+/* The front card follows a drag (--dx, --dy, --dr) and leans toward the mouse (--rx, --ry). */
+.card[data-front] { transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--dr, 0deg)) perspective(50rem) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); cursor: grab; }
+.card[data-tilting] { transition-duration: var(--dur-press); }
+.card[data-dragging] { transition: none; cursor: grabbing; }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+
+/* The card's ground follows the brand kit's banners: Obsidian with a faint grid, a teal glow from the top
+   left, and the mark drawn large in outline, cropped at the right and the foot. */
+.face {
+  position: relative; height: 100%; padding: 6cqw; overflow: hidden;
+  border: 1px solid var(--color-border-strong); border-radius: 6cqw;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 0%, var(--color-accent-tint), transparent 70%),
+    linear-gradient(rgb(255 255 255 / 0.028) 1px, transparent 1px) 0 0 / 7cqw 7cqw,
+    linear-gradient(90deg, rgb(255 255 255 / 0.028) 1px, transparent 1px) 0 0 / 7cqw 7cqw,
+    linear-gradient(165deg, var(--color-surface) 0%, var(--color-bg) 70%);
+  box-shadow: 0 1.25rem 2.5rem -1rem rgb(0 0 0 / 0.7);
+  font-size: max(0.625rem, var(--m)); line-height: 1.3; color: var(--color-text);
+}
+.face::before { content: ""; position: absolute; right: -34cqw; bottom: -6cqw; width: 150cqw; aspect-ratio: 156 / 107; background: var(--mark-star-line) center / contain no-repeat; pointer-events: none; }
+.content { position: relative; display: flex; flex-direction: column; gap: 4cqw; height: 100%; }
+
+.top { display: flex; justify-content: space-between; align-items: center; gap: 2cqw; font: var(--weight-regular) max(0.5625rem, var(--s))/1.2 var(--font-mono); color: var(--color-text-muted); }
+.brand { display: inline-flex; align-items: center; gap: 1.6cqw; font: var(--weight-bold) max(0.6875rem, var(--m))/1 var(--font-display); letter-spacing: var(--tracking-title); color: var(--color-text); }
+.brand::before, .seal::before { content: ""; aspect-ratio: 154 / 105; background: var(--gradient-brand); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
+.brand::before { width: 1.5em; }
+
+.chart { display: block; flex: none; width: 100%; height: 17cqw; overflow: visible; }
+.chart polyline { fill: none; stroke: var(--color-text); stroke-width: 1.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: 0.8; }
+
+/* The figures, in one column with even steps: the pair, the fee, then the rows. */
+.main { display: flex; flex-direction: column; gap: 4cqw; }
+.token { display: flex; align-items: center; gap: 3cqw; }
+.logo { flex: none; width: 12cqw; height: 12cqw; border-radius: 22%; object-fit: cover; }
+.pair { display: block; font: var(--weight-semibold) max(0.75rem, var(--l))/1.15 var(--font-sans); letter-spacing: var(--tracking-title); }
+/* The highlight: the referral fee. Its name stands over it, and the figure alone fills the pill a PnL card
+   keeps for its headline number. */
+.fee { display: grid; justify-items: start; gap: 1.6cqw; }
+.fee > span { font: var(--weight-medium) max(0.5625rem, var(--s))/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent-text); }
+.pill { display: block; padding: 1.4cqw 4.4cqw 1.7cqw; border-radius: var(--radius-pill); background: var(--gradient-brand); color: var(--color-on-accent); font: var(--weight-display-strong) max(1.125rem, var(--xl))/1 var(--font-display); letter-spacing: var(--tracking-display-md); font-variant-numeric: tabular-nums; }
+
+/* The rows share one pair of columns, so every value starts on the same line. */
+.rows { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 1.8cqw 4cqw; align-items: baseline; }
+.rows div { display: contents; }
+.rows dt { color: var(--color-text-secondary); }
+.rows dd { margin: 0; font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gain { color: var(--color-up); }
+/* A plus before a figure, lifted to the middle of the figures: Plus Jakarta Sans draws it 0.12em lower. */
+.sign { display: inline-block; translate: 0 -0.12em; }
+/* What was bought and what was sold stand on one line, as a chart marks them: a B in the brand colour, an S
+   in red (the trade tag, in globals.css), each before its amount, with a rule between the two. */
+.rows .trade { display: flex; grid-column: 1 / -1; align-items: center; gap: 2cqw; }
+.trade dt { display: flex; align-items: center; }
+.trade dt:nth-of-type(2) { margin-left: 1.4cqw; padding-left: 3.4cqw; border-left: 1px solid var(--color-border-strong); }
+
+/* The referral panel at the foot of the card. */
+.ref { display: flex; align-items: center; gap: 3cqw; margin-top: auto; padding: 3cqw 3.6cqw; border: 1px solid var(--color-border); border-radius: 3.6cqw; background: rgb(7 8 11 / 0.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.avatar { display: grid; place-items: center; flex: none; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--color-accent-tint-strong); color: var(--color-accent-text); font: var(--weight-bold) max(0.5625rem, var(--s))/1 var(--font-sans); }
+.whose { flex: 1; min-width: 0; }
+.whose span { display: block; font-size: max(0.5625rem, var(--s)); color: var(--color-text-muted); }
+.whose b { display: block; font: var(--weight-semibold) max(0.625rem, var(--m))/1.3 var(--font-mono); color: var(--color-accent-text); overflow-wrap: anywhere; }
+.seal { display: grid; place-items: center; flex: none; width: 11cqw; aspect-ratio: 1; border-radius: 22%; background: var(--color-accent-tint); }
+.seal::before { width: 64%; }
+
+/* From 1024px a card lies on its side, the 16 to 9 shape Hevium's own share cards export in, so the
+   section fits one screen: the figures on the left, the price line on the right, the panel across the foot. */
+@media (min-width: 64rem) {
+  .play { --card-w: min(30rem, 36vw); --ratio: 0.5625; --rise: -4%; --s: 2.2cqw; --m: 2.8cqw; --l: 3.9cqw; --xl: 7.6cqw; }
+  .stack { height: calc(var(--card-w) * var(--ratio) * 1.24); }
+  .face { padding: 3.6cqw 4cqw; border-radius: 3.6cqw; }
+  .face::before { right: -20cqw; bottom: -30cqw; width: 88cqw; }
+  /* Two columns: the pair over its fee on the left, the price line over the rows on the right. */
+  .content { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 2.4cqw 3.4cqw; }
+  .top { grid-column: 1 / -1; }
+  .main { display: contents; }
+  .token { grid-area: 2 / 1; align-self: center; gap: 2.2cqw; }
+  .logo { width: 6.8cqw; height: 6.8cqw; }
+  .chart { grid-area: 2 / 2; align-self: center; height: 8cqw; }
+  .fee { grid-area: 3 / 1; align-self: center; gap: 1.3cqw; }
+  .pill { padding: 0.9cqw 3.4cqw 1.2cqw; }
+  .rows { grid-area: 3 / 2; align-self: center; gap: 1.3cqw 2.6cqw; }
+  .ref { grid-column: 1 / -1; gap: 2.2cqw; margin-top: 0; padding: 1.6cqw 2.4cqw; border-radius: 2.4cqw; }
+  .avatar { width: 4.8cqw; height: 4.8cqw; }
+  .seal { width: 5.6cqw; }
+}
+
+/* Under the stack: the two buttons that turn it, which card is in front, and the field for a name. */
+.controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-2) var(--space-3); }
+.controls[data-idle] { visibility: hidden; } /* before the script runs: room kept, nothing shown or reachable */
+.turn { width: 2.75rem; padding: 0; font-size: var(--text-body); }
+.count { min-width: 3.25rem; text-align: center; font: var(--weight-regular) var(--text-eyebrow)/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-text-muted); }
+.field { width: 12rem; }
+
+/* --- the perks, in words --- */
+.perks { display: grid; gap: var(--space-6); max-width: 32rem; }
+/* under the cards, which stand in the middle: so do the words, as one block */
+@media (max-width: 63.999rem) { .perks { justify-self: center; width: 100%; } }
+.perks dt { font: var(--weight-semibold) var(--text-body-lg)/1.3 var(--font-sans); letter-spacing: var(--tracking-title); color: var(--color-text); }
+.perks dd { margin: var(--space-1) 0 0; font-size: var(--text-small); line-height: 1.5; color: var(--color-text-secondary); }
+/* where the fee goes: four parts to the protocol, one to you */
+.split { display: block; margin-top: var(--space-3); }
+.bar { display: flex; justify-content: flex-end; height: 0.5rem; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-border-strong); }
+.bar [data-you] { width: 20%; background: var(--gradient-brand); }
+.shares { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-2); font: var(--weight-regular) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted); }
+.shares b { font-weight: inherit; color: var(--color-accent-text); }
+.link { display: block; margin-top: var(--space-1); font: var(--weight-medium) var(--text-small)/1.4 var(--font-mono); color: var(--color-accent-text); overflow-wrap: anywhere; }
+
+/* The button to the affiliate page, and beside it what the cards are. */
+
+/* One screen (the query globals.css uses): the two parts share the height the head and the foot leave. A
+   card is as large as that height and the width of its half allow. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  .stage { grid-template-rows: minmax(0, 1fr); min-height: 17rem; max-height: 31rem; container-type: size; }
+  .play { --card-w: min(34rem, 38cqw, calc((100cqh - 3.75rem) * 1.43)); gap: var(--space-3); }
+  .perks { gap: min(var(--space-6), 4.5cqh); }
+}

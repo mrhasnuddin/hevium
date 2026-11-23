@@ -1,0 +1,137 @@
+/* Five chains: under the section head, three step pills, then one piece. The Hevium hub stands on the left,
+   a lane runs from it to each of the five chains, and the chains stand in a list on the right, each with who
+   it suits and what trades there. One chain is lit at a time: a pulse leaves the hub and runs down its lane to
+   the chain, a line draws on from the chain to its tokens, and a buy tag lands on its logo. Below 1024px the
+   lanes become one rail down the page with the chains as its stops. --turn is how long a chain is lit for; the
+   component sets it. Every line that is part of the drawing is --line-drawn thick, as in the other sections. */
+
+@property --hub-fill { syntax: "<number>"; inherits: true; initial-value: 0; } /* how far the hub has turned to its filled look */
+
+.section { position: relative; }
+.anchor { position: absolute; top: 0; left: 0; } /* where `#how` lands: the top of the section */
+
+/* The three steps, said once and plainly: the design system's pill row (globals.css), close under the
+   supporting line. They are still, because the diagram under them is the moving part. */
+.section :global(.section-head) { margin-bottom: var(--space-4); }
+.steps { margin-bottom: var(--space-12); }
+
+.stage { --hub: 4rem; --logo: 2.5rem; --gap: var(--space-6); position: relative; display: grid; gap: var(--gap); }
+/* a patch of star pixels round the hub */
+.ground { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; opacity: 0.5; -webkit-mask: radial-gradient(circle at 12% 18%, #000, transparent 55%); mask: radial-gradient(circle at 12% 18%, #000, transparent 55%); }
+.stage > :not(.ground) { position: relative; z-index: 1; }
+
+/* The hub: the Hevium mark on a disc, with rings that go out from it. Under the pointer it turns to its filled
+   look, the brand gradient with the mark in black. A gradient cannot fade, so one number fades both: the
+   disc's fill is mixed by it and the black mark is shown by it. It is set on the hub, which stays put, and not
+   on the disc, which is made afresh on every turn. */
+.hub { justify-self: start; border-radius: 50%; transition: --hub-fill var(--dur-base) ease; }
+.hub:hover { --hub-fill: 1; }
+.disc {
+  position: relative; display: grid; place-items: center; width: var(--hub); aspect-ratio: 1; border-radius: 50%;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) calc(var(--hub-fill) * 100%), var(--color-surface)), color-mix(in srgb, var(--color-accent-deep) calc(var(--hub-fill) * 100%), var(--color-surface)));
+  border: var(--line-drawn) solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 0 calc(var(--hub) * 0.12) color-mix(in srgb, var(--color-accent) 7%, transparent), 0 0 calc(var(--hub) * 0.6) color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+.disc::before, .disc::after { content: ""; position: absolute; inset: calc(-1 * var(--line-drawn)); border: var(--line-drawn) solid var(--color-accent); border-radius: 50%; opacity: 0; }
+.mark { position: relative; width: 50%; aspect-ratio: 154 / 105; background: var(--gradient-brand); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
+.mark::after { content: ""; position: absolute; inset: 0; background: var(--color-on-accent); opacity: var(--hub-fill); } /* the mark in black, over the mark in mint */
+
+.web { display: none; } /* the lanes: drawn from 1024px */
+/* on a tablet the rail and its stops are one column in the middle, not a strip down the left of a wide screen */
+@media (min-width: 40rem) and (max-width: 63.999rem) { .stage { width: 100%; max-width: 34rem; margin-inline: auto; } }
+
+/* The chains. On a narrow screen they are stops on one rail that drops from the hub. */
+.rows { display: grid; grid-auto-rows: 1fr; gap: var(--gap); }
+.rows::before {
+  content: ""; position: absolute; z-index: 0; left: calc(var(--hub) / 2 - var(--line-drawn) / 2); top: calc(-1 * var(--gap)); bottom: calc((100% - 4 * var(--gap)) / 10);
+  width: var(--line-drawn); background: var(--color-border-strong);
+}
+.rows::after { /* a pulse that runs down the rail */
+  content: ""; position: absolute; z-index: 0; left: calc(var(--hub) / 2 - var(--line-drawn) / 2); top: calc(-1 * var(--gap)); width: var(--line-drawn); height: 3rem;
+  background: linear-gradient(to bottom, transparent, var(--color-accent)); opacity: 0;
+}
+.rows > li { position: relative; display: grid; grid-template-columns: var(--hub) minmax(0, 1fr); align-items: center; gap: var(--space-2) var(--space-4); }
+.at { position: relative; z-index: 1; grid-row: 1 / span 2; justify-self: center; display: block; width: var(--logo); height: var(--logo); }
+.logo { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: var(--color-bg); transition: opacity var(--dur-base) ease, box-shadow var(--dur-base) ease; }
+.who { display: grid; gap: 0.15em; min-width: 0; }
+.name { font: var(--weight-semibold) 1.0625rem/1.2 var(--font-sans); letter-spacing: var(--tracking-title); color: var(--color-text); transition: color var(--dur-base) ease; }
+.suits { font-size: var(--text-small); line-height: 1.35; color: var(--color-text-secondary); }
+.trades { grid-column: 2; display: flex; flex-wrap: wrap; gap: var(--space-2); font: var(--weight-medium) var(--text-eyebrow)/1 var(--font-mono); letter-spacing: 0.04em; color: var(--color-text-secondary); transition: opacity var(--dur-base) ease; }
+.trades [data-token] { display: inline-flex; align-items: center; gap: 0.5em; }
+.trades img { width: 1rem; height: 1rem; border-radius: 50%; object-fit: cover; }
+
+/* The buy that lands on a chain: the trade tag, on the corner of its logo. */
+.at :global(.trade-tag) { position: absolute; right: -0.5em; bottom: -0.35em; font-size: calc(var(--logo) * 0.3); box-shadow: 0 0 0 2px var(--color-bg); opacity: 0; scale: 0.4; transition: opacity var(--dur-base) ease, scale var(--dur-base) ease; }
+.rows > li[data-on] :global(.trade-tag) { opacity: 1; scale: 1; }
+
+/* One chain is lit and the rest stand back. Only where the page's script runs: without it nothing takes turns. */
+.rows > li[data-on] .logo { box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 calc(3px + var(--line-drawn)) var(--color-accent); }
+.stage[data-live] .rows > li:not([data-on]) .logo { opacity: 0.5; }
+.stage[data-live] .rows > li:not([data-on]) .name { color: var(--color-text-secondary); }
+.stage[data-live] .rows > li:not([data-on]) .trades { opacity: 0.45; }
+
+
+/* From 1024px: hub, lanes and chains side by side. */
+@media (min-width: 64rem) {
+  .stage { --hub: clamp(6rem, 9vw, 9rem); --logo: 2.75rem; grid-template-columns: minmax(6.5rem, 0.5fr) minmax(4rem, 0.6fr) minmax(0, 2.6fr); gap: 0; }
+  .ground { -webkit-mask: radial-gradient(ellipse 42% 75% at 14% 50%, #000, transparent); mask: radial-gradient(ellipse 42% 75% at 14% 50%, #000, transparent); }
+  .hub { grid-area: 1 / 1; justify-self: end; align-self: center; }
+  /* the lanes start under the middle of the hub and stop just short of the logos */
+  .stage > .web { display: block; grid-area: 1 / 2; margin-left: calc(var(--hub) / -2); z-index: 0; }
+  .stage > .hub { z-index: 2; } /* the disc covers where the lanes meet */
+  .web svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .lanes path { fill: none; stroke: var(--color-border-strong); stroke-width: var(--line-drawn); vector-effect: non-scaling-stroke; transition: stroke var(--dur-base) ease; }
+  .lanes path[data-on] { stroke: color-mix(in srgb, var(--color-accent) 60%, transparent); }
+  .pulse { opacity: 0.55; -webkit-mask: linear-gradient(90deg, transparent, #000 80%, transparent) -32% 0 / 24% 100% no-repeat; mask: linear-gradient(90deg, transparent, #000 80%, transparent) -32% 0 / 24% 100% no-repeat; }
+  /* the pulse is a touch thicker than its lane, so it shows on a lane that is already lit */
+  .pulse path { fill: none; stroke: var(--color-accent); stroke-width: calc(var(--line-drawn) + 1px); stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .stage[data-live] .pulse:not([data-on]) { opacity: 0.3; }
+  .pulse[data-on] { opacity: 1; }
+
+  .rows { grid-area: 1 / 3; gap: 0; padding-left: var(--space-3); }
+  .rows::before, .rows::after { display: none; }
+  .rows > li { grid-template-columns: var(--logo) auto minmax(1.5rem, 1fr) auto; gap: var(--space-4); padding-block: var(--space-3); }
+  .at { grid-area: 1 / 1; }
+  .who { grid-area: 1 / 2; }
+  /* a line on from the chain to what trades there */
+  .rows > li::before { content: ""; grid-area: 1 / 3; height: var(--line-drawn); background: linear-gradient(90deg, transparent, var(--color-border-strong) 30%); transform-origin: 0 50%; }
+  .rows > li[data-on]::before { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-accent) 60%, transparent) 30%); }
+  .trades { grid-area: 1 / 4; flex-wrap: nowrap; gap: var(--space-4); }
+  .trades img { width: 1.25rem; height: 1.25rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the hub sends a ring out as each turn starts */
+  .disc::before { animation: ping var(--turn) ease-out infinite; }
+  .disc::after { animation: ping var(--turn) ease-out calc(var(--turn) * 0.22) infinite; }
+  /* every lane carries a faint pulse. The lit chain's lane sends one bright pulse out; as it arrives the chain
+     lights, a line draws on to its tokens, they light, and the buy lands */
+  .pulse { animation: run calc(var(--turn) * 1.6) linear calc(var(--i) * var(--turn) * -0.32) infinite; }
+  .pulse[data-on] { animation: send calc(var(--turn) * 0.34) cubic-bezier(0.4, 0, 0.3, 1) calc(var(--turn) * 0.1) both; }
+  .rows > li[data-on] .logo { animation: arrive var(--dur-base) ease calc(var(--turn) * 0.44) backwards; }
+  .rows > li[data-on]::before { animation: draw calc(var(--turn) * 0.12) ease-out calc(var(--turn) * 0.46) backwards; }
+  .rows > li[data-on] .trades { animation: show var(--dur-base) ease calc(var(--turn) * 0.58) backwards; }
+  .rows > li[data-on] :global(.trade-tag) { animation: land 0.4s cubic-bezier(0.3, 1.5, 0.5, 1) calc(var(--turn) * 0.6) backwards; }
+  .rows::after { animation: fall var(--turn) linear infinite; }
+}
+@keyframes ping { from { opacity: 0.55; scale: 1; } 60%, to { opacity: 0; scale: 1.7; } }
+@keyframes run { from { -webkit-mask-position: -32% 0; mask-position: -32% 0; } to { -webkit-mask-position: 132% 0; mask-position: 132% 0; } }
+@keyframes send { from { -webkit-mask-position: -32% 0; mask-position: -32% 0; } to { -webkit-mask-position: 132% 0; mask-position: 132% 0; } }
+@keyframes land { from { opacity: 0; scale: 0.4; } }
+@keyframes draw { from { scale: 0 1; } }
+@keyframes show { from { opacity: 0.45; } }
+@keyframes arrive { from { box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 calc(3px + var(--line-drawn)) transparent; } }
+@keyframes fall { from { top: calc(-1 * var(--gap)); opacity: 1; } 85% { opacity: 1; } to { top: calc(100% - (100% - 4 * var(--gap)) / 10 - 3rem); opacity: 0; } }
+
+/* One screen (the query globals.css uses): the piece takes the height the head, the steps and the button
+   leave, the five chains share it evenly, and the hub, the logos and the type are sized from it. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  .steps { flex: none; margin-bottom: var(--space-6); }
+  .stage { grid-template-rows: minmax(0, 1fr); min-height: 15rem; max-height: 28rem; container-type: size; }
+  /* set on the parts, not the stage: a container's own units measure the container round it */
+  .stage > * { --hub: min(9rem, 9vw, 40cqh); --logo: min(2.75rem, 13cqh); }
+  .rows { min-height: 0; }
+  .rows > li { padding-block: 0; }
+  .name { font-size: clamp(0.9375rem, 5.8cqh, 1.25rem); }
+  .suits { font-size: clamp(0.75rem, 4.5cqh, 0.9375rem); }
+}

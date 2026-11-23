@@ -1,0 +1,14 @@
+/* The first screen. The scene fills it and runs on a little below; the copy lies over its top half. */
+.hero { position: relative; height: 100svh; min-height: 40rem; }
+
+/* The copy lets the pointer through everywhere but on its links, so a logo under it can still be grabbed. */
+/* It starts 14% down the screen, or on a short screen just clear of the nav bar. */
+.copy { position: absolute; inset: max(14svh, calc(var(--space-4) + var(--nav-height) + var(--space-6))) 0 auto; z-index: var(--z-content); padding-inline: var(--gutter); text-align: center; pointer-events: none; }
+.copy a { pointer-events: auto; }
+.title { max-width: 20ch; margin: 0 auto var(--space-6); font: var(--weight-display) var(--hero-title-size)/var(--leading-display-lg) var(--font-display); letter-spacing: var(--tracking-display-lg); text-wrap: balance; }
+.actions { justify-content: center; }
+
+/* The scene's floor runs past the bottom of the hero and fades out. What follows sits on top of
+   that tail, and the section right after gives up its top rule, which would cut across the fade. */
+.hero ~ :global(.section) { position: relative; z-index: var(--z-content); }
+.hero + :global(.section) { border-top: 0; }

@@ -1,0 +1,87 @@
+/* The solution and its four engines: one frame, with no edge or fill of its own. It opens with the solution's
+   head and a row of four pills, and holds the four product sections (Stocks, Launch, Agents, Earn).
+
+   Wide (the screens where a section is one screen): the head and the pills stay put under the nav bar while
+   the four slide up under them, the pill of the one in view is lit, and after Earn the head goes with it.
+   The head with one engine is one screen.
+
+   Narrow (below 1024px): the pills are tabs. One engine shows at a time, so a phone does not scroll through
+   all four; the pills stay in reach under the nav bar.
+
+   All of it waits on data-live, which a script in the frame sets before the engines are drawn. Without
+   scripts it is the head, four links, and four sections one after another, as plain as before. */
+
+.engines {
+  --pin: calc(var(--space-4) + var(--nav-height) + var(--space-2)); /* where the nav bar ends, and a little air */
+  --bar-h: 3rem; /* the row of pills */
+}
+
+/* it opens a part of the page, so it stands a section's distance from what is above it */
+.top { padding-top: var(--section-y); }
+.top :global(.section-head) { margin-bottom: var(--space-2); }
+.top h2 { margin-top: var(--space-2); }
+.bar { height: var(--bar-h); }
+.next { display: none; }
+
+/* The lit pill: the engine in view, or the open tab. Read from the frame, which the early script has already
+   marked, so it is right before the page's own script runs. */
+.engines[data-live][data-active="stocks"] .bar a[href="#stocks"],
+.engines[data-live][data-active="launch"] .bar a[href="#launch"],
+.engines[data-live][data-active="agents"] .bar a[href="#agents"],
+.engines[data-live][data-active="earn"] .bar a[href="#earn"] { background: var(--gradient-brand); border-color: transparent; color: var(--color-on-accent); }
+.engines[data-live][data-active="stocks"] .bar a[href="#stocks"] :global(.pill-n),
+.engines[data-live][data-active="launch"] .bar a[href="#launch"] :global(.pill-n),
+.engines[data-live][data-active="agents"] .bar a[href="#agents"] :global(.pill-n),
+.engines[data-live][data-active="earn"] .bar a[href="#earn"] :global(.pill-n) { color: inherit; }
+
+/* Narrow: tabs. */
+@media (max-width: 63.999rem) {
+  .engines[data-live] > .bar {
+    position: sticky; top: var(--pin); z-index: 5;
+    background: color-mix(in srgb, var(--color-bg) 86%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  }
+  :global([data-nav="hidden"]) .engines[data-live] > .bar { top: var(--space-3); }
+  .engines[data-live] > :global(.section) { display: none; padding-block: var(--space-8) var(--space-6); scroll-margin-top: calc(var(--pin) + var(--bar-h)); }
+  .engines[data-live][data-active="stocks"] > :global(#stocks),
+  .engines[data-live][data-active="launch"] > :global(#launch),
+  .engines[data-live][data-active="agents"] > :global(#agents),
+  .engines[data-live][data-active="earn"] > :global(#earn) { display: block; }
+  /* the open tab says which engine this is */
+  .engines[data-live] > :global(.section) :global(.eyebrow) { display: none; }
+  /* the way on to the next engine, at the foot of the open one */
+  .engines[data-live] > .next { display: flex; justify-content: center; padding-inline: var(--gutter); padding-bottom: var(--section-y); }
+}
+@media (max-width: 63.999rem) and (prefers-reduced-motion: no-preference) {
+  .engines[data-live] > .bar { transition: top var(--motion-ui); }
+  .engines[data-live] > :global(.section) { animation: panel-in var(--dur-base) ease both; }
+}
+@keyframes panel-in { from { opacity: 0; translate: 0 var(--space-3); } }
+
+/* Wide: the head stays put and the engines slide up under it. --head-h is the room the head's words take
+   under the nav bar: on a short screen the headline alone, on a tall one the label and the line as well. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  .engines[data-live] { --head-h: 4.25rem; margin-top: calc(-1 * var(--pin)); }
+  /* Its fill is the page's own colour, so no box shows; it is there to keep an engine out of sight where it
+     passes under the head. It runs to the top of the screen, behind the nav bar. */
+  .engines[data-live] > .top { position: sticky; top: 0; z-index: 6; display: flex; align-items: flex-end; height: calc(var(--pin) + var(--head-h)); padding-top: 0; background: var(--color-bg); }
+  .engines[data-live] > .top > :global(.container) { width: 100%; }
+  .engines[data-live] > .top :global(.section-head) { margin-bottom: 0; }
+  .engines[data-live] > .top :global(.eyebrow), .engines[data-live] > .top :global(.lead) { display: none; }
+  .engines[data-live] > .top h2 { max-width: none; }
+  .engines[data-live] > .bar { position: sticky; top: calc(var(--pin) + var(--head-h)); z-index: 6; background: var(--color-bg); }
+  /* the engine fades out as it goes under, with no hard line */
+  .engines[data-live] > .bar::after { content: ""; position: absolute; inset: 100% 0 auto; height: var(--space-6); background: linear-gradient(var(--color-bg), transparent); pointer-events: none; }
+  .engines[data-live] > :global(.section) {
+    height: calc(100svh - var(--pin) - var(--head-h) - var(--bar-h)); padding-block: var(--space-6) var(--screen-bottom);
+    scroll-margin-top: calc(var(--pin) + var(--head-h) + var(--bar-h));
+  }
+  /* the lit pill says which engine this is, and its headline steps down under the solution's */
+  .engines[data-live] > :global(.section) :global(.eyebrow) { display: none; }
+  .engines[data-live] > :global(.section) :global(.section-head) { margin-bottom: var(--space-6); }
+  .engines[data-live] > :global(.section) :global(.section-head) h2 { margin-top: 0; max-width: none; font-size: calc(var(--text-display-md) * 0.75); }
+}
+@media (min-width: 64rem) and (min-height: 56rem) {
+  .engines[data-live] { --head-h: 11rem; } /* the eyebrow, the headline and the line, with a little air under the nav bar */
+  .engines[data-live] > .top :global(.eyebrow) { display: inline-flex; }
+  .engines[data-live] > .top :global(.lead) { display: block; }
+}

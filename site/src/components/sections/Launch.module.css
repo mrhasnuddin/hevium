@@ -1,0 +1,24 @@
+/* Launch: under the section head, one piece. The coin press is one wide picture in star pixels with its
+   three bins standing in thirds; the three figures below are a grid of thirds, so each stands under its bin. */
+
+/* The scene is as wide as the container and a fixed height, not the square a card's object is. */
+span.scene { aspect-ratio: auto; height: clamp(22rem, 16rem + 16vw, 30rem); }
+
+.split { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--space-4) 0 0; text-align: center; }
+/* the figure over what it counts */
+.split div { display: flex; flex-direction: column-reverse; gap: var(--space-2); }
+.split dd { margin: 0; font: var(--weight-display-strong) var(--text-display-md)/1 var(--font-display); letter-spacing: var(--tracking-display-md); font-variant-numeric: tabular-nums; color: var(--stat-value); }
+.split div:nth-child(odd) dd { color: var(--stat-value-accent); }
+.split dt { padding-inline: var(--space-1); font: var(--weight-regular) var(--text-eyebrow)/1.5 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stat-label); }
+
+
+/* One screen (the query globals.css uses): the picture takes the height the head and the button leave, and
+   the three figures move inside their bins, each on one line above its coins, so nothing is spent below. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  .figure { position: relative; display: flex; flex-direction: column; min-height: 15rem; max-height: 30rem; container-type: size; }
+  span.scene { flex: 1; height: auto; min-height: 0; }
+  .split { position: absolute; inset: 64.5% 0 auto; margin: 0; }
+  /* Each is a plate in the canvas's own colour, so a coin on its way down passes behind the words. */
+  .split div { flex-direction: row-reverse; justify-self: center; align-items: baseline; padding: var(--space-1) var(--space-3); background: var(--color-bg); border-radius: var(--radius-sm); }
+  .split dd { font-size: clamp(1.25rem, 8.5cqh, 2.5rem); }
+}

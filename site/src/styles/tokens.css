@@ -4,20 +4,15 @@
    Brand values come from hevium-brand-kit/BRAND_GUIDELINES.md, checked against
    hevium.xyz/brand and the app at hevium.xyz on 2026-11-21.
 
-   Themes: Obsidian (dark) is the page. One section, the roadmap, sets data-theme="light".
-   Views:  <html data-view="onchain"> is the on-chain view, entered by holding left click. */
+   One theme: Obsidian (dark). */
 
-/* Declared on :root and on every themed scope, so component tokens resolve again
-   against that scope's colour roles. */
-:root,
-[data-theme] {
+:root {
   /* ============ 1. PRIMITIVES ============ */
 
   /* Brand */
   --mint-200: #B4FDED;
   --mint-300: #97FBE3; /* Hevium Mint */
   --teal-400: #1CD8B3; /* Deep Teal */
-  --teal-600: #0D9488; /* brand teal for light surfaces */
 
   /* Neutrals. Surfaces are the brand kit's Obsidian and Carbon. Text greys are the app's. */
   --n-950: #07080B; /* Obsidian */
@@ -31,13 +26,6 @@
   --n-300: #A1A1AA; /* the app's secondary text */
   --n-200: #D4D4D8;
   --white: #FFFFFF;
-
-  /* Roadmap phase colours. The same colour families the app's stylesheet carries,
-     at the depth that holds on the light canvas. */
-  --blue-600: #155DFC;
-  --purple-600: #9810FA;
-  --pink-600: #E60076;
-  --orange-600: #F54A00;
 
   /* Signals, as the app sets them */
   --emerald-400: #34D399;
@@ -123,6 +111,9 @@
   --container-max: 100rem; /* 1600px */
   --gutter: clamp(1rem, 4vw, 4rem);
   --section-y: clamp(4.5rem, 10vw, 10rem);
+  /* A section that is one screen: its content starts clear of the floating nav bar and ends just above the fold. */
+  --screen-top: 5.5rem;
+  --screen-bottom: 1.5rem;
   --grid-gap: clamp(1rem, 2vw, 2rem);
   --measure: 68ch;
 
@@ -164,11 +155,19 @@
   --button-tonal-border: var(--color-border);
   --button-tonal-text: var(--color-accent-text);
 
+  /* Hero */
+  --hero-title-size: clamp(2rem, 1.2rem + 3vw, 3.75rem); /* 32 -> 60. Smaller than display-xl: the scene needs the room */
+
+  /* Statement (What is Hevium): lit as it is scrolled through */
+  --statement-unlit: color-mix(in srgb, var(--color-text) 20%, transparent); /* words not read yet */
+  --statement-figure-dim: 0.3; /* a figure before its words are read */
+
   /* Nav */
   --nav-height: 3.5rem;
   --nav-bg: var(--color-surface-glass);
   --nav-border: var(--color-border);
-  --nav-radius: var(--radius-pill);
+  --nav-inset: calc((var(--nav-height) - var(--button-height-sm)) / 2); /* the room around the bar's button */
+  --nav-radius: calc(var(--button-radius) + var(--nav-inset)); /* so the bar's corner runs with the button's */
   --nav-link: var(--color-text-secondary);
   --nav-link-hover: var(--color-text);
 
@@ -177,10 +176,28 @@
   --heading-highlight: var(--color-accent);
 
   /* Card and callout */
-  --card-bg: var(--color-surface);
-  --card-border: var(--color-border);
+  /* A dark well inside a thicker frame. The shape is measured from the cards of OriginKit's features-04
+     section; the colours are ours: a Carbon frame round an Obsidian well, each with a hairline. */
+  --card-frame-bg: var(--color-surface);
+  --card-edge: var(--color-border);
+  --card-edge-hover: var(--color-accent-tint-strong);
+  --card-frame-width: 0.5rem;
+  --card-frame-radius: 1.25rem;
+  --card-bg: var(--color-bg);
   --card-radius: var(--radius-lg);
-  --card-pad: clamp(1.25rem, 2vw, 2rem);
+  --card-pad: 0.75rem 1.25rem 1.25rem;
+  --card-gap: 0.625rem;
+  --card-title-size: 1.25rem;
+  --card-stat-size: 1.125rem;
+  /* The page's pixels: four-point stars on a grid (lib/pixels.ts). */
+  --pixel-ink: var(--color-accent);
+  --line-drawn: 2px; /* a line that is part of a drawing: a price line, a lane. Rules and edges stay 1px */
+  /* The Hevium star as a mask: give the box a background and it shows through the star (see .eyebrow).
+     The path is the mark's own, from hevium-brand-kit/01-logomark. */
+  --mark-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-77 -52.5 154 105'%3E%3Cpath d='M 24 -52.5 C 13.93 -36.78 -6.86 -25.5 -9 -6.5 C -7.36 -1.09 3.27 -0.77 9 -3.5 C 34.23 -15.52 54.85 -34.92 77 -52.5 C 66.44 -36.98 45.8 -25.2 44 -10.5 C 43.2 -4.8 48.2 -2.9 53.5 -2.1 C 61.5 -0.9 69.2 -0.35 77 0 C 59.09 1.69 40.82 1.17 26 9.5 C 7.63 19.83 -7.73 37.21 -24 52.5 C -13.93 36.78 6.86 25.5 9 6.5 C 7.36 1.09 -3.27 0.77 -9 3.5 C -34.23 15.52 -54.85 34.92 -77 52.5 C -66.44 36.98 -45.8 25.2 -44 10.5 C -43.2 4.8 -48.2 2.9 -53.5 2.1 C -61.5 0.9 -69.2 0.35 -77 0 C -59.09 -1.69 -40.82 -1.17 -26 -9.5 C -7.63 -19.83 7.73 -37.21 24 -52.5 Z'/%3E%3C/svg%3E");
+  /* The same star in outline over a faint fill, as a picture: the brand kit's banners set it large and
+     cropped behind their words. A picture cannot read the tokens, so the two brand colours are written out. */
+  --mark-star-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-78 -53.5 156 107'%3E%3Cpath d='M 24 -52.5 C 13.93 -36.78 -6.86 -25.5 -9 -6.5 C -7.36 -1.09 3.27 -0.77 9 -3.5 C 34.23 -15.52 54.85 -34.92 77 -52.5 C 66.44 -36.98 45.8 -25.2 44 -10.5 C 43.2 -4.8 48.2 -2.9 53.5 -2.1 C 61.5 -0.9 69.2 -0.35 77 0 C 59.09 1.69 40.82 1.17 26 9.5 C 7.63 19.83 -7.73 37.21 -24 52.5 C -13.93 36.78 6.86 25.5 9 6.5 C 7.36 1.09 -3.27 0.77 -9 3.5 C -34.23 15.52 -54.85 34.92 -77 52.5 C -66.44 36.98 -45.8 25.2 -44 10.5 C -43.2 4.8 -48.2 2.9 -53.5 2.1 C -61.5 0.9 -69.2 0.35 -77 0 C -59.09 -1.69 -40.82 -1.17 -26 -9.5 C -7.63 -19.83 7.73 -37.21 24 -52.5 Z' fill='%231CD8B3' fill-opacity='0.07' stroke='%2397FBE3' stroke-opacity='0.3' stroke-width='0.6' stroke-linejoin='round'/%3E%3C/svg%3E");
   --callout-bg: var(--color-surface);
   --callout-rule: var(--color-accent);
 
@@ -203,32 +220,8 @@
   --bar-fill: var(--gradient-brand);
   --bar-height: 0.75rem;
 
-  /* Roadmap: a ladder of rungs with skewed phase cards, after taiko.xyz.
-     Idle rungs are always drawn. Colour wipes down them on scroll, running through the phase colours in order. */
-  --rung-idle: var(--color-border-strong);
-  --rung-width: 1.5px;
-  --phase-skew: -5deg; /* the slope of the rungs in the body of the ladder */
-  --phase-skew-fan: -18deg; /* the slope of the rungs across the top */
-  /* One colour per phase, none repeated. On the light canvas they measure 3.5, 4.8, 5.1, 4.2 and 3.3 to 1. */
-  --phase-tone-1: var(--color-accent);
-  --phase-tone-2: var(--blue-600);
-  --phase-tone-3: var(--purple-600);
-  --phase-tone-4: var(--pink-600);
-  --phase-tone-5: var(--orange-600);
-  --phase-fill-strength: 10%;
-
   /* Scene overlay */
   --grain-opacity: 0.06;
-
-  /* On-chain view (hold left click, no button) */
-  --hold-delay: 350ms;
-  --hold-move-tolerance: 6px;
-  --hold-ring-size: 2.5rem;
-  --onchain-line: var(--color-accent);
-  --onchain-grid: var(--color-border);
-  --onchain-grid-size: 3rem;
-  --onchain-in: 600ms;
-  --onchain-out: 300ms;
 
   /* ascii-reveal (loading and reveal). These are the package's own property names. */
   --ascii-accent: var(--color-accent);
@@ -246,10 +239,8 @@
      10  accent                    --color-accent*, for the primary action, one highlighted
                                    phrase per headline, and current state */
 
-/* Obsidian: the page. A light section also takes these roles in the on-chain view. */
-:root,
-[data-theme="dark"],
-[data-view="onchain"] [data-theme="light"] {
+/* Obsidian: the page. */
+:root {
   --color-bg: var(--n-950);
   --color-surface: var(--n-900);
   --color-surface-raised: var(--n-850);
@@ -281,43 +272,8 @@
   --bar-track: var(--n-700);
 }
 
-/* Light: the brand kit's light theme, used by the roadmap section only.
-   Teal replaces mint, which fails contrast on light. */
-[data-theme="light"] {
-  --color-bg: #F4F6F5;
-  --color-surface: #FFFFFF;
-  --color-surface-raised: #FFFFFF;
-  --color-surface-hover: #E6EBE9;
-  --color-surface-glass: rgb(255 255 255 / 0.78);
-  --color-border: rgb(10 12 16 / 0.1);
-  --color-border-strong: rgb(10 12 16 / 0.22);
-  --color-text: #0A0C10;
-  --color-text-secondary: #47505D;
-  --color-text-muted: #5B6573;
-  --color-text-disabled: var(--n-300);
-  --color-accent: var(--teal-600); /* large text and graphics only: 3.5 to 1 on the canvas */
-  --color-accent-hover: #0B7F75;
-  --color-accent-deep: #14C8A5;
-  --color-accent-text: #0B6E66; /* 5.6 to 1, for small text */
-  --color-on-accent: var(--white);
-  --color-accent-soft: rgb(13 148 136 / 0.08);
-  --color-accent-tint: rgb(13 148 136 / 0.12);
-  --color-accent-tint-strong: rgb(13 148 136 / 0.2);
-  --gradient-brand: linear-gradient(135deg, #14C8A5 0%, var(--teal-600) 100%);
-  --glow-accent: 0 0 0 transparent;
-  --color-up: #0B6E66;
-  --color-down: #C8324A;
-  --color-warning: #8A5A00;
-  --color-focus: #0B6E66;
-  --button-primary-bg: #0A0C10;
-  --button-primary-bg-hover: var(--n-800);
-  --button-primary-text: var(--white);
-  --bar-track: rgb(10 12 16 / 0.12);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  :root,
-  [data-theme] {
+  :root {
     --reveal-distance: 0px;
     --press-scale: 1;
     --dur-reveal: 200ms;

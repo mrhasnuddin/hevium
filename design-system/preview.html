@@ -27,6 +27,8 @@ a { color: inherit; }
 .section { padding-block: var(--section-y); border-top: 1px solid var(--color-border); }
 .block-head { margin-bottom: var(--space-12); }
 .block-head h2 { margin-top: var(--space-3); }
+.section-head { display: grid; justify-items: center; gap: var(--space-3); text-align: center; }
+.section-head h2 { margin-top: var(--space-2); max-width: 18ch; }
 .sub { margin-top: var(--space-16); }
 .sub > .spec { margin-bottom: var(--space-4); }
 
@@ -38,36 +40,50 @@ a { color: inherit; }
 .lead { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); color: var(--color-text-secondary); max-width: var(--measure); text-wrap: pretty; }
 .body { color: var(--color-text-secondary); max-width: var(--measure); text-wrap: pretty; }
 .small { font-size: var(--text-small); line-height: 1.5; }
-.eyebrow { font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--eyebrow-color); }
+/* label: mono, uppercase, for the small print on cards, bars and tables */
+.label { font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--eyebrow-color); }
 .spec { font: var(--weight-regular) var(--text-caption)/1.5 var(--font-mono); color: var(--color-text-muted); }
 .hl { color: var(--heading-highlight); }
 
 /* nav */
 .nav-wrap { position: sticky; top: var(--space-4); z-index: var(--z-nav); padding-top: var(--space-4); }
-.nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); height: var(--nav-height); padding-inline: var(--space-6) var(--space-2); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); }
-.nav { transition: background-color var(--motion-ui), border-color var(--motion-ui); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); height: var(--nav-height); padding-inline: var(--space-4) calc(var(--nav-inset) - 1px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); }
 .nav img { height: 1.5rem; width: auto; }
-/* The nav takes a section's theme while it sits over it (set by script), and swaps to the matching logo. */
-.nav .logo-on-light, .nav[data-theme="light"] .logo-on-dark { display: none; }
-.nav[data-theme="light"] .logo-on-light { display: block; }
-.nav-links { display: none; gap: var(--space-8); font-size: var(--text-small); }
-.nav-links a { color: var(--nav-link); text-decoration: none; transition: color var(--motion-hover); }
+/* The bar's corners run with its button's: the button's radius plus the room around it (--nav-radius).
+   Below 1024px the links are a popover the menu button opens, hung under the bar. */
+.nav-links { inset: auto; gap: var(--space-8); margin: 0; padding: 0; overflow: visible; background: none; border: 0; color: inherit; font-size: var(--text-small); }
+.nav-links a:not(.btn) { display: flex; align-items: center; min-height: 2.75rem; color: var(--nav-link); text-decoration: none; transition: color var(--motion-hover), background-color var(--motion-hover); }
+.nav-links:popover-open { display: flex; flex-direction: column; gap: 0; top: calc(var(--space-4) * 2 + var(--nav-height) + var(--space-2)); right: var(--gutter); left: var(--gutter); width: auto; padding: calc(var(--nav-inset) - 1px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); font-size: var(--text-body); }
+.nav-links:popover-open a:not(.btn) { padding-inline: var(--space-2); border-radius: var(--button-radius); }
+/* Launch app is the menu's last row below 1024px, and in the bar from there up */
+.nav-cta { display: none; }
+.nav-links:popover-open .nav-cta { display: block; margin-top: var(--space-2); }
+.nav-links:popover-open .nav-cta .btn { width: 100%; }
+@media (max-width: 63.999rem) { .nav-actions > .btn-primary { display: none; } }
+.nav-actions { display: flex; align-items: center; gap: var(--space-2); }
+.nav .nav-menu { flex-direction: column; gap: 0.375rem; width: var(--button-height-sm); padding: 0; }
+.nav-menu span { width: 1rem; height: var(--line-drawn); border-radius: 1px; background: currentColor; transition: translate var(--motion-ui), rotate var(--motion-ui); }
+.nav:has(.nav-links:popover-open) .nav-menu span:first-child { translate: 0 calc((0.375rem + var(--line-drawn)) / 2); rotate: 45deg; }
+.nav:has(.nav-links:popover-open) .nav-menu span:last-child { translate: 0 calc((0.375rem + var(--line-drawn)) / -2); rotate: -45deg; }
+@media (min-width: 64rem) { .nav .nav-menu { display: none; } }
 .nav-links a[aria-current] { color: var(--color-accent); }
-@media (min-width: 64rem) { .nav-links { display: flex; } }
+@media (min-width: 64rem) { .nav-links { position: static; display: flex; width: auto; height: auto; } }
 
 /* buttons */
-.btn { display: inline-flex; align-items: center; justify-content: center; height: var(--button-height); padding-inline: var(--button-pad-x); border: 1px solid transparent; border-radius: var(--button-radius); font: var(--button-weight) var(--text-small)/1 var(--font-sans); text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform var(--motion-press), background-color var(--motion-hover), border-color var(--motion-hover); }
+.btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; height: var(--button-height); padding-inline: var(--button-pad-x); border: 1px solid transparent; border-radius: var(--button-radius); font: var(--button-weight) var(--text-small)/1 var(--font-sans); text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform var(--motion-press), background-color var(--motion-hover), border-color var(--motion-hover); }
 .btn:active { transform: scale(var(--press-scale)); }
 .btn-sm { height: var(--button-height-sm); padding-inline: var(--space-4); }
 .btn-primary { background: var(--button-primary-bg); color: var(--button-primary-text); }
+/* The fill is a gradient, and a gradient cannot fade to a flat colour, so the hover colour lies over it and fades in. */
+.btn-primary::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: var(--button-primary-bg-hover); opacity: 0; transition: opacity var(--motion-hover); }
 .btn-secondary { background: transparent; color: var(--button-secondary-text); border-color: var(--button-secondary-border); }
 .link { color: var(--color-accent); text-decoration-thickness: from-font; text-underline-position: from-font; transition: color var(--motion-hover); }
 @media (hover: hover) and (pointer: fine) {
-  .nav-links a:hover { color: var(--nav-link-hover); }
-  .btn-primary:hover { background: var(--button-primary-bg-hover); }
+  .nav-links a:not(.btn):hover { color: var(--nav-link-hover); }
+  .btn-primary:hover::before { opacity: 1; }
   .btn-secondary:hover { background: var(--button-secondary-bg-hover); }
   .link:hover { color: var(--color-accent-hover); }
-  a.card:hover { background: var(--color-surface-hover); }
+  .card:hover { border-color: var(--card-edge-hover); }
 }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 
@@ -100,9 +116,24 @@ a { color: inherit; }
 /* cards and callout */
 .cards { display: grid; gap: var(--grid-gap); }
 @media (min-width: 48rem) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.card { display: block; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--card-radius); padding: var(--card-pad); text-decoration: none; transition: background-color var(--motion-hover); }
-.card .title { margin-block: var(--space-3) var(--space-2); }
-.card p { color: var(--color-text-secondary); }
+/* card: an inner surface inside a thicker frame, as in the site's globals.css */
+.card { display: flex; padding: var(--card-frame-width); background: var(--card-frame-bg); border: 1px solid var(--card-edge); border-radius: var(--card-frame-radius); text-decoration: none; transition: border-color var(--motion-hover); }
+.card-body { display: flex; flex: 1; flex-direction: column; gap: var(--card-gap); min-width: 0; padding: var(--card-pad); background: var(--card-bg); border: 1px solid var(--card-edge); border-radius: var(--card-radius); }
+.card-text { display: flex; flex-direction: column; gap: var(--space-3); margin-top: auto; }
+.card-title { font: var(--weight-semibold) var(--card-title-size)/1.2 var(--font-sans); letter-spacing: var(--tracking-title); }
+.card-text p { line-height: 1.35; color: var(--color-text-secondary); }
+.card-stat .card-body { flex-direction: row; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-6); font: var(--weight-medium) var(--card-stat-size)/1.2 var(--font-sans); }
+/* input: a one-line text field, 44px tall */
+.input { display: block; width: 100%; height: 2.75rem; padding-inline: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border-strong); border-radius: var(--button-radius); color: var(--color-text); font: var(--weight-medium) var(--text-small)/1 var(--font-sans); transition: border-color var(--motion-hover); }
+.input::placeholder { color: var(--color-text-muted); }
+.input:focus-visible { border-color: var(--color-accent); }
+/* trade tag: the letter a chart marks a trade with */
+.trade-tag { display: inline-grid; place-items: center; flex: none; width: 1.7em; height: 1.7em; border-radius: 0.45em; background: var(--color-accent); color: var(--color-on-accent); font: var(--weight-bold) 0.82em/1 var(--font-mono); }
+.trade-tag[data-side="sell"] { background: var(--color-down); }
+.trade-tag[data-side="held"] { background: var(--amber-400); }
+/* eyebrow: the pill that opens a section, led by the Hevium star */
+.eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) 0.875rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-pill); font: var(--weight-medium) var(--text-small)/1.2 var(--font-sans); }
+.eyebrow::before { content: ""; flex: none; width: 1rem; aspect-ratio: 154 / 105; background: var(--gradient-brand); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
 .callout { background: var(--callout-bg); border-left: 2px solid var(--callout-rule); padding: var(--space-4) var(--space-6); color: var(--color-text-secondary); }
 .callout strong { color: var(--color-text); font-weight: var(--weight-semibold); }
 
@@ -128,52 +159,6 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
 .bar i { display: block; height: 100%; width: 80%; background: var(--bar-fill); transform-origin: left; transition: transform var(--motion-reveal); }
 .bar.is-reset i { transform: scaleX(0.02); transition: none; }
 
-/* roadmap, after taiko.xyz: idle rungs are always drawn, colour wipes down them on scroll, and each card grows up from the rung it stands on. The one light section. */
-.journey { position: relative; overflow: hidden; padding-block: var(--section-y); border-radius: var(--radius-xl); background-color: var(--color-bg); color: var(--color-text); transition: background-color var(--onchain-out) var(--ease-out), color var(--onchain-out) var(--ease-out); }
-/* Flex centring lets a map wider than a phone crop evenly on both sides. */
-.journey > .container { display: flex; flex-direction: column; align-items: center; }
-.journey-label, .journey-title { text-align: center; }
-.journey-title { margin-top: var(--space-3); }
-/* Card sizes are in em, so the map's font-size scales them with the ladder. The top margin is room for the first cards to grow into. */
-.journey-map { position: relative; flex: none; width: 36rem; aspect-ratio: 893 / 1067; margin-top: 9.5rem; font-size: 0.75rem; }
-.journey-rungs { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.journey-list { margin: 0; }
-.rung { stroke: var(--rung-idle); stroke-width: var(--rung-width); vector-effect: non-scaling-stroke; transition: stroke var(--motion-ui); }
-.rung.is-on { stroke: color-mix(in oklab, var(--b) var(--mix), var(--a)); }
-/* Each phase has its own colour, in --tone. */
-.phase { --tone: var(--phase-tone-1); --skew: var(--phase-skew); position: absolute; transform: skewY(var(--skew)); }
-.phase:nth-child(1) { left: 22%; bottom: 94%; width: 13.5em; --skew: var(--phase-skew-fan); transform-origin: left center; }
-.phase:nth-child(2) { right: 22%; bottom: 91.8%; width: 12.5em; --skew: -16deg; --tone: var(--phase-tone-2); }
-.phase:nth-child(3) { right: 48%; bottom: 64.5%; width: 14em; --tone: var(--phase-tone-3); }
-.phase:nth-child(4) { left: 28%; bottom: 39.5%; width: 12.5em; --tone: var(--phase-tone-4); }
-.phase:nth-child(5) { right: 22%; bottom: 20.6%; width: 15em; --tone: var(--phase-tone-5); }
-.phase-meta { margin: 0 0 0.5em; padding-left: 0.75em; font: var(--weight-medium) max(0.6875em, 0.625rem)/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-secondary); }
-.phase.is-current .phase-meta { color: var(--color-accent-text); }
-.phase-title { position: relative; z-index: 2; margin: 0; padding-left: 0.54em; font: var(--weight-display) 1.375em/0.9 var(--font-display); letter-spacing: -0.02em; }
-/* The label and title lie on the rungs with no panel behind them. A halo in the canvas colour keeps the lines off the letters. */
-.phase-meta, .phase-title { text-shadow: 0 0 2px var(--color-bg), 0 0 4px var(--color-bg), 0 0 6px var(--color-bg), 0 0 8px var(--color-bg); }
-/* Closed until the wipe reaches the card. A noscript rule after this stylesheet opens them all. */
-.phase-reveal { display: grid; grid-template-rows: 0fr; transform: translateY(-0.6875em); -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); transition: grid-template-rows var(--motion-reveal); }
-.phase.is-on .phase-reveal { grid-template-rows: 1fr; }
-.phase-body { min-height: 0; overflow: hidden; }
-.phase-body ul { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 1.5em 1.125em 0.875em; border: 1px solid transparent; border-image: linear-gradient(transparent, var(--tone)) 1; background: linear-gradient(transparent, color-mix(in srgb, var(--tone) var(--phase-fill-strength), transparent) 120%); }
-.phase-body li { display: flex; align-items: flex-start; gap: 8px; font-size: max(0.875em, 0.75rem); font-weight: var(--weight-medium); line-height: 1.6; letter-spacing: -0.01em; color: var(--color-text-secondary); }
-.phase-body li::before { content: "+"; flex: none; font-family: var(--font-mono); color: var(--tone); }
-.phase-body .phase-chain { display: none; margin-top: 0.5em; font: var(--weight-regular) max(0.6875em, 0.625rem)/1.5 var(--font-mono); letter-spacing: 0.04em; color: var(--onchain-line); }
-.phase-body .phase-chain::before { content: none; }
-@media (min-width: 35.375rem) {
-  .journey-map { width: 42.5rem; }
-  .phase:nth-child(1) { left: 18%; }
-  .phase:nth-child(2) { right: 17%; width: 17.5em; }
-  .phase:nth-child(5) { right: 13%; }
-}
-@media (min-width: 62rem) {
-  .journey-map { width: 55.6875rem; font-size: 1rem; }
-  .phase:nth-child(1) { left: 0; bottom: 95%; width: 15.5em; }
-  .phase:nth-child(5) { right: 5%; }
-}
-@media (min-width: 68rem) { .phase:nth-child(1) { left: -8%; } }
-
 /* faq */
 .faq details { border-top: 1px solid var(--color-border); }
 .faq details:last-child { border-bottom: 1px solid var(--color-border); }
@@ -190,7 +175,7 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
 .loading-grid .spec { margin-bottom: var(--space-4); }
 
 /* pairing and scheme comparison (preview only) */
-.link, td.mono, .faq summary::after, .roadmap .is-current .eyebrow { color: var(--color-accent-text); }
+.link, td.mono, .faq summary::after { color: var(--color-accent-text); }
 .scheme-grid { display: grid; gap: var(--grid-gap); margin-bottom: var(--space-16); }
 @media (min-width: 48rem) { .scheme-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .scheme { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
@@ -213,54 +198,43 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
 
 /* third button: tinted fill with accent text and edge, as on the app's active tab */
 .btn-tonal { background: var(--button-tonal-bg); color: var(--button-tonal-text); border-color: var(--button-tonal-border); }
+/* how a section ends: one button under its piece, in the middle; on a phone a section's button takes the whole row */
+.section-foot { display: grid; justify-items: center; gap: var(--space-4); margin-top: var(--space-8); text-align: center; }
+@media (max-width: 39.999rem) { main .btn:not(.btn-sm) { width: 100%; } }
+/* a drawn icon: stroked at the drawn-line weight in a 16-unit box */
+.icon { flex: none; width: 1em; height: 1em; overflow: visible; fill: none; stroke: currentColor; stroke-width: var(--line-drawn); stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) and (pointer: fine) { .btn-tonal:hover { background: var(--button-tonal-bg-hover); } }
 
-/* on-chain view: entered by holding left click. One attribute on <html>, each section responds. */
-.hold-ring { position: fixed; left: 0; top: 0; z-index: var(--z-loader); width: var(--hold-ring-size); height: var(--hold-ring-size); pointer-events: none; opacity: 0; mix-blend-mode: difference; transition: opacity var(--motion-hover); }
-.hold-ring circle { fill: none; stroke: var(--white); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1; transform: rotate(-90deg); transform-origin: center; }
-.hold-ring.is-holding { opacity: 1; }
-.hold-ring.is-holding circle { stroke-dashoffset: 0; transition: stroke-dashoffset var(--hold-delay) linear; }
-.onchain-toggle { position: fixed; left: var(--space-4); top: var(--space-4); z-index: var(--z-loader); transform: translateY(-200%); }
-.onchain-toggle:focus-visible { transform: none; }
-[data-view="onchain"] { user-select: none; -webkit-user-select: none; }
-[data-view="onchain"] body, [data-view="onchain"] .journey { background-image: linear-gradient(var(--onchain-grid) 1px, transparent 1px), linear-gradient(90deg, var(--onchain-grid) 1px, transparent 1px); background-size: var(--onchain-grid-size) var(--onchain-grid-size); }
-[data-view="onchain"] .journey { transition-duration: var(--onchain-in); }
-[data-view="onchain"] .card, [data-view="onchain"] .callout, [data-view="onchain"] .chip-tag, [data-view="onchain"] .nav, [data-view="onchain"] .btn { background: transparent; border-color: var(--onchain-line); }
-[data-view="onchain"] .btn-primary { color: var(--onchain-line); }
-[data-view="onchain"] .nav .logo-on-dark { display: block; }
-[data-view="onchain"] .nav .logo-on-light { display: none; }
-[data-view="onchain"] .bar i { background: transparent; box-shadow: inset 0 0 0 1px var(--onchain-line); }
-[data-view="onchain"] .phase-reveal { -webkit-backdrop-filter: none; backdrop-filter: none; }
-[data-view="onchain"] .phase-body ul { background: var(--color-bg); border: 1px solid var(--onchain-line); border-image: none; } /* solid, so the rungs do not run through the text */
-[data-view="onchain"] .phase:not(.is-current) .phase-body ul { border-style: dashed; }
-[data-view="onchain"] .phase-body .phase-chain { display: block; }
-[data-view="onchain"] .rung.is-on { stroke: var(--onchain-line); }
-[data-view="onchain"] .rung:not(.is-mined) { stroke-dasharray: 6 6; }
+/* pixels demo (preview only): the canvas has no frame, so it reads as part of the page */
+.pixel-stage { display: block; width: 100%; height: clamp(20rem, 46vw, 34rem); touch-action: pan-y; }
 
 @media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }
 </style>
-<noscript><style>.phase-reveal { grid-template-rows: 1fr; }</style></noscript>
 </head>
 <body>
 
 <div class="container nav-wrap">
   <nav class="nav" aria-label="Main">
-    <a href="#top" aria-label="Hevium"><img class="logo-on-dark" src="../hevium-brand-kit/02-horizontal-lockup/hevium-logo-dark.svg" alt="Hevium" width="132" height="36"><img class="logo-on-light" src="../hevium-brand-kit/02-horizontal-lockup/hevium-logo-light.svg" alt="Hevium" width="132" height="36"></a>
-    <ul class="nav-links">
+    <a href="#top" aria-label="Hevium"><img src="../hevium-brand-kit/02-horizontal-lockup/hevium-logo-dark.svg" alt="Hevium" width="132" height="36"></a>
+    <ul class="nav-links" id="nav-links" popover>
       <li><a href="#colour" aria-current="true">Colour</a></li>
       <li><a href="#type">Type</a></li>
       <li><a href="#layout">Layout</a></li>
       <li><a href="#components">Components</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
       <li><a href="#loading">Loading</a></li>
+      <li><a href="#pixels">Pixels</a></li>
+      <li class="nav-cta"><a class="btn btn-primary" href="https://hevium.xyz/">Launch app</a></li>
     </ul>
-    <a class="btn btn-primary btn-sm" href="https://hevium.xyz/">Launch app</a>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="https://hevium.xyz/">Launch app</a>
+      <button class="btn btn-secondary btn-sm nav-menu" type="button" popovertarget="nav-links" aria-label="Menu"><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+    </div>
   </nav>
 </div>
 
 <main id="top">
   <header class="container hero">
-    <p class="eyebrow">Live on 5 chains</p>
+    <p class="label">Live on 5 chains</p>
     <h1 class="display-xl" style="margin-top: var(--space-4)">The multi-chain <span class="hl">stock &amp; fair-launch</span> terminal.</h1>
     <p class="lead">Fair-launch tokens paired directly with NVDA, TSLA and digital dollars. Built for everyday traders and 24/7 AI agents.</p>
     <div class="row">
@@ -308,7 +282,7 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
       <div class="type-row"><p class="spec">--text-title<br>20 to 28px · Plus Jakarta Sans · 600</p><p class="title">15-second Token Studio</p></div>
       <div class="type-row"><p class="spec">--text-body-lg<br>17 to 21px · Plus Jakarta Sans · 400</p><p class="lead">Quarterly tech earnings create viral spikes on X. Hevium turns Wall Street catalysts into trading volume.</p></div>
       <div class="type-row"><p class="spec">--text-body<br>16 to 17px · Plus Jakarta Sans · 400</p><p class="body">Hevium never holds user deposits. Every trade and liquidity lock settles publicly on-chain, and successful launches migrate automatically into leading public exchanges.</p></div>
-      <div class="type-row"><p class="spec">--text-eyebrow<br>12px · JetBrains Mono · 500</p><p class="eyebrow">03 · Unfair advantage</p></div>
+      <div class="type-row"><p class="spec">--text-eyebrow<br>12px · JetBrains Mono · 500</p><p class="label">03 · Unfair advantage</p></div>
       <div class="type-row"><p class="spec">mono data<br>13px · JetBrains Mono · 400</p><p class="spec" style="color: var(--color-text)">0x5f8dDBA84D3E7f4cdcF43c8841722Ae75e66DEA4</p></div>
     </div>
   </section>
@@ -344,14 +318,32 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
         <a class="btn btn-tonal" href="#components">Become an affiliate</a>
         <a class="link small" href="#components">Read the docs</a>
       </div>
+      <p class="spec" style="margin: var(--space-8) 0 var(--space-3)">Section foot · one tonal button under a section's piece, in the middle. Below 640px a section's button takes the whole row</p>
+      <div class="section-foot" style="margin-top: 0"><a class="btn btn-tonal" href="#components">Open the terminal</a></div>
+      <p class="spec" style="margin: var(--space-8) 0 var(--space-3)">Icon · a drawn arrow in place of an arrow character: right, left, up, and out for a link that leaves the page</p>
+      <div class="row" style="gap: var(--space-6); font-size: 1.25rem">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true" style="rotate: 180deg"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true" style="rotate: -90deg"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true" style="rotate: -45deg"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+      </div>
 
       <div class="sub">
         <p class="spec">Cards</p>
+        <p class="spec" style="margin-bottom: var(--space-3)">Text field · one line, 44px tall, mint edge when focused</p>
+        <p style="max-width: 16rem; margin-bottom: var(--space-12)"><input class="input" type="text" placeholder="Put your name on it" aria-label="Sample text field"></p>
+        <p class="spec" style="margin-bottom: var(--space-3)">Trade tag · how a chart marks a trade: buy, sell, held</p>
+        <p class="row" style="margin-bottom: var(--space-12)"><span class="trade-tag" data-side="buy">B</span><span class="trade-tag" data-side="sell">S</span><span class="trade-tag" data-side="held">!</span></p>
+        <p class="spec" style="margin-bottom: var(--space-3)">Eyebrow · the pill that opens a section, led by the Hevium star</p>
+        <p class="row" style="margin-bottom: var(--space-12)"><span class="eyebrow">The problem</span><span class="eyebrow">Stocks</span><span class="eyebrow">What is Hevium</span></p>
+        <p class="spec" style="margin-bottom: var(--space-3)">Section head · eyebrow, headline, one supporting line, then the section's one component or asset</p>
+        <header class="section-head" style="margin-bottom: var(--space-12)"><p class="eyebrow">The problem</p><h2 class="display-md">First-generation launchpads hit <span class="hl">three walls</span>.</h2><p class="lead">Hevium puts stock pairs, fair launches and AI trading in one terminal.</p></header>
+        <p class="spec" style="margin-bottom: var(--space-3)">Card · a Carbon frame round an Obsidian well</p>
         <div class="cards">
-          <a class="card" href="#components"><p class="eyebrow">01 · Fair launchpad</p><h3 class="title">15-second Token Studio</h3><p>Instant community token launches with locked exchange liquidity and zero insider pre-mine.</p></a>
-          <a class="card" href="#components"><p class="eyebrow">02 · Equity pairs</p><h3 class="title">Stock-paired trading</h3><p>Pair tokens directly with NVDA, TSLA, AAPL, COIN and yield-bearing digital dollars.</p></a>
-          <a class="card" href="#components"><p class="eyebrow">03 · Creator revenue</p><h3 class="title">Instant 20% commissions</h3><p>Creators and referrers earn a 20% on-chain fee split on every trade, paid automatically.</p></a>
-          <a class="card" href="#components"><p class="eyebrow">04 · Access</p><h3 class="title">Google login and AI ready</h3><p>One-click Google login for traders. Direct API and bot connection for AI agents.</p></a>
+          <a class="card" href="#components"><div class="card-body"><p class="label">01 · Fair launchpad</p><div class="card-text"><h3 class="card-title">15-second Token Studio</h3><p>Instant community token launches with locked exchange liquidity and zero insider pre-mine.</p></div></div></a>
+          <a class="card" href="#components"><div class="card-body"><p class="label">02 · Equity pairs</p><div class="card-text"><h3 class="card-title">Stock-paired trading</h3><p>Pair tokens directly with NVDA, TSLA, AAPL, COIN and yield-bearing digital dollars.</p></div></div></a>
+          <a class="card" href="#components"><div class="card-body"><p class="label">03 · Creator revenue</p><div class="card-text"><h3 class="card-title">Instant 20% commissions</h3><p>Creators and referrers earn a 20% on-chain fee split on every trade, paid automatically.</p></div></div></a>
+          <a class="card" href="#components"><div class="card-body"><p class="label">04 · Access</p><div class="card-text"><h3 class="card-title">Google login and AI ready</h3><p>One-click Google login for traders. Direct API and bot connection for AI agents.</p></div></div></a>
         </div>
       </div>
 
@@ -384,7 +376,7 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
 
       <div class="sub">
         <p class="spec">Fairness bar <button class="btn btn-secondary btn-sm" id="bar-replay" type="button" style="margin-left: var(--space-3)">Replay</button></p>
-        <div class="bar-labels"><span class="eyebrow" style="color: var(--color-text)">Fixed supply · zero pre-mine</span><span class="eyebrow">80% public launch · 20% locked LP · 0% insider</span></div>
+        <div class="bar-labels"><span class="label" style="color: var(--color-text)">Fixed supply · zero pre-mine</span><span class="label">80% public launch · 20% locked LP · 0% insider</span></div>
         <div class="bar" id="bar" role="img" aria-label="80 percent public launch, 20 percent locked liquidity, 0 percent insider"><i></i></div>
       </div>
 
@@ -399,161 +391,167 @@ td.mono { font-family: var(--font-mono); font-size: var(--text-caption); color: 
     </div>
   </section>
 
-  <section class="journey" id="roadmap" data-theme="light" aria-labelledby="roadmap-title">
-    <div class="container">
-      <p class="eyebrow journey-label">Roadmap</p>
-      <h2 class="display-lg journey-title" id="roadmap-title">Where Hevium <span class="hl">goes next</span></h2>
-      <div class="journey-map">
-        <svg class="journey-rungs" viewBox="0 0 893 1067" fill="none" aria-hidden="true"></svg>
-        <ol class="journey-list">
-          <li class="phase is-current">
-            <p class="phase-meta">Phase 0 · Nov to Dec 2026 · Now</p><h3 class="phase-title">Ignition</h3>
-            <div class="phase-reveal"><div class="phase-body"><ul><li>Five-chain public rollout</li><li>Tier-1 security audit</li><li class="phase-chain">LIVE · Base 8453 · BNB 56 · Robinhood 4663 · Solana · Elysium</li></ul></div></div>
-          </li>
-          <li class="phase">
-            <p class="phase-meta">Phase 1 · Q1 2027</p><h3 class="phase-title">Stock Wedge</h3>
-            <div class="phase-reveal"><div class="phase-body"><ul><li>Earnings-season sprints</li><li>Audit completion badge</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
-          </li>
-          <li class="phase">
-            <p class="phase-meta">Phase 2 · Q2 2027</p><h3 class="phase-title">AI Wave</h3>
-            <div class="phase-reveal"><div class="phase-body"><ul><li>Starter AI bot kits</li><li>Developer buildathons</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
-          </li>
-          <li class="phase">
-            <p class="phase-meta">Phase 3 · Q3 2027</p><h3 class="phase-title">Affiliate Arena</h3>
-            <div class="phase-reveal"><div class="phase-body"><ul><li>Affiliate leaderboards</li><li>Cross-chain trading cups</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
-          </li>
-          <li class="phase">
-            <p class="phase-meta">Phase 4 · Q4 2027</p><h3 class="phase-title">Market Leader</h3>
-            <div class="phase-reveal"><div class="phase-body"><ul><li>Institutional API feeds</li><li class="phase-chain">PENDING · not on-chain yet</li></ul></div></div>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
   <section class="section" id="loading">
     <div class="container">
       <div class="block-head"><p class="eyebrow">05 · Loading</p><h2 class="display-lg">Skeletons that <span class="hl">decode</span> into data.</h2><p class="lead" style="margin-top: var(--space-6)">Live demo of <code class="spec">ascii-reveal</code> 0.3.0 with the Hevium tokens. Glyphs in JetBrains Mono, accent in mint.</p></div>
       <div class="loading-grid" id="loading-demo">
-        <div class="card"><p class="spec">AsciiSkeleton · scan (proposed default)</p><div id="sk-scan"></div></div>
-        <div class="card"><p class="spec">AsciiSkeleton · terminal</p><div id="sk-terminal"></div></div>
-        <div class="card" id="reveal-card">
+        <div class="card"><div class="card-body"><p class="spec">AsciiSkeleton · scan (proposed default)</p><div id="sk-scan"></div></div></div>
+        <div class="card"><div class="card-body"><p class="spec">AsciiSkeleton · terminal</p><div id="sk-terminal"></div></div></div>
+        <div class="card" id="reveal-card"><div class="card-body">
           <p class="spec">AsciiReveal · decode <button class="btn btn-secondary btn-sm" id="reveal-replay" type="button" style="margin-left: var(--space-3)">Replay</button></p>
           <div id="reveal-target"><p class="stat-num">$2.5M</p><p class="stat-label">Sample daily volume</p><p class="body small" style="margin-top: var(--space-3)">Sample numbers for the demo only.</p></div>
-        </div>
+        </div></div>
       </div>
       <p class="spec" id="ascii-status" style="margin-top: var(--space-6)"></p>
     </div>
   </section>
+  <section class="section" id="pixels">
+    <div class="container">
+      <div class="block-head"><p class="eyebrow">06 · Pixels</p><h2 class="display-lg">Pictures made of <span class="hl">living pixels</span>.</h2><p class="lead" style="margin-top: var(--space-6)">One grid of pixels draws the object and the ground under it. A pixel grows where the picture is bright. The pixels shimmer on their own, the coin turns, and everything near the pointer leans toward it. Pick the shape of a pixel.</p></div>
+      <div class="row" role="group" aria-label="Pixel shape" id="pixel-shapes" style="margin-bottom: var(--space-6)">
+        <button class="btn btn-sm btn-secondary" type="button" data-shape="square" aria-pressed="false">Square</button>
+        <button class="btn btn-sm btn-tonal" type="button" data-shape="star" aria-pressed="true">Star</button>
+        <button class="btn btn-sm btn-secondary" type="button" data-shape="circle" aria-pressed="false">Circle</button>
+      </div>
+      <canvas class="pixel-stage" id="pixel-stage" role="img" aria-label="A coin drawn in pixels, turning above a field of pixels"></canvas>
+      <p class="spec" style="margin-top: var(--space-4)">Star is the chosen shape · 10px grid · mint on Obsidian · move the pointer over it</p>
+    </div>
+  </section>
 </main>
 
-<button class="btn btn-secondary btn-sm onchain-toggle" type="button" id="onchain-toggle" aria-pressed="false">Toggle on-chain view</button>
-<div class="hold-ring" aria-hidden="true"><svg viewBox="0 0 40 40" width="100%" height="100%"><circle cx="20" cy="20" r="17" pathLength="1"/></svg></div>
 
 <script>
-// Roadmap ladder, after taiko.xyz. Rungs are drawn between waypoints of [x, y, slope in degrees, length, rungs to the next waypoint].
-// Colour wipes down them as the section scrolls, and each card opens when the wipe reaches the rung it stands on.
-(function () {
-  var map = document.querySelector('.journey-map');
-  if (!map) return;
-  var svg = map.querySelector('.journey-rungs');
-  var phases = [].slice.call(map.querySelectorAll('.phase'));
-  var H = 1067, MID = 440, RAD = Math.PI / 180;
-  var route = [
-    [52, 18, 19, 109, 4], [330, 26, 16, 166, 4], [590, 56, 16, 250, 3], [619, 116, 14, 210, 3], [600, 189, 10, 210, 3],
-    [499, 277, 6, 192, 3], [360, 366, 5, 192, 2], [240, 426, 5, 192, 4], [144, 546, 5, 192, 2], [192, 604, 5, 192, 6],
-    [648, 691, 5, 192, 2], [754, 728, 5, 192, 2], [797, 782, 5, 192, 2], [736, 836, 5, 192, 8], [303, 1055, 5, 192, 1]
-  ];
-  // The wipe front runs parallel to the rungs, so a rung's turn is where its line crosses the middle of the ladder.
-  function turn(x, y, deg) { return y + (x - MID) * Math.tan(deg * RAD); }
-  var rungs = [];
-  route.forEach(function (a, i) {
-    var b = route[i + 1] || a;
-    for (var k = 0; k < a[4]; k++) {
-      var v = a.map(function (n, j) { return n + (b[j] - n) * k / a[4]; });
-      var hx = Math.cos(v[2] * RAD) * v[3] / 2, hy = Math.sin(v[2] * RAD) * v[3] / 2;
-      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', (v[0] - hx).toFixed(1)); line.setAttribute('y1', (v[1] + hy).toFixed(1));
-      line.setAttribute('x2', (v[0] + hx).toFixed(1)); line.setAttribute('y2', (v[1] - hy).toFixed(1));
-      line.setAttribute('class', 'rung');
-      svg.appendChild(line); rungs.push({ el: line, at: turn(v[0], v[1], v[2]) });
-    }
-  });
-  rungs.forEach(function (r, n) {
-    if (n < 8) r.el.classList.add('is-mined'); // the stretch the current phase covers
-    if (n > rungs.length - 7) r.el.style.opacity = (rungs.length - n) / 7; // no card stands on the tail, so it fades out
-  });
-  var nav = document.querySelector('.nav'), sheet = map.closest('[data-theme]');
-  var still = matchMedia('(prefers-reduced-motion: reduce)').matches, queued = false, scale = 1, turns = [];
-  function measure() {
-    scale = map.offsetHeight / H;
-    // A card stands on its bottom edge, which stays put while the card grows upward.
-    turns = phases.map(function (ph) {
-      var deg = -parseFloat(getComputedStyle(ph).getPropertyValue('--skew')) || 5;
-      return turn((ph.offsetLeft + ph.offsetWidth / 2) / scale, (ph.offsetTop + ph.offsetHeight) / scale, deg);
-    });
-    // A rung takes the colour of the card it passes and blends toward the next card's colour on the way there.
-    rungs.forEach(function (r) {
-      var i = 0;
-      while (i < turns.length - 2 && r.at >= turns[i + 1]) i++;
-      var mix = Math.max(0, Math.min(1, (r.at - turns[i]) / (turns[i + 1] - turns[i])));
-      r.el.style.setProperty('--a', 'var(--phase-tone-' + (i + 1) + ')');
-      r.el.style.setProperty('--b', 'var(--phase-tone-' + (i + 2) + ')');
-      r.el.style.setProperty('--mix', Math.round(mix * 100) + '%');
-    });
-    update();
-  }
-  function update() {
-    queued = false;
-    // The front sits just below the middle of the viewport, in ladder units.
-    var front = still ? Infinity : (innerHeight * 0.55 - map.getBoundingClientRect().top) / scale;
-    rungs.forEach(function (r) { r.el.classList.toggle('is-on', r.at <= front); });
-    phases.forEach(function (ph, n) { ph.classList.toggle('is-on', turns[n] <= front); });
-    // The nav takes this section's theme while it sits over it.
-    var bar = nav.getBoundingClientRect(), box = sheet.getBoundingClientRect(), mid = (bar.top + bar.bottom) / 2;
-    if (box.top < mid && box.bottom > mid) nav.dataset.theme = sheet.dataset.theme; else delete nav.dataset.theme;
-  }
-  function queue() { if (!queued) { queued = true; requestAnimationFrame(update); } }
-  addEventListener('scroll', queue, { passive: true });
-  addEventListener('resize', measure);
-  measure();
-})();
 
-// On-chain view: hold left click on a non-interactive area. Touch long-press works the same way.
-(function () {
-  var root = document.documentElement, ring = document.querySelector('.hold-ring'), toggle = document.getElementById('onchain-toggle');
-  var styles = getComputedStyle(root);
-  var delay = parseFloat(styles.getPropertyValue('--hold-delay')) || 350;
-  var tolerance = parseFloat(styles.getPropertyValue('--hold-move-tolerance')) || 6;
-  var timer = null, held = false, sx = 0, sy = 0;
-  function place(x, y) { var half = ring.offsetWidth / 2; ring.style.transform = 'translate(' + (x - half) + 'px,' + (y - half) + 'px)'; }
-  function set(on) { if (on) root.dataset.view = 'onchain'; else delete root.dataset.view; toggle.setAttribute('aria-pressed', String(on)); }
-  function release() {
-    clearTimeout(timer); timer = null;
-    ring.classList.remove('is-holding');
-    if (held) { held = false; set(false); }
-  }
-  document.addEventListener('pointerdown', function (e) {
-    if (e.button !== 0 || e.target.closest('a, button, input, select, textarea, summary, label, [role="button"]')) return;
-    sx = e.clientX; sy = e.clientY; place(sx, sy);
-    ring.classList.add('is-holding');
-    timer = setTimeout(function () { timer = null; held = true; set(true); }, delay);
-  });
-  document.addEventListener('pointermove', function (e) {
-    if (timer && Math.hypot(e.clientX - sx, e.clientY - sy) > tolerance) release(); // a drag or text selection, not a hold
-    else if (held) place(e.clientX, e.clientY);
-  });
-  ['pointerup', 'pointercancel'].forEach(function (type) { document.addEventListener(type, release); });
-  addEventListener('blur', release);
-  document.addEventListener('contextmenu', function (e) { if (timer || held) e.preventDefault(); });
-  toggle.addEventListener('click', function () { set(root.dataset.view !== 'onchain'); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
-})();
 document.getElementById('bar-replay').addEventListener('click', function () {
   var bar = document.getElementById('bar');
   bar.classList.add('is-reset');
   requestAnimationFrame(function () { requestAnimationFrame(function () { bar.classList.remove('is-reset'); }); });
 });
+</script>
+<script>
+// Pixels demo: one grid draws a turning coin and the ground under it. A pixel is as big and as bright
+// as the picture is at its cell. The pixels shimmer, and those near the pointer lean toward it.
+(function () {
+  var canvas = document.getElementById('pixel-stage');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var picture = document.createElement('canvas'); // the coin, drawn at one pixel per cell
+  var pen = picture.getContext('2d', { willReadFrequently: true });
+  var CELL = 10; // CSS px
+  var REACH = 120, PULL = 9; // how far the pointer reaches, and how far it moves a pixel, in CSS px
+  var shape = 'star'; // the shape the user chose on 2026-11-22; the other two stay here for comparison
+  var accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#97FBE3';
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pointer = { x: 0, y: 0, pull: 0, inside: false };
+  var cols = 0, rows = 0, ratio = 1, seen = false, frame = 0;
+
+  // Each draws one pixel of size s, centred on the origin.
+  var draw = {
+    square: function (s) { ctx.rect(-s / 2, -s / 2, s, s); },
+    circle: function (s) { ctx.arc(0, 0, s / 2, 0, Math.PI * 2); },
+    // a four-point star with hollow sides; the cell is sheared so it leans the way the Hevium mark does
+    star: function (s) {
+      var r = s * 0.66, k = r * 0.18;
+      ctx.moveTo(0, -r); ctx.quadraticCurveTo(k, -k, r, 0); ctx.quadraticCurveTo(k, k, 0, r);
+      ctx.quadraticCurveTo(-k, k, -r, 0); ctx.quadraticCurveTo(-k, -k, 0, -r);
+    }
+  };
+
+  function size() {
+    ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(canvas.clientWidth * ratio);
+    canvas.height = Math.round(canvas.clientHeight * ratio);
+    cols = Math.ceil(canvas.clientWidth / CELL);
+    rows = Math.ceil(canvas.clientHeight / CELL);
+    picture.width = cols; picture.height = rows;
+    paint(performance.now());
+  }
+
+  // The coin, turning about its upright axis: its rim, then the face that is toward us, then a ring on the face.
+  function coin(t) {
+    var turn = t * 0.9, face = Math.abs(Math.cos(turn)), side = Math.sin(turn);
+    var cx = cols / 2, cy = rows * 0.4 + Math.sin(t * 1.3) * 0.5, r = rows * 0.27;
+    var rx = Math.max(r * face, 0.6), rim = r * 0.17 * Math.abs(side), lead = side > 0 ? rim / 2 : -rim / 2;
+    pen.clearRect(0, 0, cols, rows);
+    pen.fillStyle = 'rgba(255,255,255,0.42)'; // the rim: both faces and the band between them
+    [-rim / 2, rim / 2].forEach(function (dx) { pen.beginPath(); pen.ellipse(cx + dx, cy, rx, r, 0, 0, 7); pen.fill(); });
+    pen.fillRect(cx - rim / 2, cy - r, rim, r * 2);
+    pen.fillStyle = 'rgba(255,255,255,0.95)';
+    pen.beginPath(); pen.ellipse(cx + lead, cy, rx, r, 0, 0, 7); pen.fill();
+    pen.globalCompositeOperation = 'source-atop'; // the ring is drawn only where the face already is
+    pen.fillStyle = 'rgba(128,128,128,1)';
+    pen.beginPath(); pen.ellipse(cx + lead, cy, rx * 0.66, r * 0.66, 0, 0, 7); pen.fill();
+    pen.fillStyle = 'rgba(245,245,245,1)';
+    pen.beginPath(); pen.ellipse(cx + lead, cy, rx * 0.5, r * 0.5, 0, 0, 7); pen.fill();
+    pen.globalCompositeOperation = 'source-over';
+    return pen.getImageData(0, 0, cols, rows).data;
+  }
+
+  // A cell's own steady number from 0 to 1, so its shimmer is out of step with its neighbours'.
+  function grain(x, y) { var n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return n - Math.floor(n); }
+
+  function paint(now) {
+    var t = still ? 0.6 : now / 1000;
+    var data = coin(t), horizon = rows * 0.6;
+    pointer.pull += ((pointer.inside ? 1 : 0) - pointer.pull) * 0.12; // eases in on entry and back out on leaving
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = accent;
+    var lean = shape === 'star' ? -0.3 : 0;
+    for (var y = 0; y < rows; y++) {
+      for (var x = 0; x < cols; x++) {
+        var i = (y * cols + x) * 4;
+        var v = (data[i] / 255) * (data[i + 3] / 255);
+        if (y > horizon) {
+          // the ground: brighter toward us, with slow swells running across it and a glow under the coin
+          var depth = (y - horizon) / (rows - horizon);
+          var swell = 0.5 + 0.5 * Math.sin(x * 0.21 + t * 0.9 + Math.sin(y * 0.4 + t * 0.5) * 1.4);
+          var glow = Math.exp(-Math.pow((x - cols / 2) / (cols * 0.12), 2)) * (1 - depth) * 0.5;
+          v = Math.max(v, Math.pow(depth, 1.5) * (0.55 + 0.45 * swell) + glow);
+        }
+        if (v < 0.04) continue;
+        v = Math.min(1, v * (0.86 + 0.14 * Math.sin(t * 2.4 + grain(x, y) * 6.283))); // shimmer
+        var px = (x + 0.5) * CELL, py = (y + 0.5) * CELL;
+        var dx = pointer.x - px, dy = pointer.y - py, far = Math.sqrt(dx * dx + dy * dy) || 1;
+        var near = pointer.pull * Math.exp(-(far * far) / (REACH * REACH));
+        px += (dx / far) * near * PULL; py += (dy / far) * near * PULL;
+        var s = CELL * (0.16 + 0.8 * v) * (1 + near * 0.35);
+        ctx.globalAlpha = Math.min(1, 0.22 + 0.78 * v + near * 0.3);
+        ctx.setTransform(ratio, 0, lean * ratio, ratio, px * ratio, py * ratio);
+        ctx.beginPath(); draw[shape](s); ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function loop(now) { paint(now); frame = seen && !still ? requestAnimationFrame(loop) : 0; }
+  function wake() { if (!frame && seen && !still) frame = requestAnimationFrame(loop); }
+  // with reduced motion nothing loops, so the pointer's pull is played out by hand
+  function settle() { if (!still) return; var n = 0; (function step() { paint(0); if (++n < 24) requestAnimationFrame(step); })(); }
+
+  canvas.addEventListener('pointermove', function (e) {
+    var box = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - box.left; pointer.y = e.clientY - box.top;
+    if (!pointer.inside) { pointer.inside = true; settle(); } else if (still) paint(0);
+  });
+  ['pointerleave', 'pointercancel'].forEach(function (type) { canvas.addEventListener(type, function () { pointer.inside = false; settle(); }); });
+
+  document.getElementById('pixel-shapes').addEventListener('click', function (e) {
+    var button = e.target.closest('button[data-shape]');
+    if (!button) return;
+    shape = button.dataset.shape;
+    [].forEach.call(this.querySelectorAll('button'), function (b) {
+      var on = b === button;
+      b.setAttribute('aria-pressed', String(on));
+      b.classList.toggle('btn-tonal', on); b.classList.toggle('btn-secondary', !on);
+    });
+    paint(performance.now());
+  });
+
+  new ResizeObserver(size).observe(canvas);
+  // it runs only while it is on screen
+  new IntersectionObserver(function (entries) { seen = entries[0].isIntersecting; wake(); }).observe(canvas);
+})();
 </script>
 <script type="module">
 // Preview only: loaded from a CDN. The site installs the package from npm.

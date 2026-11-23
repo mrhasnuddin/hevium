@@ -1,0 +1,33 @@
+/* The final call to action: the mark, a headline, one line and one button, in the middle of the screen. Behind
+   them a soft mint light and a field of stars; at both sides, from 1024px, the page's logos as coins that
+   drift up and down. Nothing else. */
+
+.final { position: relative; overflow: hidden; background: radial-gradient(ellipse 46% 50% at 50% 48%, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent); }
+.field { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; -webkit-mask: radial-gradient(ellipse 60% 60% at 50% 50%, #000, transparent); mask: radial-gradient(ellipse 60% 60% at 50% 50%, #000, transparent); }
+.final > :global(.container) { position: relative; }
+
+/* The words stand between two sides. A side is as wide as the screen leaves, so a coin can never reach the words. */
+.stage { display: grid; align-items: center; }
+.middle { display: grid; justify-items: center; }
+/* the mark: the Hevium star in the brand gradient, where a section's eyebrow would stand */
+.mark { width: clamp(4.5rem, 7vw, 7rem); aspect-ratio: 154 / 105; margin-bottom: var(--space-6); background: var(--gradient-brand); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
+.final :global(.section-head) { margin-bottom: var(--space-8); }
+/* as wide as the words' column, so the button can take the whole row on a phone */
+.actions { display: flex; justify-content: center; justify-self: stretch; }
+
+.coins { display: none; }
+@media (min-width: 64rem) {
+  .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 42rem) minmax(0, 1fr); min-height: 30rem; }
+  /* A coin stands at --x across its side and --y down it, measured so that it stays inside the side whole. */
+  .coins { position: relative; display: block; align-self: stretch; }
+  .coins img {
+    position: absolute; left: calc((100% - var(--s)) * var(--x)); top: calc((100% - var(--s)) * var(--y)); width: var(--s); height: var(--s);
+    border-radius: 50%; object-fit: cover; background: var(--color-surface); box-shadow: 0 0 0 1px var(--color-border), 0 0 0 0.375rem color-mix(in srgb, var(--color-surface) 70%, transparent);
+    opacity: var(--o);
+  }
+}
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  /* each at its own pace, out of step with the rest */
+  .coins img { animation: drift calc(6s + var(--n) * 0.37s) ease-in-out calc(var(--n) * -0.9s) infinite alternate; }
+}
+@keyframes drift { from { translate: 0 -0.5rem; } to { translate: 0 0.5rem; } }

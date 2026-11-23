@@ -1,0 +1,45 @@
+/* Trust and FAQ: one section in two parts. Under the head, the guarantees are a bento (TrustBento.module.css).
+   Then the questions, with their heading and a link to the docs beside them from 1024px. The questions are plain
+   `details` on the canvas: no boxes, no lines between them. The section runs as long as it needs. */
+
+/* The questions. The nav bar's FAQ link lands here, clear of the bar. */
+.faq {
+  display: grid; gap: var(--space-8) var(--grid-gap); margin-top: clamp(var(--space-16), 8vw, var(--space-24));
+  scroll-margin-top: calc(var(--space-4) + var(--nav-height) + var(--space-6));
+  interpolate-size: allow-keywords; /* lets an answer open and close by height, where the browser can */
+}
+.aside { display: grid; justify-items: start; align-content: start; gap: var(--space-3); }
+/* the headline stands under its eyebrow as far as a section's does */
+.aside h3 { margin-top: var(--space-2); }
+@media (min-width: 64rem) {
+  .faq { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+  /* the heading keeps the questions company as they are read */
+  .aside { position: sticky; top: calc(var(--space-4) + var(--nav-height) + var(--space-6)); }
+}
+
+.item summary {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--space-6); min-height: 3.5rem; padding-block: var(--space-3);
+  list-style: none; cursor: pointer; font: var(--weight-semibold) 1.125rem/1.35 var(--font-sans); letter-spacing: var(--tracking-title);
+  transition: color var(--motion-hover);
+}
+.item summary::-webkit-details-marker { display: none; }
+@media (hover: hover) and (pointer: fine) { .item summary:hover { color: var(--color-accent-text); } }
+.item p { max-width: var(--measure); padding: 0 var(--space-12) var(--space-6) 0; line-height: 1.6; color: var(--color-text-secondary); }
+/* the plus: two bars at the line weight, turned to a cross when the answer is open */
+.plus { position: relative; flex: none; width: 1rem; height: 1rem; }
+.plus::before, .plus::after { content: ""; position: absolute; inset: 50% 0 auto; height: var(--line-drawn); background: var(--color-accent); translate: 0 -50%; }
+.plus::after { rotate: 90deg; }
+.item[open] .plus { rotate: 45deg; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .plus { transition: rotate var(--dur-base) ease; }
+  @supports selector(::details-content) {
+    .item::details-content { block-size: 0; overflow: clip; transition: block-size var(--dur-base) ease, content-visibility var(--dur-base) allow-discrete; }
+    .item[open]::details-content { block-size: auto; }
+  }
+}
+
+/* Two parts in one section, so where other sections are one screen it runs as long as it needs. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  section.trust { height: auto; padding-block: var(--section-y); }
+}

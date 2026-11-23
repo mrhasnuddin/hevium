@@ -1,0 +1,113 @@
+/* Stocks: under the section head, one piece. Thirteen tickers turn in a ring seen from a little above, like
+   the ticker round a building. Each beat a coin drops onto the ticker at the front, the two light up as a
+   pair and a short price line draws out; then the coin falls away and the ring brings the next ticker round.
+   The coin carries the logo of the ticker it lands on, and each pair has a price line of its own.
+   All of it is CSS, so it runs with scripts off: the only script is the coin's own pixels and the stars
+   under the ring. With reduced motion it stands still on the first pair. */
+
+@property --ring-step { syntax: "<number>"; inherits: true; initial-value: 0; } /* whole tickers turned so far */
+@property --ring-move { syntax: "<number>"; inherits: true; initial-value: 0; } /* how far into the next turn, 0 to 1 */
+@property --ring-lock { syntax: "<number>"; inherits: true; initial-value: 1; } /* 1 while coin and ticker are a pair */
+
+.stage {
+  --type: clamp(1.5rem, 0.5rem + 4.4vw, 4.5rem); /* the ticker at the front: 24 to 72px */
+  --coin: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+  --ry: clamp(5rem, 3rem + 9vw, 11.5rem); /* how far below its middle the front of the ring stands: tall enough that the tickers passing at each side stand clear of one another */
+  --line-w: clamp(7rem, 4rem + 12vw, 14rem);
+  --line-h: calc(var(--line-w) * 0.24);
+  --beat: 3.6s; /* one ticker's turn at the front */
+  position: relative; isolation: isolate;
+}
+
+/* The ground: a patch of the page's star pixels under the ring, fading out on every side. */
+.ground {
+  position: absolute; left: 0; top: calc(-1 * var(--space-12)); z-index: -1; width: 100%; height: calc(100% + var(--space-24));
+  -webkit-mask: radial-gradient(ellipse 50% 50% at 50% 55%, rgb(0 0 0 / 0.7), transparent);
+  mask: radial-gradient(ellipse 50% 50% at 50% 55%, rgb(0 0 0 / 0.7), transparent);
+}
+
+/* Without the maths the ring needs (sin, cos and container units) the tickers are a plain wrapped row. */
+.ring { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-6); font: var(--weight-display-strong) var(--type)/1 var(--font-display); letter-spacing: var(--tracking-display-md); }
+.coin, .line { display: none; }
+
+@supports (translate: calc(sin(1deg) * 1cqw)) {
+  .stage {
+    /* the ring's middle, from the top: room for the coin over the front ticker, and for the far side of the ring */
+    --cy: max(calc(var(--coin) + var(--type) * 0.36 - var(--ry) + var(--space-8)), calc(var(--ry) / 3 + var(--type) * 0.2 + var(--space-2)));
+    /* The ring is as deep as it is wide and is seen from one radius away. So its far side draws at a third
+       of the size, and its widest point on screen is 0.577 of its radius: 1.732 radii fill the width. */
+    --r: calc((50cqw - var(--type)) * 1.732);
+    container-type: inline-size;
+    height: calc(var(--cy) + var(--ry) + var(--type) * 0.5 + var(--space-2) + var(--line-h) + var(--space-4));
+  }
+
+  .ring { display: block; }
+  .ring li {
+    --a: calc((var(--i) - var(--ring-step) - var(--ring-move)) * 360deg / var(--n)); /* its place round the ring: 0 at the front */
+    --p: calc(1 / (2 - cos(var(--a)))); /* its size in perspective: 1 at the front, a third at the back */
+    --q: calc((var(--p) - 0.3333) * 1.5); /* the same, from 0 at the back to 1 at the front */
+    --front: clamp(0, (cos(var(--a)) - 0.9) * 10, 1); /* 1 only at the very front */
+    position: absolute; left: 50%; top: var(--cy); z-index: calc(var(--p) * 100);
+    translate: calc(-50% + sin(var(--a)) * var(--r) * var(--p)) calc(-50% + cos(var(--a)) * var(--ry) * var(--p));
+    scale: var(--p);
+    opacity: calc(0.14 + 0.86 * var(--q) * var(--q));
+    /* the ticker at the front turns mint while the coin is on it */
+    color: color-mix(in srgb, var(--color-accent) calc(var(--front) * var(--ring-lock) * 100%), var(--color-text));
+    white-space: nowrap;
+  }
+
+  /* The coin rests on the head of the ticker at the front. It stands behind the near half of the ring,
+     so it falls away behind that ticker. */
+  .coin { display: block; position: absolute; left: 50%; top: calc(var(--cy) + var(--ry) - var(--type) * 0.36 - var(--coin) / 2); z-index: 50; width: var(--coin); translate: -50% -50%; }
+
+  .line { display: block; position: absolute; left: 50%; top: calc(var(--cy) + var(--ry) + var(--type) * 0.5 + var(--space-2)); width: var(--line-w); height: var(--line-h); translate: -50% 0; overflow: visible; opacity: var(--ring-lock); }
+  .line polyline { fill: none; stroke: var(--color-accent); stroke-width: var(--line-drawn); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+  /* The coin's face: its rim in star pixels with a logo in the middle. The two rock together. */
+  .face { position: relative; }
+  .logo { position: absolute; left: 50%; top: 50%; width: 54%; height: auto; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; object-fit: cover; }
+  /* Thirteen logos lie in one place, and thirteen price lines in another. Only the front ticker's shows:
+     the one whose place is the step. The step changes while the coin and the line are out of sight. */
+  .logo, .line polyline { opacity: max(0, 1 - (var(--i) - var(--ring-step)) * (var(--i) - var(--ring-step))); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .stage { animation: step calc(var(--beat) * var(--n)) steps(var(--n)) infinite, move var(--beat) var(--ease-in-out) infinite, lock var(--beat) linear infinite; }
+    .coin { animation: drop var(--beat) infinite; }
+    .face { animation: rock 2.6s ease-in-out infinite alternate; }
+    .line polyline { animation: draw var(--beat) linear infinite; }
+  }
+}
+
+/* One beat: the coin drops (to 24%), the pair holds (to 62%), the coin falls away (to 74%) as the ring turns (from 72%). */
+@keyframes step { to { --ring-step: var(--n); } }
+@keyframes move { 0%, 72% { --ring-move: 0; } 100% { --ring-move: 1; } }
+@keyframes lock { 0%, 24% { --ring-lock: 0; } 30%, 62% { --ring-lock: 1; } 70%, 100% { --ring-lock: 0; } }
+@keyframes rock { from { transform: perspective(40rem) rotateY(-32deg); } to { transform: perspective(40rem) rotateY(32deg); } }
+@keyframes draw { 0%, 28% { stroke-dashoffset: 1; } 52%, 100% { stroke-dashoffset: 0; } }
+@keyframes drop {
+  0% { translate: -50% calc(-50% - var(--coin) * 1.25); opacity: 0; animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  10% { opacity: 1; }
+  24% { translate: -50% -50%; animation-timing-function: ease-out; }
+  29% { translate: -50% calc(-50% - var(--coin) * 0.14); animation-timing-function: ease-in; } /* one small bounce */
+  34% { translate: -50% -50%; }
+  62% { translate: -50% -50%; animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  68% { opacity: 1; }
+  74%, 100% { translate: -50% calc(-50% + var(--coin) + var(--type) * 1.5); opacity: 0; }
+}
+
+/* Under the ring: how many pairs, and the button into the terminal. */
+.count { font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--stat-label); }
+.count strong { font-weight: inherit; color: var(--stat-value-accent); }
+
+/* One screen (the query globals.css uses): the stage takes the height the head and the foot leave, and the
+   ring's sizes follow that height. They are read by the stage's children, so cqh is the stage's own height. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  @supports (translate: calc(sin(1deg) * 1cqw)) {
+    .stage {
+      --type: min(clamp(1.5rem, 0.5rem + 4.4vw, 4.5rem), 19cqh); --coin: 35cqh; --ry: 44cqh; --line-w: 56cqh;
+      container-type: size; height: auto; min-height: 14.5rem; max-height: 27rem;
+    }
+  }
+  /* the count stands over the button here, so this foot is the tallest: it closes up to leave the ring its height */
+  :global(.section-foot).foot { gap: var(--space-3); margin-top: var(--space-4); }
+}

@@ -1,0 +1,105 @@
+/* What is Hevium: one statement standing straight on the canvas, after the About section on taiko.xyz.
+   No sheet, no lines, no boxes: the page is one continuous canvas. Scrolling does two things, both in CSS:
+   the statement stands up from lying back, and it lights up in reading order with a mint edge, each figure
+   lighting with its words. Without scroll-driven CSS, or with reduced motion, it simply stands finished and lit. */
+
+/* How much of the statement is read. It rests at 1: done. */
+@property --statement-read { syntax: "<number>"; inherits: true; initial-value: 1; }
+
+.about { position: relative; }
+
+/* Film grain over the whole section, fading out toward the sections above and below. */
+.about::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+}
+
+.sheet { position: relative; transform-origin: 50% 100%; }
+
+h2.bar { display: flex; width: fit-content; margin-bottom: var(--space-4); }
+
+.body { position: relative; isolation: isolate; display: grid; }
+
+p.statement { position: relative; overflow: clip; padding-block: clamp(var(--space-8), 5vw, var(--space-24)); text-wrap: pretty; }
+
+/* Texture: a field of the page's star pixels behind the text (PixelField), on the hero floor's 10px grid.
+   It is a canvas with nothing in it to read, so it adds nothing to the page's text. One mask shows it two
+   ways at once: faintly where it gathers toward the bottom right, fading out on every side so it has no
+   edge, and at full strength in a band that trails the line being read. It slips against the text while
+   that is read, which sets it behind it. */
+.field {
+  --rest: 0.8; /* how strongly the field shows where nothing is being read */
+  --band: clamp(0, min(var(--statement-read), 1 - var(--statement-read)) * 10, 1); /* nothing before the reading starts or after it ends */
+  --mask:
+    linear-gradient(to bottom, transparent, rgb(0 0 0 / var(--band)) 55%, rgb(0 0 0 / var(--band)) 70%, transparent) 0 calc(var(--statement-read) * 100% - var(--space-12)) / 100% 8rem no-repeat,
+    linear-gradient(to right, transparent, rgb(0 0 0 / var(--rest)) 45%, rgb(0 0 0 / var(--rest)) 80%, transparent),
+    linear-gradient(to bottom, transparent, #000 45%, #000 80%, transparent);
+  position: absolute; left: 0; top: calc(-1 * var(--space-4)); z-index: -1; width: 100%; height: calc(100% + var(--space-8));
+  translate: 0 calc((0.5 - var(--statement-read)) * var(--space-8));
+  /* the band, added to where the two fades overlap */
+  -webkit-mask: var(--mask); -webkit-mask-composite: source-over, source-in;
+  mask: var(--mask); mask-composite: add, intersect;
+}
+
+/* The light on the text. An inline box that wraps keeps one background across all its lines, so a
+   gradient along it runs in reading order: lit behind the edge, mint at the edge, unlit ahead. */
+.ink {
+  --edge: calc(var(--statement-read) * 108% - 4%); /* from before the first letter to past the last */
+  background-image: linear-gradient(90deg, var(--color-text) calc(var(--edge) - 3%), var(--color-accent) calc(var(--edge) - 0.4%), var(--statement-unlit) calc(var(--edge) + 0.6%));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+@media (forced-colors: active) { .ink { background: none; color: CanvasText; } }
+
+/* The figures. On narrow screens a row each: the figure, then what it counts. */
+.facts { margin: 0; }
+.facts div {
+  display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: baseline; gap: var(--space-4);
+  padding-block: var(--space-4);
+  /* dim until the reading reaches this figure's words (--at), then up to full over the last few */
+  opacity: clamp(var(--statement-figure-dim), (var(--statement-read) - var(--at)) * 12 + 1, 1);
+}
+/* A figure stays out of sight until the reading reaches its words, then fades in while it counts up (see Count). */
+.facts dd { opacity: clamp(0, (var(--statement-read) - var(--at)) * 12 + 1, 1); margin: 0; font: var(--weight-display-strong) var(--text-display-md)/1 var(--font-display); letter-spacing: var(--tracking-display-md); font-variant-numeric: tabular-nums; color: var(--stat-value); }
+.facts div:nth-child(odd) dd { color: var(--stat-value-accent); }
+.facts dt { font: var(--weight-regular) var(--text-eyebrow)/1.5 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; text-align: right; color: var(--stat-label); }
+/* On a tablet the three stand side by side, each figure over what it counts: a row each would set the words a
+   screen's width away from their figure. */
+@media (min-width: 40rem) and (max-width: 63.999rem) {
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .facts div { flex-direction: column-reverse; justify-content: flex-end; align-items: flex-start; gap: var(--space-2); }
+  .facts dt { text-align: left; }
+}
+
+/* From 1024px the figures stand in a column on the right, each over its label. */
+@media (min-width: 64rem) {
+  .body { grid-template-columns: minmax(0, 1fr) clamp(13rem, 19vw, 18rem); }
+  .facts { display: grid; }
+  .facts div { flex-direction: column-reverse; justify-content: center; align-items: flex-start; gap: var(--space-3); padding-inline: var(--space-8); }
+  .facts dd { font-size: var(--text-display-lg); letter-spacing: var(--tracking-display-lg); }
+  .facts dt { text-align: left; }
+}
+
+/* shortcut: a browser without scroll-driven CSS shows the sheet finished and lit; add a scroll listener that sets the two properties if that browser has to move too. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet { animation: rise linear both; animation-timeline: view(); animation-range: cover 0% cover 42vh; }
+    /* The reading runs on the statement's own passage up the screen and keeps the lit edge about
+       two thirds of the way down it. It is done a little before the statement stands in the middle:
+       where the section is one screen, that is by the time the section fills the screen. */
+    p.statement { view-timeline: --statement block; }
+    .body { timeline-scope: --statement; animation: read linear both; animation-timeline: --statement; animation-range: cover 20% cover 44%; }
+  }
+}
+@keyframes rise {
+  from { opacity: 0.35; transform: perspective(90rem) rotateX(22deg) translateY(var(--space-8)); }
+  to { opacity: 1; transform: perspective(90rem) rotateX(0deg) translateY(0); }
+}
+@keyframes read { from { --statement-read: 0; } }
+
+/* The section holds two parts (what Hevium is, and the problem), so where other sections are one screen it
+   runs as long as it needs. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  section.about { height: auto; padding-block: var(--section-y); }
+}

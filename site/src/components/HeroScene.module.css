@@ -1,0 +1,20 @@
+/* The art box starts at the top of the hero and runs 24svh past its bottom edge. That stretch is
+   more floor, masked out so that it dissolves into the next section. */
+.art {
+  position: absolute; inset: 0 0 auto; z-index: var(--z-scene); height: calc(100% + 24svh);
+  container-type: inline-size;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 30svh), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 30svh), transparent);
+}
+.canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity var(--motion-reveal); }
+.art:global(.is-live) .canvas { opacity: 1; }
+
+/* The poster: the mark, standing where the scene's cube stands, which is 17.3% of the width above
+   the fold. From about 1050px up it is the size of the mark in the cube, and it is never smaller
+   than 6rem, since on a phone it is all there is. */
+.poster {
+  position: absolute; left: 50%; bottom: calc(24svh + 17.3cqw); width: max(9.15cqw, 6rem); height: auto;
+  transform: translate(-50%, 50%); transition: opacity var(--motion-reveal);
+  pointer-events: none; /* once the scene is live the poster is unseen, and the cube under it takes the pointer */
+}
+.art:global(.is-live) .poster { opacity: 0; }

@@ -3,7 +3,8 @@
 
 html, body { background: var(--color-bg); overflow-x: clip; }
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+/* The page is dark, so what the browser draws is too: form controls, and the scrollbar in the page's own greys. */
+html { color-scheme: dark; scrollbar-color: var(--color-border-strong) var(--color-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body { margin: 0; color: var(--color-text); font-family: var(--font-sans); font-size: var(--text-body); line-height: var(--leading-body); overflow-wrap: break-word; }
 h1, h2, h3, p, figure, ul, ol, table { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
@@ -12,13 +13,38 @@ a { color: inherit; }
 :focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring-color); outline-offset: var(--focus-ring-offset); border-radius: var(--radius-sm); }
 ::selection { background: var(--color-accent); color: var(--color-on-accent); }
 
+/* A section that is off screen rests (components/Away.tsx marks it). */
+[data-away] *, [data-away] *::before, [data-away] *::after { animation-play-state: paused !important; }
+
+/* Text for screen readers and crawlers that is not drawn: a visual's description. */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
 /* layout */
 .container { max-width: var(--container-max); margin-inline: auto; padding-inline: var(--gutter); }
-.section { padding-block: var(--section-y); border-top: 1px solid var(--color-border); }
-.block-head { margin-bottom: var(--space-12); }
-.block-head h2 { margin-top: var(--space-3); }
-.block-head .lead { margin-top: var(--space-6); }
+/* No rule between sections: the page is one continuous canvas. */
+.section { padding-block: var(--section-y); }
+/* section head: how every section opens. An eyebrow, the headline and one supporting line, centred; the
+   section's one component or asset comes after it. Write it with the SectionHead component. */
+.section-head { display: grid; justify-items: center; gap: var(--space-3); margin-bottom: var(--space-16); text-align: center; }
+.section-head h2 { margin-top: var(--space-2); max-width: 18ch; }
+.section-head .lead { text-wrap: balance; } /* centred lines of even length, never two words left over */
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+
+/* One screen to a section, where the screen is wide and tall enough for it: the head, the piece and any
+   button stand in view together, under the nav bar. The piece (.section-piece) takes the height the rest
+   leaves, up to a limit of its own; what is left over is shared above and below. A smaller screen lets a
+   section run as long as it needs. Sections repeat this query for what their own piece does with the height. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  .section { height: 100svh; padding-block: var(--screen-top) var(--screen-bottom); }
+  .section > .container { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100%; }
+  .section-head { flex: none; margin-bottom: var(--space-8); }
+  .section-piece { flex: 1 1 0; }
+  .section-foot { flex: none; margin-top: var(--space-6); }
+}
+/* On a short screen the headline takes one line where it can, and the piece gets the height that saves. */
+@media (min-width: 64rem) and (min-height: 45rem) and (max-height: 52rem) {
+  .section-head h2 { max-width: none; }
+}
 
 /* type roles */
 .display-xl { font: var(--weight-display-strong) var(--text-display-xl)/var(--leading-display-xl) var(--font-display); letter-spacing: var(--tracking-display-xl); text-wrap: balance; }
@@ -28,26 +54,72 @@ a { color: inherit; }
 .lead { font-size: var(--text-body-lg); line-height: var(--leading-body-lg); color: var(--color-text-secondary); max-width: var(--measure); text-wrap: pretty; }
 .body { color: var(--color-text-secondary); max-width: var(--measure); text-wrap: pretty; }
 .small { font-size: var(--text-small); line-height: 1.5; }
-.eyebrow { font: var(--weight-medium) var(--text-eyebrow)/1.4 var(--font-mono); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--eyebrow-color); }
 .hl { color: var(--heading-highlight); }
 
-/* card */
-.card { display: block; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--card-radius); padding: var(--card-pad); text-decoration: none; transition: background-color var(--motion-hover); }
-.card .title { margin-block: var(--space-3) var(--space-2); }
-.card p { color: var(--color-text-secondary); }
+/* card: a dark well inside a thicker frame, each edged with a hairline. Write it with the Card component, which makes both layers. */
+.card { display: flex; padding: var(--card-frame-width); background: var(--card-frame-bg); border-radius: var(--card-frame-radius); border: 1px solid var(--card-edge); transition: border-color var(--motion-hover); }
+.card-body { display: flex; flex: 1; flex-direction: column; gap: var(--card-gap); min-width: 0; padding: var(--card-pad); background: var(--card-bg); border-radius: var(--card-radius); border: 1px solid var(--card-edge); }
+/* a card's words: its title and a line or two, at the foot of the card */
+.card-text { display: flex; flex-direction: column; gap: var(--space-3); margin-top: auto; }
+.card-title { font: var(--weight-semibold) var(--card-title-size)/1.2 var(--font-sans); letter-spacing: var(--tracking-title); }
+.card-text p { line-height: 1.35; color: var(--color-text-secondary); }
+/* a one-line fact: a small mark, then the words */
+.card-stat .card-body { flex-direction: row; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-6); font: var(--weight-medium) var(--card-stat-size)/1.2 var(--font-sans); }
+
+/* pill row: a few short things in a row, joined by a line: the steps of Five chains, the four engines of the
+   solution. A pill wears the eyebrow's fill and edge a size smaller, with a number in mint mono. They do not
+   animate. A pill that is a link takes a mint edge under the pointer and is 44px tall to press. */
+.pill-row { display: flex; justify-content: center; align-items: center; }
+.pill-row li { display: flex; align-items: center; }
+.pill-row li + li::before { content: ""; width: 0.5rem; height: var(--line-drawn); background: var(--color-border-strong); }
+.pill { position: relative; display: inline-flex; align-items: center; gap: 0.5em; height: 1.75rem; padding-inline: 0.625rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-pill); font: var(--weight-medium) var(--text-eyebrow)/1 var(--font-sans); color: var(--color-text); text-decoration: none; white-space: nowrap; transition: border-color var(--motion-hover); }
+.pill-n { font: var(--weight-semibold) 0.6875rem/1 var(--font-mono); color: var(--color-accent-text); }
+a.pill::after { content: ""; position: absolute; inset: 50% 0 auto; height: 2.75rem; translate: 0 -50%; }
+a.pill:hover { border-color: var(--card-edge-hover); }
+@media (min-width: 40rem) {
+  .pill-row li + li::before { width: clamp(1rem, 3vw, 2.5rem); }
+  .pill { gap: 0.6em; height: 2rem; padding-inline: var(--space-3) var(--space-4); font-size: var(--text-small); }
+  .pill-n { font-size: var(--text-eyebrow); }
+}
+
+/* trade tag: the letter a chart marks a trade with. B on the brand mint for a buy, S on red for a sell, and
+   amber for a trade that was held. Say the word as well, for a screen reader. */
+.trade-tag { display: inline-grid; place-items: center; flex: none; width: 1.7em; height: 1.7em; border-radius: 0.45em; background: var(--color-accent); color: var(--color-on-accent); font: var(--weight-bold) 0.82em/1 var(--font-mono); }
+.trade-tag[data-side="sell"] { background: var(--color-down); }
+.trade-tag[data-side="held"] { background: var(--color-warning); }
+
+/* input: a one-line text field, 44px tall. Name it with a label. */
+.input { display: block; width: 100%; height: 2.75rem; padding-inline: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border-strong); border-radius: var(--button-radius); color: var(--color-text); font: var(--weight-medium) var(--text-small)/1 var(--font-sans); transition: border-color var(--motion-hover); }
+.input::placeholder { color: var(--color-text-muted); }
+.input { caret-color: var(--color-accent); }
+.input:focus-visible { border-color: var(--color-accent); }
+
+/* eyebrow: the pill that opens a section, led by the Hevium star. Write it with the Eyebrow component. */
+.eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-3) 0.875rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-pill); font: var(--weight-medium) var(--text-small)/1.2 var(--font-sans); }
+.eyebrow::before { content: ""; flex: none; width: 1rem; aspect-ratio: 154 / 105; background: var(--gradient-brand); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
 
 /* buttons */
-.btn { display: inline-flex; align-items: center; justify-content: center; height: var(--button-height); padding-inline: var(--button-pad-x); border: 1px solid transparent; border-radius: var(--button-radius); font: var(--button-weight) var(--text-small)/1 var(--font-sans); text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform var(--motion-press), background-color var(--motion-hover), border-color var(--motion-hover); }
+.btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; height: var(--button-height); padding-inline: var(--button-pad-x); border: 1px solid transparent; border-radius: var(--button-radius); font: var(--button-weight) var(--text-small)/1 var(--font-sans); text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform var(--motion-press), background-color var(--motion-hover), border-color var(--motion-hover); }
 .btn:active { transform: scale(var(--press-scale)); }
 .btn-sm { height: var(--button-height-sm); padding-inline: var(--space-4); }
+.btn-sm::after { content: ""; position: absolute; inset: calc(-0.125rem - 1px) 0; } /* 40px tall, 44px to press. The inset starts inside the 1px border */
 .btn-primary { background: var(--button-primary-bg); color: var(--button-primary-text); }
+/* The fill is a gradient, and a gradient cannot fade to a flat colour, so the hover colour lies over it and fades in. */
+.btn-primary::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: var(--button-primary-bg-hover); opacity: 0; transition: opacity var(--motion-hover); }
 .btn-secondary { background: transparent; color: var(--button-secondary-text); border-color: var(--button-secondary-border); }
 /* third button: tinted fill with accent text and a hairline edge, as on the app's active tab */
 .btn-tonal { background: var(--button-tonal-bg); color: var(--button-tonal-text); border-color: var(--button-tonal-border); }
+/* A drawn icon: stroked at the drawn-line weight in a 16-unit box, so the stroke scales with the icon. */
+.icon { flex: none; width: 1em; height: 1em; overflow: visible; fill: none; stroke: currentColor; stroke-width: var(--line-drawn); stroke-linecap: round; stroke-linejoin: round; }
+/* How a section ends: one button under its piece, in the middle. On a phone a section's button takes the whole
+   row, so either thumb reaches it; the nav bar's button and the small ones keep their size. */
+.section-foot { display: grid; justify-items: center; gap: var(--space-4); margin-top: var(--space-8); text-align: center; }
+@media (max-width: 39.999rem) { main .btn:not(.btn-sm) { width: 100%; } }
 .link { color: var(--color-accent); text-decoration-thickness: from-font; text-underline-position: from-font; transition: color var(--motion-hover); }
 @media (hover: hover) and (pointer: fine) {
-  .btn-primary:hover { background: var(--button-primary-bg-hover); }
+  .btn-primary:hover::before { opacity: 1; }
   .btn-secondary:hover { background: var(--button-secondary-bg-hover); }
   .btn-tonal:hover { background: var(--button-tonal-bg-hover); }
   .link:hover { color: var(--color-accent-hover); }
+  .card:hover { border-color: var(--card-edge-hover); }
 }

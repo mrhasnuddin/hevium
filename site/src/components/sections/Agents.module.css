@@ -1,0 +1,171 @@
+/* Agents: under the section head, one piece in two parts. On the left a clean MCP prompt card using Hevium's
+   double-frame Card surface with supported client marks above it; on the right a price chart drawn as the
+   session runs, marking every trade at the exact moment its confirmation appears in the card. One CSS custom
+   property (--agent-t) runs from 0 to 1 on the stage so both halves stay frame-locked with zero JS. */
+
+@property --agent-t { syntax: "<number>"; inherits: true; initial-value: 1; } /* how far through the session */
+
+.stage { display: grid; gap: var(--space-8); align-items: center; }
+/* From 1024px the two parts stand side by side, balanced in their halves. */
+@media (min-width: 64rem) {
+  .stage { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
+}
+
+/* --- Left: client icons + Hevium double-frame prompt card --- */
+.session {
+  --type-k: clamp(0, (var(--agent-t) - var(--type-start)) / var(--type-span), 1);
+  --typing-active: calc(clamp(0, (var(--agent-t) - var(--type-start)) * 500, 1) * clamp(0, (var(--sent-at) - var(--agent-t)) * 500, 1));
+  --sent: clamp(0, (var(--agent-t) - var(--sent-at)) * 60, 1);
+  --send-flash: calc(clamp(0, (var(--agent-t) - 0.195) * 200, 1) * clamp(0, (0.245 - var(--agent-t)) * 200, 1));
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3); width: 100%; max-width: 31rem; min-width: 0;
+  justify-self: center; /* in the middle of its half on a wide screen, and of the screen on a tablet */
+}
+
+.clients { display: flex; justify-content: center; align-items: center; gap: var(--space-2); }
+.client {
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  border: 1px solid var(--card-edge); border-radius: var(--radius-md);
+  background: var(--color-surface);
+  transition: border-color var(--motion-hover), background-color var(--motion-hover);
+}
+@media (hover: hover) and (pointer: fine) {
+  .client:hover { border-color: var(--card-edge-hover); background: var(--color-surface-hover); }
+}
+.markCursor { color: var(--color-text); }
+
+/* Uses Hevium's .card (Carbon outer frame) + .card-body (Obsidian well), no drop shadows. */
+.promptCard { width: 100%; min-width: 0; }
+.promptCard :global(.card-body) { gap: var(--space-4); padding: var(--space-4); }
+
+.feed { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+
+/* Right-aligned user instruction bubble on Carbon surface, stepped above the Obsidian well. */
+.bubble {
+  align-self: flex-end; max-width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
+  background: var(--color-surface);
+  font: var(--weight-medium) clamp(0.8125rem, 0.76rem + 0.2vw, 0.9375rem)/1.4 var(--font-sans);
+  color: var(--color-text);
+  opacity: var(--sent);
+  transform: translateY(calc((1 - var(--sent)) * 6px));
+}
+
+/* Left-aligned agent confirmations, each synced 1:1 with its marker on the chart. */
+.replies { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.reply {
+  --on: clamp(0, (var(--agent-t) - var(--at)) * 60, 1);
+  display: flex; align-items: center; gap: var(--space-2); min-width: 0;
+  font: var(--weight-medium) clamp(0.75rem, 0.7rem + 0.18vw, 0.875rem)/1.35 var(--font-sans);
+  color: var(--color-text);
+  opacity: var(--on);
+  transform: translateY(calc((1 - var(--on)) * 6px));
+}
+.replyHeld { color: var(--color-warning); }
+.replyIcon { display: inline-grid; place-items: center; flex: none; color: var(--color-accent); }
+.replyHeld .replyIcon { color: var(--color-warning); }
+.replyText { flex: 1; min-width: 0; }
+.replyTime {
+  flex: none;
+  font: var(--weight-regular) var(--text-eyebrow)/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+/* Bottom "Ask your agent" prompt bar: matches .input surface/border on the Obsidian well. */
+.composer {
+  display: flex; align-items: center; gap: var(--space-2); min-width: 0;
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-4);
+  border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+.composerText {
+  display: grid; flex: 1; align-items: center; min-width: 0; overflow: hidden;
+  font: var(--weight-regular) clamp(0.75rem, 0.71rem + 0.16vw, 0.875rem)/1.3 var(--font-sans);
+}
+.placeholder, .draft { grid-area: 1 / 1; white-space: nowrap; }
+.placeholder { color: var(--color-text-muted); opacity: calc(1 - var(--typing-active)); }
+.draft {
+  position: relative; justify-self: start; max-width: 100%; overflow: hidden;
+  color: var(--color-text); opacity: var(--typing-active);
+}
+.draftText { display: block; clip-path: inset(0 calc((1 - var(--type-k)) * 100%) 0 0); }
+.caretWrap {
+  position: absolute; inset: 0.12em 0; pointer-events: none;
+  transform: translateX(calc(var(--type-k) * 100%));
+  opacity: var(--typing-active);
+}
+.caretWrap::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; border-radius: 1px;
+  background: var(--color-accent);
+}
+
+.sendBtn {
+  position: relative; display: inline-grid; place-items: center; flex: none;
+  width: 2rem; height: 2rem; border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border); background: var(--color-surface-raised);
+  color: var(--color-text-muted); overflow: hidden;
+}
+.sendFlash {
+  position: absolute; inset: 0; display: grid; place-items: center; border-radius: inherit;
+  background: var(--gradient-brand); color: var(--color-on-accent);
+  opacity: var(--send-flash);
+}
+
+/* --- Right: interactive 24h price chart --- */
+/* The chart: a price line through one day. --chart-x is how far across it the session has drawn, and is set
+   on the figure from the same numbers that place the marks. */
+.chart { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.plot {
+  position: relative; aspect-ratio: 4 / 3; max-height: 22rem;
+  border-bottom: 1px solid var(--color-border-strong);
+  background: repeating-linear-gradient(to bottom, var(--color-border) 0, var(--color-border) 1px, transparent 1px, transparent 25%);
+}
+/* a ground of star pixels under the line, fading upward */
+.ground { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.6; -webkit-mask: linear-gradient(to top, #000, transparent 80%); mask: linear-gradient(to top, #000, transparent 80%); }
+/* the line and the wash under it show only as far as the session has run */
+.plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; color: var(--color-accent); clip-path: inset(-10% calc((1 - var(--chart-x)) * 100%) -10% 0); }
+.line { fill: none; stroke: currentColor; stroke-width: var(--line-drawn); stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+/* where the session has got to: a hairline that travels with the line's end and goes when the session is over */
+.now { position: absolute; top: 0; bottom: 0; left: calc(var(--chart-x) * 100%); width: 1px; background: var(--color-border-strong); opacity: clamp(0, (1 - var(--agent-t)) * 40, 1); }
+/* A trade on the line: its tag stands on the point, which is a dip, and its amount under it, clear of the
+   line. It shows the moment its confirmation appears in the card. */
+.mark {
+  --on: clamp(0, (var(--agent-t) - var(--at)) * 200, 1);
+  position: absolute; z-index: 1; display: grid; justify-items: center; gap: 0.4em;
+  translate: -50% -0.7em; transform-origin: 50% 0.7em; scale: calc(0.6 + 0.4 * var(--on)); opacity: var(--on);
+  font: var(--weight-semibold) var(--text-small)/1 var(--font-mono); white-space: nowrap;
+}
+.amount { padding: 0.35em 0.55em; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); font-size: 0.82em; color: var(--color-text); }
+.hours { display: flex; justify-content: space-between; font: var(--weight-regular) var(--text-eyebrow)/1 var(--font-mono); letter-spacing: 0.06em; color: var(--color-text-muted); }
+
+/* Under the chart: the two limits in words, and the day's budget filling as the buys land. */
+.under { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-3) var(--space-8); margin-top: var(--space-2); }
+.limits { display: flex; gap: var(--space-8); }
+.limits dt, .label { display: block; font: var(--weight-regular) var(--text-eyebrow)/1.5 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--stat-label); }
+.limits dd { margin: 0; font: var(--weight-semibold) var(--text-body)/1.4 var(--font-mono); color: var(--color-text); }
+.budget { display: grid; flex: 1; gap: var(--space-2); min-width: 8rem; padding-bottom: 0.45rem; }
+.track { display: block; height: 0.5rem; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-border-strong); }
+/* the fill turns amber once a trade has been held at the budget */
+.track span { display: block; width: calc(var(--spent) * 100%); height: 100%; border-radius: inherit; background: color-mix(in srgb, var(--color-warning) calc(var(--held) * 100%), var(--color-accent)); }
+
+/* The button to the MCP page, and beside it the docs as a text link. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .stage { animation: session var(--cycle) linear infinite; }
+}
+@keyframes session { from { --agent-t: 0; } to { --agent-t: 1; } }
+
+/* One screen (the query globals.css uses): the two parts share the height the head and the foot leave, and
+   the plot takes what its column has left. */
+@media (min-width: 64rem) and (min-height: 45rem) {
+  .stage { grid-template-rows: minmax(0, 1fr); min-height: 16rem; max-height: 28rem; container-type: size; }
+  .session { gap: min(var(--space-3), 2.8cqh); }
+  .client { width: min(2.75rem, 11cqh); height: min(2.75rem, 11cqh); }
+  .promptCard :global(.card-body) { gap: min(var(--space-4), 3.4cqh); padding: min(var(--space-4), 3.8cqh); }
+  .feed { gap: min(var(--space-3), 2.5cqh); }
+  .replies { gap: min(var(--space-2), 1.6cqh); }
+  .chart { height: 100%; min-height: 0; }
+  .plot { flex: 1; min-height: 0; max-height: none; aspect-ratio: auto; }
+}

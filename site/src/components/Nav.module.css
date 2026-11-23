@@ -1,0 +1,53 @@
+/* The wrapper has no height, so the bar floats over the hero and takes no room above it. */
+.wrap { position: sticky; top: var(--space-4); z-index: var(--z-nav); height: 0; }
+
+/* The bar's corners run with its button's: the button's radius plus the room around the button (--nav-radius).
+   The padding at the button's end is that room less the 1px edge, so there is as much beside the button as above it. */
+.nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); height: var(--nav-height); padding-inline: var(--space-4) calc(var(--nav-inset) - 1px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); }
+@media (prefers-reduced-motion: no-preference) {
+  .nav { transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-fast) ease; }
+}
+.nav[data-hidden="true"]:not(:focus-within):not(:has(.links:popover-open)) {
+  translate: 0 calc(-100% - var(--space-6));
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The logo, each link and the small buttons are 44px tall to press, whatever they look. */
+.logo { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.logo img { height: 1.5rem; width: auto; }
+
+/* The links are a popover. This takes off the box a browser gives one; below 1024px it stays hidden until opened. */
+.links { inset: auto; gap: var(--space-8); margin: 0; padding: 0; overflow: visible; background: none; border: 0; color: inherit; font-size: var(--text-small); }
+.links a:not(:global(.btn)) { display: flex; align-items: center; min-height: 2.75rem; color: var(--nav-link); text-decoration: none; transition: color var(--motion-hover), background-color var(--motion-hover); }
+
+/* Open below 1024px: a panel of the bar's own glass, hung under the bar and as wide as it. A link's corners run with the panel's. */
+.links:popover-open { display: flex; flex-direction: column; gap: 0; top: calc(var(--space-4) + var(--nav-height) + var(--space-2)); right: var(--gutter); left: var(--gutter); width: auto; padding: calc(var(--nav-inset) - 1px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); font-size: var(--text-body); }
+.links:popover-open a:not(:global(.btn)) { padding-inline: var(--space-2); border-radius: var(--button-radius); }
+/* Launch app is the menu's last row below 1024px, at full size and as wide as the links. From 1024px it is in the bar. */
+.cta { display: none; }
+.links:popover-open .cta { display: block; margin-top: var(--space-2); }
+.links:popover-open .cta :global(.btn) { width: 100%; }
+@media (max-width: 63.999rem) { .actions > :global(.btn-primary) { display: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .links:popover-open { transition: opacity var(--motion-ui), translate var(--motion-ui); }
+  @starting-style { .links:popover-open { opacity: 0; translate: 0 calc(-1 * var(--space-2)); } }
+}
+
+.actions { display: flex; align-items: center; gap: var(--space-2); }
+
+/* The menu button: two bars at the drawn-line weight that cross when the menu is open. */
+.nav .menu { flex-direction: column; gap: 0.375rem; width: var(--button-height-sm); padding: 0; }
+.nav .menu::after { inset-inline: calc(-0.125rem - 1px); }
+.menu span { width: 1rem; height: var(--line-drawn); border-radius: 1px; background: currentColor; transition: translate var(--motion-ui), rotate var(--motion-ui); }
+.nav:has(.links:popover-open) .menu span:first-child { translate: 0 calc((0.375rem + var(--line-drawn)) / 2); rotate: 45deg; }
+.nav:has(.links:popover-open) .menu span:last-child { translate: 0 calc((0.375rem + var(--line-drawn)) / -2); rotate: -45deg; }
+
+@media (min-width: 64rem) {
+  .links { position: static; display: flex; width: auto; height: auto; }
+  .nav .menu { display: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .links a:not(:global(.btn)):hover { color: var(--nav-link-hover); }
+  .links:popover-open a:not(:global(.btn)):hover { background: var(--color-surface-hover); }
+}
