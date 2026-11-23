@@ -45,13 +45,6 @@ export const metadata: Metadata = {
         type: 'image/png',
         alt: OG_ALT,
       },
-      {
-        url: `${HOME_URL}og-square.png`,
-        width: 1200,
-        height: 1200,
-        type: 'image/png',
-        alt: OG_ALT,
-      },
     ],
   },
   twitter: {
