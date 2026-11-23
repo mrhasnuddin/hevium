@@ -2,7 +2,7 @@
   "name": "hevium",
   "compatibility_date": "2026-11-23",
   "build": {
-    "command": "test -f site/out/index.html || (cd site && pnpm install --frozen-lockfile && pnpm run build)"
+    "command": "test -f site/out/index.html || (cd site && npx -y pnpm@9.15.9 install --frozen-lockfile && npx -y pnpm@9.15.9 run build)"
   },
   "assets": {
     "directory": "./site/out",

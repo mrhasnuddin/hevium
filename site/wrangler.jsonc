@@ -1,0 +1,11 @@
+{
+  "name": "hevium",
+  "compatibility_date": "2026-11-23",
+  "build": {
+    "command": "test -f out/index.html || (npx -y pnpm@9.15.9 install --frozen-lockfile && npx -y pnpm@9.15.9 run build)"
+  },
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
