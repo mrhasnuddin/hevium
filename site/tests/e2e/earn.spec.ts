@@ -52,7 +52,7 @@ test.describe('earn section', () => {
       const card = cards(page).nth(n);
       await expect(card).toContainText('Hevium');
       await expect(card).toContainText(`${ticker} pair`);
-      await expect(card.locator('img[data-logo]')).toHaveAttribute('src', new RegExp(`^https://hevium\\.xyz/tokens/${ticker.toLowerCase()}\\.`));
+      await expect(card.locator('img[data-logo]')).toHaveAttribute('src', new RegExp(`^https://app\\.hevium\\.xyz/tokens/${ticker.toLowerCase()}\\.`));
       await expect(card.locator('dl dt')).toHaveCount(4);
       await expect(card.locator('dl dt').nth(0)).toHaveText('Referred volume');
       await expect(card.locator('dl dt').nth(1)).toHaveText('Total PnL');
@@ -233,7 +233,7 @@ test.describe('earn section', () => {
     await expect(cta).toHaveClass(/\bbtn\b/);
     expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const url = new URL((await cta.getAttribute('href'))!);
-    expect(url.origin).toBe('https://hevium.xyz');
+    expect(url.origin).toBe('https://app.hevium.xyz');
     expect(url.searchParams.get('utm_source')).toBe('landing');
     expect(url.searchParams.get('utm_content')).toBe('earn');
   });

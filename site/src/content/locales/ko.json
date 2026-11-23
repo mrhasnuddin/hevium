@@ -1,0 +1,437 @@
+{
+  "FACTS": [
+    {
+      "value": "5",
+      "label": "체인",
+      "words": "다섯 개 체인"
+    },
+    {
+      "value": "1.0%",
+      "label": "거래당 수수료",
+      "words": "1.0%"
+    },
+    {
+      "value": "20%",
+      "label": "그 수수료 중 추천인 몫",
+      "words": "20%"
+    }
+  ],
+  "FOOTER": {
+    "headline": "하나의 터미널. 다섯 개의 체인.",
+    "copyright": "© 2026 Hevium",
+    "backToTop": "맨 위로"
+  },
+  "META": {
+    "title": "Hevium: 멀티체인 주식 & 페어런치 터미널",
+    "description": "다섯 개 체인에서 주식, 디지털 달러와 짝지은 페어런치 토큰을 거래하세요. 수수료 1.0%, 비수탁, 로그인 한 번. 트레이더와 AI 에이전트용.",
+    "whatIs": "Hevium은 Base, Robinhood Chain, BNB Chain, Solana, Elysium 다섯 개 체인에서 운영되는 비수탁 트레이딩 터미널이자 페어런치 런치패드입니다. 토큰은 본딩 커브에서 출시되며, 주식이나 디지털 달러와 짝지을 수 있습니다. 거래 수수료는 건당 1.0%이며, 그 수수료의 20%는 추천인에게 돌아갑니다."
+  },
+  "RISK_LINE": "토큰 거래에는 위험이 따르며, 가격이 제로까지 떨어질 수 있습니다. Hevium은 비수탁 방식으로 운영되며 투자 조언을 제공하지 않습니다.",
+  "AGENT_CHART": "하루 동안의 가격을 세션 진행에 맞춰 그려 나가는 선 차트입니다. 에이전트가 매수할 때마다 가격이 내려간 지점에 B 표시와 매수 금액 0.1 ETH가 선 위에 찍힙니다. 네 번째 매수는 일일 예산에 걸려 보류되며 주황색으로 표시됩니다.",
+  "AGENT_LIMITS": [
+    {
+      "label": "거래당",
+      "setting": "HEVIUM_MAX_TRADE_ETH",
+      "value": "0.1 ETH"
+    },
+    {
+      "label": "하루당",
+      "setting": "HEVIUM_DAILY_BUDGET_ETH",
+      "value": "0.3 ETH"
+    }
+  ],
+  "AGENT_PROMPT": {
+    "prompt": "NVDA가 내릴 때마다 0.1 ETH씩 매수해 줘. 하루 최대 0.3.",
+    "placeholder": "에이전트에게 요청하기",
+    "replies": [
+      {
+        "text": "NVDA 0.1 ETH 매수 완료",
+        "time": "08:15",
+        "through": true
+      },
+      {
+        "text": "NVDA 0.1 ETH 매수 완료",
+        "time": "11:45",
+        "through": true
+      },
+      {
+        "text": "NVDA 0.1 ETH 매수 완료",
+        "time": "15:15",
+        "through": true
+      },
+      {
+        "text": "0.1 ETH 보류 · 일일 예산 도달",
+        "time": "18:45",
+        "through": false
+      }
+    ]
+  },
+  "AUDIT_NOTE": "보안 감사 완료",
+  "AUDIT_TEXT": "컨트랙트는 보안 감사를 마쳤습니다. 주소와 빌드 설정이 문서에 기재되어 있어 누구나 배포된 내용을 확인할 수 있습니다.",
+  "CHAINS": [
+    {
+      "name": "Base",
+      "suits": "Coinbase 사용자와 안정 수익형 자산 보유자",
+      "trades": [
+        "ETH",
+        "USDC",
+        "USD+",
+        "COIN"
+      ]
+    },
+    {
+      "name": "Robinhood Chain",
+      "suits": "주식 트레이더, 24/7 열려 있는 시장",
+      "trades": [
+        "NVDA",
+        "TSLA",
+        "AAPL",
+        "SPY"
+      ]
+    },
+    {
+      "name": "BNB Chain",
+      "suits": "거래량이 큰 글로벌 런치",
+      "trades": [
+        "BNB",
+        "USDT",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Solana",
+      "suits": "빠른 트레이더와 봇",
+      "trades": [
+        "SOL",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Elysium",
+      "suits": "초기 진입을 선호하는 DeFi 트레이더",
+      "trades": [
+        "HYPE",
+        "USDC"
+      ]
+    }
+  ],
+  "CHAIN_ROUTE": "Hevium 마크가 허브로 서 있고, 거기서 Base, Robinhood Chain, BNB Chain, Solana, Elysium 다섯 개 체인으로 경로가 하나씩 뻗어 있습니다. 선택한 체인의 경로를 따라 허브에서 펄스가 이동하고, 그 체인에 매수가 도착합니다.",
+  "CHAIN_STEPS": [
+    "로그인",
+    "체인 선택",
+    "거래"
+  ],
+  "EARN": {
+    "fee": "레퍼럴 수수료",
+    "name": "내 이름을 넣어 보세요",
+    "protocol": "프로토콜 0.80%",
+    "you": "내 몫 0.20%",
+    "perks": [
+      {
+        "title": "수수료의 20%",
+        "text": "내가 데려온 사람이 런치에서 매수하거나 EVM 체인에서 졸업한 토큰을 스왑하면 1.0% 수수료의 5분의 1을 받습니다."
+      },
+      {
+        "title": "온체인 지급",
+        "text": "스왑분은 같은 트랜잭션에서 지급됩니다. 런치 매수분은 에스크로 컨트랙트에 쌓이며, 직접 클레임해 받습니다."
+      },
+      {
+        "title": "내 링크, 내 카드",
+        "text": "어떤 거래든 카드나 리플레이로 공유하거나 콜아웃을 올려 보세요. 모두 내 링크를 담고 있습니다:"
+      }
+    ]
+  },
+  "ENGINES": [
+    {
+      "id": "stocks",
+      "label": "주식",
+      "href": "#stocks",
+      "summary": "주식, 디지털 달러와 짝지은 토큰"
+    },
+    {
+      "id": "launch",
+      "label": "런치",
+      "href": "#launch",
+      "summary": "고정 공급량, 15초 만에 페어런치"
+    },
+    {
+      "id": "agents",
+      "label": "에이전트",
+      "href": "#agents",
+      "summary": "안전장치를 갖춘 MCP 기반 24/7 AI 오더플로우"
+    },
+    {
+      "id": "earn",
+      "label": "수익",
+      "href": "#earn",
+      "summary": "링크를 공유하고 수수료의 20% 받기"
+    }
+  ],
+  "FAQ": [
+    {
+      "q": "내 자금은 누가 보관하나요?",
+      "a": "본인이 보관합니다. Google로 로그인하면 EVM 체인용 비수탁 지갑이 만들어지고, Phantom이나 Solflare 같은 Solana 지갑도 연결할 수 있습니다. Hevium은 예치금을 일절 보관하지 않으며, 모든 거래는 온체인에서 정산됩니다."
+    },
+    {
+      "q": "페어런치는 어떻게 진행되나요?",
+      "a": "모든 토큰의 공급량은 1,000,000,000개로 고정되어 있습니다. 80%는 누구나 참여할 수 있는 본딩 커브에서 판매되고 20%는 유동성으로 따로 배정되며, 내부자를 위해 미리 발행되는 물량은 없습니다. 런치 가드는 스나이퍼 봇을 억제하기 위해 처음 5초 동안 이루어진 매수에 95%에서 시작해 제로까지 낮아지는 세금을 부과합니다. 커브가 다 채워지면 토큰은 해당 체인의 거래소 풀로 자동 졸업합니다."
+    },
+    {
+      "q": "토큰이 졸업한 뒤 유동성은 어떻게 되나요?",
+      "a": "누구도 손댈 수 없게 됩니다. Base, BNB Chain, Robinhood Chain에서는 풀 토큰이 데드 주소로 소각됩니다. Elysium에서는 포지션이 곧바로 데드 주소로 발행되고, Solana에서는 영구적으로 잠깁니다."
+    },
+    {
+      "q": "거래 비용은 얼마인가요?",
+      "a": "런치 커브와 졸업한 토큰 모두 거래당 1.0%입니다. 유일한 예외는 Solana의 졸업한 토큰으로, Jupiter를 통해 0.50%에 스왑됩니다."
+    },
+    {
+      "q": "레퍼럴 수수료는 어떻게 지급되나요?",
+      "a": "내가 추천한 사람이 런치 커브에서 매수하거나 EVM 체인에서 졸업한 토큰을 스왑하면 1.0% 수수료의 20%, 즉 거래 금액의 0.20%를 받습니다. 스왑분은 같은 트랜잭션에서 지급되고, 커브 매수분은 에스크로 컨트랙트에 쌓이며 직접 클레임해 받습니다. 커브 매도와 Solana의 졸업한 토큰 스왑에는 레퍼럴 수수료가 지급되지 않습니다."
+    },
+    {
+      "q": "AI 에이전트가 나 대신 거래할 수 있나요?",
+      "a": "네, MCP로 가능합니다. Claude, Cursor 등의 클라이언트를 mcp.hevium.xyz에 연결해 트랜잭션마다 직접 승인하거나, 거래당 한도와 일일 예산을 정해 서버를 직접 운영할 수 있습니다. 에이전트는 다섯 개 체인 모두에서 거래합니다."
+    },
+    {
+      "q": "코드는 보안 감사를 받았나요?",
+      "a": "네. 컨트랙트는 보안 감사를 마쳤습니다. 주소와 빌드 설정이 문서에 기재되어 있어 누구나 배포된 내용을 확인할 수 있습니다."
+    },
+    {
+      "q": "어떤 위험이 있나요?",
+      "a": "이곳에서 출시되는 토큰은 신규 토큰이며 가치를 전부 잃을 수 있습니다. 본딩 커브의 가격은 양방향으로 빠르게 움직이고, 스마트 컨트랙트에는 어떤 검토에서도 발견되지 않은 결함이 있을 수 있습니다. 이 페이지는 금융 조언이 아닙니다. 잃어도 감당할 수 있는 금액만 거래하세요."
+    }
+  ],
+  "GUARANTEES": [
+    {
+      "title": "내 키",
+      "text": "Hevium은 예치금을 일절 보관하지 않습니다. 모든 거래는 내 지갑에서 온체인으로 정산됩니다.",
+      "proof": "비수탁 지갑"
+    },
+    {
+      "title": "고정 공급량",
+      "text": "모든 토큰은 동일한 고정 공급량으로 출시되며, 내부자를 위해 미리 발행되는 물량은 없습니다.",
+      "proof": "토큰당 1,000,000,000개"
+    },
+    {
+      "title": "잠긴 유동성",
+      "text": "토큰이 졸업하면 풀 토큰은 소각되거나 영구적으로 잠깁니다.",
+      "proof": "0x0000...dEaD로 소각"
+    },
+    {
+      "title": "바이백 볼트",
+      "text": "트레저리와 크리에이터 몫의 토큰은 온체인 볼트에 보관되며, 180일에 걸쳐 풀리거나 소각됩니다.",
+      "proof": "180일 베스팅"
+    }
+  ],
+  "HERO": {
+    "title": "멀티체인 주식 & 페어런치 터미널.",
+    "highlight": "주식 & 페어런치"
+  },
+  "LAUNCH_PRESS": "돔 아래의 코인 프레스가 코인 하나를 찍어 내는 동안 카운터가 열다섯까지 올라갑니다. 코인은 나오면서 세 개의 통으로 나뉩니다. 다섯 중 넷은 공개 판매로 가고, 다섯 중 하나는 유동성으로 잠기며, 내부자용 통은 비어 있습니다. 작은 봇들이 프레스로 달려들지만 돔에 부딪혀 튕겨 나갑니다.",
+  "LAUNCH_SPLIT": [
+    {
+      "value": "80%",
+      "label": "공개 판매"
+    },
+    {
+      "value": "20%",
+      "label": "잠긴 유동성"
+    },
+    {
+      "value": "0%",
+      "label": "내부자"
+    }
+  ],
+  "PROBLEMS": [
+    {
+      "title": "크립토 전용",
+      "body": "토큰은 변동성 큰 가스 토큰에만 묶여 있고, NVDA나 TSLA 같은 주식으로 이어지는 다리가 없습니다."
+    },
+    {
+      "title": "스나이퍼 봇",
+      "body": "봇이 출시와 동시에 물량을 사들이고, 뒤늦게 들어온 커뮤니티는 봇의 탈출구가 됩니다."
+    },
+    {
+      "title": "사람 전용",
+      "body": "거래는 수동 웹 화면을 거쳐야 합니다. AI 에이전트에게는 직접 연결도, 지출 한도도 주어지지 않습니다."
+    }
+  ],
+  "PROBLEM_FACTS": [
+    "5개 체인에서 운영 중",
+    "내부자 배정 0%"
+  ],
+  "SECTIONS": {
+    "problem": {
+      "eyebrow": "문제",
+      "title": "1세대 런치패드가 부딪힌 세 가지 벽.",
+      "highlight": "세 가지 벽"
+    },
+    "solution": {
+      "eyebrow": "해결책",
+      "title": "하나의 터미널. 네 개의 엔진.",
+      "highlight": "네 개의 엔진",
+      "lead": "Hevium은 주식 페어, 페어런치, AI 에이전트, 레퍼럴 수수료를 하나의 터미널에 담았습니다."
+    },
+    "stocks": {
+      "eyebrow": "주식",
+      "title": "밈의 속도, 월스트리트를 만나다.",
+      "highlight": "월스트리트",
+      "lead": "실적 발표일에는 시장도 타임라인도 움직입니다. Hevium에서는 헤드라인에 오른 바로 그 주식과 토큰을 짝지어 거래할 수 있습니다."
+    },
+    "launch": {
+      "eyebrow": "런치",
+      "title": "15초 만에 끝나는 페어런치.",
+      "highlight": "15초",
+      "lead": "이름을 정하고 페어를 고르면 곧바로 출시됩니다. 공급량은 고정되어 있고, 내부자를 위해 미리 발행되는 물량은 없으며, 런치 가드가 스나이퍼 봇을 억제합니다."
+    },
+    "agents": {
+      "eyebrow": "에이전트",
+      "title": "24/7 AI 오더플로우를 위한 설계.",
+      "highlight": "24/7",
+      "lead": "Claude, Cursor 또는 직접 만든 봇을 MCP로 연결하세요. 거래당 한도와 일일 예산을 정해 두면 밤낮없이 거래합니다."
+    },
+    "earn": {
+      "eyebrow": "수익",
+      "title": "트레이더를 데려오면, 수수료의 20%는 내 몫.",
+      "highlight": "수수료의 20%",
+      "lead": "링크를 공유하고, 데려온 트레이더의 거래에 붙는 1.0% 수수료에서 수익을 얻으세요."
+    },
+    "chains": {
+      "eyebrow": "다섯 개 체인",
+      "title": "하나의 터미널, 다섯 개의 체인.",
+      "highlight": "다섯 개의 체인",
+      "lead": "Google로 로그인하고 체인을 골라 거래하세요. 체인마다 고유한 커뮤니티와 페어가 있으며, 모두 메인넷에서 운영 중입니다."
+    },
+    "trust": {
+      "eyebrow": "신뢰",
+      "title": "믿지 말고, 검증하세요.",
+      "highlight": "검증하세요",
+      "lead": "누구나 온체인에서 확인할 수 있는 네 가지 보장과 자주 묻는 질문에 대한 답을 모았습니다."
+    },
+    "final": {
+      "title": "하나의 터미널에서 거래를 시작하세요.",
+      "highlight": "하나의 터미널",
+      "lead": "다섯 개 체인에서 주식 페어, 페어런치, AI 에이전트, 레퍼럴 수수료를 만나 보세요. Google로 로그인하면 바로 시작할 수 있습니다."
+    }
+  },
+  "STOCK_COUNT": {
+    "value": "17+",
+    "label": "주식 및 달러 페어"
+  },
+  "STOCK_RING": "열세 개의 티커가 고리를 이루며 돕니다. NVDA, TSLA, SPY 같은 주식과 펀드, 그리고 디지털 달러인 USD+, USDC, USDG입니다. 토큰 코인이 티커 위로 차례차례 떨어지고, 둘은 하나의 페어로 거래됩니다.",
+  "TRUST_FEED": [
+    {
+      "side": "buy",
+      "what": "NVDA 페어 매수",
+      "where": "Robinhood Chain에서 0.1 ETH"
+    },
+    {
+      "side": "sell",
+      "what": "COIN 페어 매도",
+      "where": "Base에서 0.25 ETH"
+    },
+    {
+      "side": "buy",
+      "what": "런치 커브 매수",
+      "where": "BNB Chain에서 0.05 BNB"
+    },
+    {
+      "side": "buy",
+      "what": "USD+ 페어 매수",
+      "where": "Base에서 120 USD+"
+    },
+    {
+      "side": "sell",
+      "what": "런치 커브 매도",
+      "where": "Elysium에서 2 HYPE"
+    }
+  ],
+  "TRUST_WORDS": [
+    "직접 보관합니다.",
+    "직접 서명합니다.",
+    "거래가 정산됩니다."
+  ],
+  "UI": {
+    "launchApp": "앱 실행",
+    "howItWorks": "작동 방식",
+    "openTerminal": "터미널 열기",
+    "launchToken": "토큰 출시",
+    "connectAgent": "에이전트 연결",
+    "becomeAffiliate": "어필리에이트 되기",
+    "startTrading": "거래 시작",
+    "next": "다음: {name}",
+    "overview": "개요",
+    "menu": "메뉴",
+    "mainNav": "주요 메뉴",
+    "backToTop": "Hevium, 맨 위로",
+    "language": "언어",
+    "whatIs": "Hevium이란",
+    "faq": "FAQ",
+    "faqTitle": "궁금한 점, 답해 드립니다.",
+    "faqHighlight": "답해 드립니다",
+    "stop": ".",
+    "securityAudit": "보안 감사",
+    "signedByYou": "내가 서명",
+    "totalSupply": "총 공급량",
+    "mintedForInsiders": "내부자 발행분",
+    "graduatedOn": "졸업 체인",
+    "poolTokens": "풀 토큰",
+    "sentTo": "보낸 곳",
+    "status": "상태",
+    "pending": "대기 중",
+    "burned": "소각 완료",
+    "vesting": "베스팅",
+    "vestingDay": "180일 중 {day}일째",
+    "spentToday": "오늘 지출",
+    "held": "보류",
+    "bought": "매수 완료",
+    "buy": "매수",
+    "sold": "매도 완료",
+    "mcpClients": "지원 MCP 클라이언트",
+    "tradedHere": "거래 종목:",
+    "shareCards": "공유 카드",
+    "previousCard": "이전 카드",
+    "nextCard": "다음 카드",
+    "referredVolume": "레퍼럴 거래량",
+    "totalPnl": "총 PnL",
+    "pair": "{ticker} 페어",
+    "cardOf": "{total}장 중 {n}번째 카드: {ticker} 페어",
+    "referralLink": "@{name}의 레퍼럴 링크",
+    "product": "제품",
+    "resources": "자료",
+    "fiveChains": "다섯 개 체인",
+    "docs": "문서",
+    "mcpServer": "MCP 서버",
+    "trust": "신뢰",
+    "brandKit": "브랜드 키트",
+    "terms": "이용약관",
+    "privacy": "개인정보 처리방침",
+    "ogAlt": "Hevium: Base, Robinhood Chain, BNB Chain, Solana, Elysium의 멀티체인 주식 & 페어런치 터미널."
+  },
+  "NAV": [
+    {
+      "label": "문제",
+      "href": "#problem"
+    },
+    {
+      "label": "해결책",
+      "href": "#solution"
+    },
+    {
+      "label": "체인",
+      "href": "#chains"
+    },
+    {
+      "label": "신뢰",
+      "href": "#trust"
+    },
+    {
+      "label": "FAQ",
+      "href": "#faq"
+    },
+    {
+      "label": "문서",
+      "href": "https://docs.hevium.xyz/"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { expect, test } from './fixtures';
 
-const HOME = 'https://hevium.xyz/home/';
+const HOME = 'https://hevium.xyz/';
 const TITLE = 'Hevium: Multi-Chain Stock and Fair-Launch Terminal';
 
 // What a search engine, a link preview and an answer engine are given, beyond the page's own words.
@@ -56,8 +56,8 @@ test.describe('search and answer engines', () => {
     await page.goto('/');
     const blocks = await page.locator('script[type="application/ld+json"]').evaluateAll((scripts) => scripts.flatMap((script) => JSON.parse(script.textContent!)['@graph'] ?? JSON.parse(script.textContent!)));
     const of = (type: string) => blocks.find((block: { '@type': string }) => block['@type'] === type);
-    expect(of('Organization')).toMatchObject({ name: 'Hevium', url: 'https://hevium.xyz/', sameAs: ['https://x.com/heviumxyz'] });
-    expect(of('Organization').logo).toMatch(/^https:\/\/hevium\.xyz\/home\/.+\.(png|svg)$/);
+    expect(of('Organization')).toMatchObject({ name: 'Hevium', url: 'https://hevium.xyz/', sameAs: ['https://x.com/heviumxyz', 'https://www.threads.com/@hevium.xyz'] });
+    expect(of('Organization').logo).toMatch(/^https:\/\/hevium\.xyz\/.+\.(png|svg)$/);
     expect(of('WebSite')).toMatchObject({ name: 'Hevium', url: HOME });
     expect(of('WebPage')).toMatchObject({ url: HOME, name: TITLE });
     const faq = of('FAQPage');

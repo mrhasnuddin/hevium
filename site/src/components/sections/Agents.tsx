@@ -1,7 +1,9 @@
+'use client';
+
 import type { CSSProperties } from 'react';
 import { SectionHead } from '@/components/SectionHead';
 import { SITE } from '@/config/site';
-import { SECTIONS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import { CYCLE } from '@/lib/agentSession';
 import { AgentChart } from './AgentChart';
 import { AgentPrompt } from './AgentPrompt';
@@ -12,6 +14,7 @@ import styles from './Agents.module.css';
 // each execution lands in the card and on the chart at the same moment. The still, shown when nothing may
 // move, is the end of the session.
 export function Agents() {
+  const { SECTIONS, UI } = useWords().copy;
   return (
     <section className="section" id="agents" aria-labelledby="agents-title">
       <div className="container">
@@ -22,7 +25,7 @@ export function Agents() {
         </div>
         <div className="section-foot">
           <a className="btn btn-tonal" href={SITE.mcp} target="_blank" rel="noopener">
-            Connect an agent
+            {UI.connectAgent}
           </a>
         </div>
       </div>

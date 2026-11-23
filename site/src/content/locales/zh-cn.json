@@ -1,0 +1,437 @@
+{
+  "FACTS": [
+    {
+      "value": "5",
+      "label": "支持的链",
+      "words": "五条链"
+    },
+    {
+      "value": "1.0%",
+      "label": "每笔交易手续费",
+      "words": "1.0%"
+    },
+    {
+      "value": "20%",
+      "label": "手续费中归邀请人的部分",
+      "words": "20%"
+    }
+  ],
+  "FOOTER": {
+    "headline": "一个终端。五条链。",
+    "copyright": "© 2026 Hevium",
+    "backToTop": "回到顶部"
+  },
+  "META": {
+    "title": "Hevium：多链股票与公平发射交易终端",
+    "description": "在五条链上交易与股票和数字美元配对的公平发射代币。手续费 1.0%，非托管，一次登录即可使用。为交易者和 AI 智能体打造。",
+    "whatIs": "Hevium 是一个非托管交易终端和公平发射平台，覆盖五条链：Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。代币在联合曲线上发射，可与股票和数字美元配对。每笔交易收取 1.0% 手续费，其中 20% 归邀请人。"
+  },
+  "RISK_LINE": "代币交易有风险，价格可能跌至零。Hevium 是非托管平台，不提供投资建议。",
+  "AGENT_CHART": "一张价格折线图，展示一天内的价格走势，随交易时段推进逐步绘出。智能体每次买入，都会在价格回调处用 B 标出，并注明金额 0.1 ETH。第四笔买入因触及每日预算而被暂缓，以琥珀色标出。",
+  "AGENT_LIMITS": [
+    {
+      "label": "每笔交易",
+      "setting": "HEVIUM_MAX_TRADE_ETH",
+      "value": "0.1 ETH"
+    },
+    {
+      "label": "每日",
+      "setting": "HEVIUM_DAILY_BUDGET_ETH",
+      "value": "0.3 ETH"
+    }
+  ],
+  "AGENT_PROMPT": {
+    "prompt": "NVDA 回调时买入 0.1 ETH，每天最多 0.3。",
+    "placeholder": "问问你的智能体",
+    "replies": [
+      {
+        "text": "已买入 0.1 ETH 的 NVDA",
+        "time": "08:15",
+        "through": true
+      },
+      {
+        "text": "已买入 0.1 ETH 的 NVDA",
+        "time": "11:45",
+        "through": true
+      },
+      {
+        "text": "已买入 0.1 ETH 的 NVDA",
+        "time": "15:15",
+        "through": true
+      },
+      {
+        "text": "已暂缓 0.1 ETH · 已达每日预算",
+        "time": "18:45",
+        "through": false
+      }
+    ]
+  },
+  "AUDIT_NOTE": "已完成安全审计",
+  "AUDIT_TEXT": "合约已完成安全审计。合约地址和构建设置均列在文档中，任何人都可以核对实际部署的内容。",
+  "CHAINS": [
+    {
+      "name": "Base",
+      "suits": "Coinbase 用户和稳定收益持有者",
+      "trades": [
+        "ETH",
+        "USDC",
+        "USD+",
+        "COIN"
+      ]
+    },
+    {
+      "name": "Robinhood Chain",
+      "suits": "股票交易者，市场 24/7 开放",
+      "trades": [
+        "NVDA",
+        "TSLA",
+        "AAPL",
+        "SPY"
+      ]
+    },
+    {
+      "name": "BNB Chain",
+      "suits": "高交易量发射，面向全球",
+      "trades": [
+        "BNB",
+        "USDT",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Solana",
+      "suits": "追求速度的交易者和机器人",
+      "trades": [
+        "SOL",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Elysium",
+      "suits": "喜欢抢先布局的 DeFi 交易者",
+      "trades": [
+        "HYPE",
+        "USDC"
+      ]
+    }
+  ],
+  "CHAIN_ROUTE": "Hevium 标志居中作为枢纽，各有一条通道通向五条链：Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。一道脉冲从枢纽出发，沿所选链的通道传去，一笔买入在那里落地。",
+  "CHAIN_STEPS": [
+    "登录",
+    "选择链",
+    "交易"
+  ],
+  "EARN": {
+    "fee": "邀请返佣",
+    "name": "填上你的名字",
+    "protocol": "0.80% 归协议",
+    "you": "0.20% 归你",
+    "perks": [
+      {
+        "title": "手续费的 20%",
+        "text": "你邀请的用户在发射曲线上买入，或在 EVM 链上兑换已毕业代币时，你可获得 1.0% 手续费的五分之一。"
+      },
+      {
+        "title": "链上支付",
+        "text": "兑换的返佣在同一笔交易中支付给你。发射曲线买入的返佣累积在托管合约中，由你领取。"
+      },
+      {
+        "title": "你的链接，你的卡片",
+        "text": "分享任意一笔交易的卡片或回放，或发布一条喊单。每一条都带有你的链接："
+      }
+    ]
+  },
+  "ENGINES": [
+    {
+      "id": "stocks",
+      "label": "股票",
+      "href": "#stocks",
+      "summary": "与股票和数字美元配对的代币"
+    },
+    {
+      "id": "launch",
+      "label": "发射",
+      "href": "#launch",
+      "summary": "固定供应量，15 秒公平发射"
+    },
+    {
+      "id": "agents",
+      "label": "智能体",
+      "href": "#agents",
+      "summary": "通过 MCP 接入 24/7 AI 订单流，设有限额保护"
+    },
+    {
+      "id": "earn",
+      "label": "返佣",
+      "href": "#earn",
+      "summary": "分享你的链接，获得手续费的 20%"
+    }
+  ],
+  "FAQ": [
+    {
+      "q": "谁持有我的资金？",
+      "a": "你自己。使用 Google 登录会为 EVM 链创建一个非托管钱包，你还可以关联 Phantom 或 Solflare 等 Solana 钱包。Hevium 从不持有用户存入的资金，每笔交易都在链上结算。"
+    },
+    {
+      "q": "公平发射如何运作？",
+      "a": "每个代币的供应量固定为 1,000,000,000。其中 80% 在对所有人开放的联合曲线上出售，20% 留作流动性，不会为内部人士预先铸造任何代币。发射保护会对最初五秒内的买入征税，税率从 95% 起逐步降至零，以威慑狙击机器人。曲线填满后，代币会自动毕业，进入所在链的交易所流动性池。"
+    },
+    {
+      "q": "代币毕业后，流动性会怎样？",
+      "a": "流动性将无法再被任何人动用。在 Base、BNB Chain 和 Robinhood Chain 上，LP 代币会被销毁至黑洞地址。在 Elysium 上，流动性头寸直接铸造到黑洞地址；在 Solana 上则被永久锁定。"
+    },
+    {
+      "q": "交易费用是多少？",
+      "a": "每笔交易 1.0%，发射曲线和已毕业代币均适用。唯一的例外是 Solana 上的已毕业代币，它通过 Jupiter 兑换，费率为 0.50%。"
+    },
+    {
+      "q": "返佣如何运作？",
+      "a": "你邀请的用户在发射曲线上买入，或在 EVM 链上兑换已毕业代币时，你可获得 1.0% 手续费中的 20%，即交易额的 0.20%。兑换的返佣在同一笔交易中支付给你，曲线买入的返佣则累积在托管合约中，由你领取。曲线卖出以及 Solana 上的已毕业代币兑换不产生返佣。"
+    },
+    {
+      "q": "AI 智能体可以替我交易吗？",
+      "a": "可以，通过 MCP 实现。将 Claude、Cursor 或其他客户端连接到 mcp.hevium.xyz，并亲自批准每笔交易；也可以自行运行服务器，设置单笔上限和每日预算。智能体可在全部五条链上交易。"
+    },
+    {
+      "q": "代码做过安全审计吗？",
+      "a": "做过。合约已完成安全审计。合约地址和构建设置均列在文档中，任何人都可以核对实际部署的内容。"
+    },
+    {
+      "q": "有哪些风险？",
+      "a": "在这里发射的代币都是新代币，可能损失全部价值。联合曲线上的价格涨跌都很快，智能合约也可能存在任何审查都未曾发现的缺陷。本页面内容不构成财务建议。请只用你承受得起损失的资金进行交易。"
+    }
+  ],
+  "GUARANTEES": [
+    {
+      "title": "你的密钥",
+      "text": "Hevium 从不持有你存入的资金。每笔交易都从你自己的钱包发起，在链上结算。",
+      "proof": "非托管钱包"
+    },
+    {
+      "title": "固定供应量",
+      "text": "每个代币发射时的固定供应量都相同，不会为内部人士预先铸造任何代币。",
+      "proof": "每个代币 1,000,000,000"
+    },
+    {
+      "title": "锁定流动性",
+      "text": "代币毕业后，其 LP 代币会被销毁或永久锁定。",
+      "proof": "销毁至 0x0000...dEaD"
+    },
+    {
+      "title": "回购金库",
+      "text": "国库和创建者的代币存放在链上金库中，金库会在 180 天内逐步释放这些代币，或将其销毁。",
+      "proof": "180 天锁仓释放"
+    }
+  ],
+  "HERO": {
+    "title": "多链股票与公平发射交易终端。",
+    "highlight": "股票与公平发射"
+  },
+  "LAUNCH_PRESS": "穹顶下的一台压币机压出一枚硬币，同时计数器数到十五。每枚硬币出机时被分入三个槽：五分之四归公众，五分之一锁定为流动性，留给内部人士的槽始终是空的。小机器人冲向压币机，却被穹顶弹开。",
+  "LAUNCH_SPLIT": [
+    {
+      "value": "80%",
+      "label": "公众"
+    },
+    {
+      "value": "20%",
+      "label": "锁定流动性"
+    },
+    {
+      "value": "0%",
+      "label": "内部人士"
+    }
+  ],
+  "PROBLEMS": [
+    {
+      "title": "仅限加密资产",
+      "body": "代币只能与波动剧烈的 Gas 代币绑定，无法连通 NVDA、TSLA 这样的股票。"
+    },
+    {
+      "title": "狙击机器人",
+      "body": "机器人在发射时抢走筹码，后来才到的社区只能为它们接盘。"
+    },
+    {
+      "title": "仅限人工操作",
+      "body": "交易只能通过手动操作的网页界面完成。AI 智能体没有直连通道，也没有支出限额。"
+    }
+  ],
+  "PROBLEM_FACTS": [
+    "已上线 5 条链",
+    "0% 内部分配"
+  ],
+  "SECTIONS": {
+    "problem": {
+      "eyebrow": "问题",
+      "title": "第一代发射平台撞上三堵墙。",
+      "highlight": "三堵墙"
+    },
+    "solution": {
+      "eyebrow": "解决方案",
+      "title": "一个终端。四大引擎。",
+      "highlight": "四大引擎",
+      "lead": "Hevium 将股票交易对、公平发射、AI 智能体和返佣集于一个终端。"
+    },
+    "stocks": {
+      "eyebrow": "股票",
+      "title": "Meme 速度，遇上华尔街。",
+      "highlight": "华尔街",
+      "lead": "财报日牵动市场，也刷屏时间线。在 Hevium 上，代币可以与登上头条的股票配对交易。"
+    },
+    "launch": {
+      "eyebrow": "发射",
+      "title": "15 秒完成公平发射。",
+      "highlight": "15 秒",
+      "lead": "起个名字，选好交易对，即刻上线。供应量固定，不为内部人士预先铸造任何代币，发射保护可威慑狙击机器人。"
+    },
+    "agents": {
+      "eyebrow": "智能体",
+      "title": "为 24/7 AI 订单流而生。",
+      "highlight": "24/7",
+      "lead": "通过 MCP 接入 Claude、Cursor 或你自己的机器人。设好单笔上限和每日预算，它就能全天候交易。"
+    },
+    "earn": {
+      "eyebrow": "返佣",
+      "title": "邀请交易者。赚取手续费的 20%。",
+      "highlight": "手续费的 20%",
+      "lead": "分享你的链接，从他们交易产生的 1.0% 手续费中获得收益。"
+    },
+    "chains": {
+      "eyebrow": "五条链",
+      "title": "一个终端，五条链。",
+      "highlight": "五条链",
+      "lead": "用 Google 登录，选一条链，开始交易。每条链都有自己的用户群和交易对，全部已在主网上线。"
+    },
+    "trust": {
+      "eyebrow": "信任",
+      "title": "无需信任。自行验证。",
+      "highlight": "自行验证",
+      "lead": "四项保障，任何人都能在链上核实，另附常见问题的解答。"
+    },
+    "final": {
+      "title": "在一个终端里开始交易。",
+      "highlight": "一个终端",
+      "lead": "股票交易对、公平发射、AI 智能体和返佣，覆盖五条链。用 Google 登录即可开始。"
+    }
+  },
+  "STOCK_COUNT": {
+    "value": "17+",
+    "label": "股票与美元交易对"
+  },
+  "STOCK_RING": "十三个代码围成一圈转动：有 NVDA、TSLA、SPY 等股票和基金，也有数字美元 USD+、USDC 和 USDG。一枚代币硬币依次落在它们上面，两者随即组成交易对。",
+  "TRUST_FEED": [
+    {
+      "side": "buy",
+      "what": "买入 NVDA 交易对",
+      "where": "0.1 ETH · Robinhood Chain"
+    },
+    {
+      "side": "sell",
+      "what": "卖出 COIN 交易对",
+      "where": "0.25 ETH · Base"
+    },
+    {
+      "side": "buy",
+      "what": "在发射曲线上买入",
+      "where": "0.05 BNB · BNB Chain"
+    },
+    {
+      "side": "buy",
+      "what": "买入 USD+ 交易对",
+      "where": "120 USD+ · Base"
+    },
+    {
+      "side": "sell",
+      "what": "在发射曲线上卖出",
+      "where": "2 HYPE · Elysium"
+    }
+  ],
+  "TRUST_WORDS": [
+    "你持有。",
+    "你签名。",
+    "链上结算。"
+  ],
+  "UI": {
+    "launchApp": "启动应用",
+    "howItWorks": "如何运作",
+    "openTerminal": "打开终端",
+    "launchToken": "发射代币",
+    "connectAgent": "连接智能体",
+    "becomeAffiliate": "加入返佣计划",
+    "startTrading": "开始交易",
+    "next": "接下来：{name}",
+    "overview": "概览",
+    "menu": "菜单",
+    "mainNav": "主导航",
+    "backToTop": "Hevium，回到顶部",
+    "language": "语言",
+    "whatIs": "Hevium 是什么",
+    "faq": "常见问题",
+    "faqTitle": "常见问题，一一解答。",
+    "faqHighlight": "一一解答",
+    "stop": "。",
+    "securityAudit": "安全审计",
+    "signedByYou": "由你签名",
+    "totalSupply": "总供应量",
+    "mintedForInsiders": "为内部人士铸造",
+    "graduatedOn": "毕业于",
+    "poolTokens": "LP 代币",
+    "sentTo": "发送至",
+    "status": "状态",
+    "pending": "处理中",
+    "burned": "已销毁",
+    "vesting": "锁仓释放",
+    "vestingDay": "第 {day} 天 / 共 180 天",
+    "spentToday": "今日已用",
+    "held": "暂缓",
+    "bought": "已买入",
+    "buy": "买入",
+    "sold": "已卖出",
+    "mcpClients": "支持的 MCP 客户端",
+    "tradedHere": "可交易：",
+    "shareCards": "分享卡片",
+    "previousCard": "上一张卡片",
+    "nextCard": "下一张卡片",
+    "referredVolume": "邀请交易量",
+    "totalPnl": "总 PnL",
+    "pair": "{ticker} 交易对",
+    "cardOf": "第 {n} 张卡片，共 {total} 张：{ticker} 交易对",
+    "referralLink": "@{name} 的邀请链接",
+    "product": "产品",
+    "resources": "资源",
+    "fiveChains": "五条链",
+    "docs": "文档",
+    "mcpServer": "MCP 服务器",
+    "trust": "信任",
+    "brandKit": "品牌素材",
+    "terms": "服务条款",
+    "privacy": "隐私政策",
+    "ogAlt": "Hevium：多链股票与公平发射交易终端，支持 Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。"
+  },
+  "NAV": [
+    {
+      "label": "问题",
+      "href": "#problem"
+    },
+    {
+      "label": "方案",
+      "href": "#solution"
+    },
+    {
+      "label": "五条链",
+      "href": "#chains"
+    },
+    {
+      "label": "信任",
+      "href": "#trust"
+    },
+    {
+      "label": "常见问题",
+      "href": "#faq"
+    },
+    {
+      "label": "文档",
+      "href": "https://docs.hevium.xyz/"
+    }
+  ]
+}

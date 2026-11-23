@@ -103,7 +103,7 @@ test.describe('stocks section', () => {
 
   test('holds each ticker\'s own logo for the coin, as the app shows it', async ({ page }) => {
     await page.goto('/');
-    expect(await logos(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')))).toEqual(LOGOS.map((file) => `https://hevium.xyz/tokens/${file}`));
+    expect(await logos(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')))).toEqual(LOGOS.map((file) => `https://app.hevium.xyz/tokens/${file}`));
     // the ring names each ticker in text, so the pictures say nothing more
     expect(await logos(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('alt')))).toEqual(LOGOS.map(() => ''));
   });
@@ -211,7 +211,7 @@ test.describe('stocks section', () => {
     await page.goto('/');
     const href = await page.locator('#stocks').getByRole('link', { name: 'Open the terminal' }).getAttribute('href');
     const url = new URL(href!);
-    expect(url.origin).toBe('https://hevium.xyz');
+    expect(url.origin).toBe('https://app.hevium.xyz');
     expect(url.searchParams.get('utm_source')).toBe('landing');
     expect(url.searchParams.get('utm_content')).toBe('stocks');
   });

@@ -1,10 +1,13 @@
+'use client';
+
 import { AppLink } from '@/components/AppLink';
 import { HeroScene } from '@/components/HeroScene';
-import { HERO } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import styles from './Hero.module.css';
 
 // The first screen: the headline and two buttons over the 3D scene, which fills it.
 export function Hero() {
+  const { HERO, UI } = useWords().copy;
   const at = HERO.title.indexOf(HERO.highlight);
   return (
     <section className={styles.hero} id="top" aria-labelledby="hero-title" data-hero>
@@ -17,10 +20,10 @@ export function Hero() {
         </h1>
         <p className={`row ${styles.actions}`}>
           <AppLink target="app" placement="hero" className="btn btn-primary" data-launch>
-            Launch app
+            {UI.launchApp}
           </AppLink>
           <a className="btn btn-secondary" href="#how">
-            How it works
+            {UI.howItWorks}
           </a>
         </p>
       </div>

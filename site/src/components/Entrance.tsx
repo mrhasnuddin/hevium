@@ -17,18 +17,27 @@ export const EARLY = `(function(){try{var d=document.documentElement,s=sessionSt
 // read from the page as it stands (the headline is balanced, and a splitter that wraps greedily breaks it
 // elsewhere, which shows as a jump when the lines are put back). The headline's own nodes are kept and
 // returned by `revert`, and its words are said once, by a label, while it is in pieces.
+const WIDE = '\\u2e80-\\u9fff\\uf900-\\ufaff\\uff00-\\uffef'; // Chinese and Japanese characters and their punctuation
+const PIECE = new RegExp(`\\s+|[${WIDE}]|[^\\s${WIDE}]+`, 'g');
 function splitLines(heading: HTMLElement) {
   const kept = [...heading.childNodes];
-  const rows: { top: number; words: { text: string; accent: boolean }[] }[] = [];
+  const rows: { top: number; words: { text: string; accent: boolean; gap: boolean }[] }[] = [];
+  let gap = false; // whether a space stands before the next piece
   const texts = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
   const range = document.createRange();
   for (let node = texts.nextNode(); node; node = texts.nextNode()) {
-    for (const word of node.textContent!.matchAll(/\S+/g)) {
+    // a word, or one character of a script whose lines break between characters
+    for (const word of node.textContent!.matchAll(PIECE)) {
+      if (!word[0].trim()) {
+        gap = true;
+        continue;
+      }
       range.setStart(node, word.index);
       range.setEnd(node, word.index + word[0].length);
       const top = Math.round(range.getBoundingClientRect().top);
       if (!rows.length || Math.abs(rows[rows.length - 1].top - top) > 4) rows.push({ top, words: [] });
-      rows[rows.length - 1].words.push({ text: word[0], accent: Boolean(node.parentElement?.closest('.hl')) });
+      rows[rows.length - 1].words.push({ text: word[0], accent: Boolean(node.parentElement?.closest('.hl')), gap });
+      gap = false;
     }
   }
   const lines = rows.map((row) => {
@@ -38,7 +47,7 @@ function splitLines(heading: HTMLElement) {
     mask.style.cssText = 'display:block;overflow:clip;white-space:nowrap;padding-block:0.12em;margin-block:-0.12em';
     line.style.display = 'block';
     row.words.forEach((word, n) => {
-      if (n) line.append(' ');
+      if (n && word.gap) line.append(' ');
       const piece = word.accent ? line.appendChild(document.createElement('span')) : null;
       if (piece) piece.className = 'hl';
       (piece ?? line).append(word.text);

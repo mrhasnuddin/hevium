@@ -1,17 +1,22 @@
+'use client';
+
 import type { CSSProperties } from 'react';
 import { Card } from '@/components/Card';
 import { PixelArt, PixelField } from '@/components/PixelArt';
 import { asset } from '@/config/site';
-import { AUDIT_NOTE, AUDIT_TEXT, GUARANTEES, TRUST_FEED, TRUST_WORDS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import styles from './TrustBento.module.css';
 
-const [keys, supply, liquidity, vault] = GUARANTEES;
 
 // How a cell says its guarantee: its name and one line run on together, the fact behind it in mono under them.
 function Caption({ title, text, proof }: { title: string; text: string; proof?: string }) {
+  const { stop } = useWords().copy.UI;
   return (
     <div className={styles.caption}>
-      <h3>{title}.</h3> <p data-line>{text}</p>
+      <h3>
+        {title}
+        {stop}
+      </h3> <p data-line>{text}</p>
       {proof && (
         <p className={styles.proof} data-proof>
           {proof}
@@ -36,6 +41,9 @@ function Art({ scene }: { scene: 'seal' | 'lock' | 'safe' | 'shield' }) {
 // from screen readers and the words under it carry the meaning. All the motion is CSS or the pixel canvas, and
 // it stops with reduced motion.
 export function TrustBento() {
+  const { AUDIT_NOTE, AUDIT_TEXT, GUARANTEES, TRUST_FEED, TRUST_WORDS, UI } = useWords().copy;
+  const [keys, supply, liquidity, vault] = GUARANTEES;
+  const [day, ofDays] = UI.vestingDay.split('{day}'); // the day's number is drawn between the two
   return (
     <ul className={styles.bento} data-bento>
       {/* Your keys: three lines set large over a field of stars, beside a feed of sample trades, each signed by the visitor */}
@@ -63,7 +71,7 @@ export function TrustBento() {
                     <span>{trade.where}</span>
                   </span>
                   <span className={styles.signed}>
-                    <span>signed by you</span>
+                    <span>{UI.signedByYou}</span>
                     <i />
                   </span>
                 </li>
@@ -79,11 +87,11 @@ export function TrustBento() {
           <Art scene="seal" />
           <dl className={styles.readout} data-supply>
             <div>
-              <dt>Total supply</dt>
+              <dt>{UI.totalSupply}</dt>
               <dd>1,000,000,000</dd>
             </div>
             <div>
-              <dt>Minted for insiders</dt>
+              <dt>{UI.mintedForInsiders}</dt>
               <dd>0</dd>
             </div>
           </dl>
@@ -96,9 +104,9 @@ export function TrustBento() {
         <div className={`${styles.visual} ${styles.pair}`}>
           <dl className={styles.receipt} data-receipt aria-hidden="true">
             {[
-              ['Graduated on', 'Base'],
-              ['Pool tokens', '100%'],
-              ['Sent to', '0x0000...dEaD'],
+              [UI.graduatedOn, 'Base'],
+              [UI.poolTokens, '100%'],
+              [UI.sentTo, '0x0000...dEaD'],
             ].map(([label, value], n) => (
               <div key={label} style={{ '--n': n } as CSSProperties}>
                 <dt>{label}</dt>
@@ -106,10 +114,10 @@ export function TrustBento() {
               </div>
             ))}
             <div style={{ '--n': 3 } as CSSProperties}>
-              <dt>Status</dt>
+              <dt>{UI.status}</dt>
               <dd className={styles.status}>
-                <span data-pending>Pending</span>
-                <span data-done>Burned</span>
+                <span data-pending>{UI.pending}</span>
+                <span data-done>{UI.burned}</span>
               </dd>
             </div>
           </dl>
@@ -124,9 +132,11 @@ export function TrustBento() {
           <Art scene="safe" />
           <div className={styles.vesting} data-vesting aria-hidden="true">
             <p className={styles.vestHead}>
-              <span>Vesting</span>
+              <span>{UI.vesting}</span>
               <span className={styles.day}>
-                Day <i /> of 180
+                {day}
+                <i />
+                {ofDays}
               </span>
             </p>
             <div className={styles.track}>
@@ -153,7 +163,7 @@ export function TrustBento() {
           </p>
           <Art scene="shield" />
         </div>
-        <Caption title="Security audit" text={AUDIT_TEXT} />
+        <Caption title={UI.securityAudit} text={AUDIT_TEXT} />
       </Card>
     </ul>
   );

@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppLink } from '@/components/AppLink';
 import { Arrow } from '@/components/Arrow';
 import { asset } from '@/config/site';
-import { ENGINES, NAV, SECTIONS } from '@/content/sections';
+import { LangSwitch } from '@/components/LangSwitch';
+import { useWords } from '@/components/Words';
+import { ENGINES } from '@/content/sections';
 import styles from './Nav.module.css';
 
 const DESKTOP = '(min-width: 64rem)';
@@ -15,6 +17,8 @@ const ENGINE_HREFS = new Set(ENGINES.map((engine) => engine.href));
 // Below 1024px the links fold into a popover menu with Solution as an inline accordion, triggered by a 3x2
 // geometric tile matrix button, and Launch app is the menu's last row. Both the menu (popover="auto") and Solution (<details>) work with no script.
 export function Nav() {
+  const { copy } = useWords();
+  const { NAV, SECTIONS, UI } = copy;
   const navRef = useRef<HTMLElement>(null);
   const links = useRef<HTMLUListElement>(null);
   const solutionRef = useRef<HTMLDetailsElement>(null);
@@ -99,7 +103,7 @@ export function Nav() {
       if (
         performance.now() < suppressUntil ||
         y <= TOP_KEEP ||
-        menu?.matches(':popover-open') ||
+        nav.querySelector(':popover-open') || // the menu, or the list of languages
         (matchMedia(DESKTOP).matches && solutionRef.current?.open) ||
         nav.contains(document.activeElement)
       ) {
@@ -184,8 +188,8 @@ export function Nav() {
 
   return (
     <header className={`container ${styles.wrap}`}>
-      <nav className={styles.nav} ref={navRef} aria-label="Main">
-        <a className={styles.logo} href="#top" aria-label="Hevium, back to top" onClick={shut}>
+      <nav className={styles.nav} ref={navRef} aria-label={UI.mainNav}>
+        <a className={styles.logo} href="#top" aria-label={UI.backToTop} onClick={shut}>
           {/* eslint-disable-next-line @next/next/no-img-element -- a static export: images are plain <img> */}
           <img src={asset('/brand/hevium-logo-dark.svg')} alt="" width={132} height={36} />
         </a>
@@ -213,7 +217,7 @@ export function Nav() {
                         <p className={styles.panelSub}>{SECTIONS.solution.title}</p>
                       </div>
                       <a className={styles.overview} href={href} onClick={shut}>
-                        <span>Overview</span>
+                        <span>{UI.overview}</span>
                         <Arrow to="right" />
                       </a>
                     </div>
@@ -256,20 +260,21 @@ export function Nav() {
           )}
           <li className={styles.cta}>
             <AppLink target="app" placement="nav" className="btn btn-primary" onClick={shut}>
-              Launch app
+              {UI.launchApp}
             </AppLink>
           </li>
         </ul>
 
         <div className={styles.actions}>
+          <LangSwitch />
           <AppLink target="app" placement="nav" className="btn btn-primary btn-sm" data-launch>
-            Launch app
+            {UI.launchApp}
           </AppLink>
           <button
             type="button"
             className={`btn btn-secondary btn-sm ${styles.menu}`}
             popoverTarget="nav-links"
-            aria-label="Menu"
+            aria-label={UI.menu}
           >
             <span className={styles.matrix} aria-hidden="true">
               <i />

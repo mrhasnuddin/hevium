@@ -1,8 +1,10 @@
+'use client';
+
 import { AppLink } from '@/components/AppLink';
 import { PixelArt } from '@/components/PixelArt';
 import { SectionHead } from '@/components/SectionHead';
 import { asset } from '@/config/site';
-import { LAUNCH_PRESS, LAUNCH_SPLIT, SECTIONS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import styles from './Launch.module.css';
 
 // The section's one piece: a coin press under a dome, drawn in star pixels across the whole width
@@ -11,6 +13,7 @@ import styles from './Launch.module.css';
 // in thirds, and their figures are real text, one per third: under the bins on a small screen, inside them
 // where the section is one screen.
 export function Launch() {
+  const { LAUNCH_PRESS, LAUNCH_SPLIT, SECTIONS, UI } = useWords().copy;
   return (
     <section className="section" id="launch" aria-labelledby="launch-title">
       <div className="container">
@@ -29,7 +32,7 @@ export function Launch() {
         </figure>
         <div className="section-foot">
           <AppLink className="btn btn-tonal" target="launch" placement="launch">
-            Launch a token
+            {UI.launchToken}
           </AppLink>
         </div>
       </div>

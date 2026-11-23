@@ -1,6 +1,8 @@
+'use client';
+
 import { Eyebrow } from '@/components/Eyebrow';
 import { SectionHead } from '@/components/SectionHead';
-import { FAQ, SECTIONS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import { TrustBento } from './TrustBento';
 import styles from './Trust.module.css';
 
@@ -8,6 +10,8 @@ import styles from './Trust.module.css';
 // four guarantees and the audit as an animated bento (TrustBento). Then the questions: plain `details`, one open at a time, on the canvas with no boxes or lines. The
 // nav bar's FAQ link lands on the questions. The questions need no script.
 export function Trust() {
+  const { FAQ, SECTIONS, UI } = useWords().copy;
+  const at = UI.faqTitle.indexOf(UI.faqHighlight);
   return (
     <section className={`section ${styles.trust}`} id="trust" aria-labelledby="trust-title">
       <div className="container">
@@ -16,9 +20,11 @@ export function Trust() {
 
         <div className={styles.faq} id="faq">
           <div className={styles.aside}>
-            <Eyebrow>FAQ</Eyebrow>
+            <Eyebrow>{UI.faq}</Eyebrow>
             <h3 className="display-md" id="faq-title">
-              Questions, <span className="hl">answered</span>.
+              {UI.faqTitle.slice(0, at)}
+              <span className="hl">{UI.faqHighlight}</span>
+              {UI.faqTitle.slice(at + UI.faqHighlight.length)}
             </h3>
           </div>
           <div>

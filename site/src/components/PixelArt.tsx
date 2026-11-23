@@ -7,6 +7,9 @@ import { SCENES, type SceneName } from '@/lib/pixelScenes';
 import styles from './PixelArt.module.css';
 
 const STILL_AT = 0.6; // the moment shown when nothing may move
+const CELL = 10; // a field's grid, CSS px
+const WAVE_LIFE = 2.4; // seconds a wave takes to spread and die away
+const MAX_WAVES = 6; // waves alive at once; the oldest gives way
 
 // A small moving object drawn in the page's star pixels (lib/pixels.ts). The pixels shimmer, the object
 // moves, and pixels near the pointer are pulled toward it. It runs only while it is on screen.
@@ -54,7 +57,9 @@ export function PixelArt({ scene, fallback, cell = 7, className = '' }: { scene:
 // A field of star pixels to lay behind words, as a section's texture: the hero floor at rest, on its
 // 10px grid. Three cells in ten hold a quiet star, and a slow swell crosses the field and lifts them.
 // It fills the box its class gives it and lets the pointer through, so it watches the pointer on the
-// section it stands in. Decoration only.
+// section it stands in. When something in that section is struck (a `hevium:impact` event, with where on the
+// screen) a ring of lit stars spreads from the place and the stars inside it go dark for a moment, as on the
+// hero floor (hero/scene/floor.js). Decoration only.
 export function PixelField({ className = '' }: { className?: string }) {
   const field = useRef<HTMLCanvasElement>(null);
 
@@ -63,13 +68,28 @@ export function PixelField({ className = '' }: { className?: string }) {
     let picture = new Uint8ClampedArray(0);
     let own = new Float32Array(0); // each cell's two steady numbers, worked out once for the grid
     let other = new Float32Array(0);
-    return runPixels(canvas, {
-      cell: 10,
+    let waves: { x: number; y: number; from: number }[] = []; // where each was struck, in the canvas's px, and when
+    let cleared = true; // the cells that hold no star are empty again
+    const section = canvas.closest('section') ?? canvas;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tell = () => {
+      canvas.dataset.waves = String(waves.length);
+    };
+    function struck(event: Event) {
+      if (still) return;
+      const box = canvas.getBoundingClientRect();
+      const at = (event as CustomEvent<{ x: number; y: number }>).detail;
+      waves = [...waves.slice(-(MAX_WAVES - 1)), { x: at.x - box.left, y: at.y - box.top, from: performance.now() / 1000 }];
+      tell();
+    }
+    section.addEventListener('hevium:impact', struck);
+    const stop = runPixels(canvas, {
+      cell: CELL,
       reach: 90,
       pull: 7,
       stillAt: STILL_AT,
       maxDpr: 1,
-      watch: canvas.closest('section') ?? canvas,
+      watch: section as HTMLElement,
       picture(cols, rows, time) {
         if (picture.length !== cols * rows * 4) {
           picture = new Uint8ClampedArray(cols * rows * 4);
@@ -77,20 +97,40 @@ export function PixelField({ className = '' }: { className?: string }) {
           other = Float32Array.from({ length: cols * rows }, (_, n) => grain((n % cols) + 7, Math.floor(n / cols) + 7));
           for (let n = 0; n < cols * rows; n++) picture[n * 4 + 3] = 255;
         }
+        if (waves.some((wave) => time - wave.from > WAVE_LIFE)) {
+          waves = waves.filter((wave) => time - wave.from <= WAVE_LIFE);
+          tell();
+        }
+        const waving = waves.length > 0;
         for (let y = 0; y < rows; y++) {
           for (let x = 0; x < cols; x++) {
             const n = y * cols + x;
-            if (own[n] <= 0.7) continue; // seven cells in ten are always empty
-            const swell = Math.max(0, Math.sin(x * 0.19 + y * 0.11 - time * 0.7)) ** 3;
-            picture[n * 4] = 255 * (0.18 + 0.2 * other[n] + 0.5 * swell * own[n]);
+            const star = own[n] > 0.7; // seven cells in ten are empty
+            if (!star && cleared && !waving) continue;
+            let value = star ? 0.18 + 0.2 * other[n] + 0.5 * Math.max(0, Math.sin(x * 0.19 + y * 0.11 - time * 0.7)) ** 3 * own[n] : 0;
+            for (const wave of waves) {
+              const age = time - wave.from;
+              const far = Math.hypot((x + 0.5) * CELL - wave.x, (y + 0.5) * CELL - wave.y);
+              const radius = 30 + age * (560 - 120 * age); // fast at first, then easing out
+              const width = 22 + 0.07 * radius;
+              const fade = Math.exp(-age * 0.9) * Math.min(1, (WAVE_LIFE - age) * 3);
+              if (far < radius) value *= 1 - 0.9 * fade * Math.min(1, (radius - far) / (2 * width)); // dark behind the ring
+              value += 1.8 * fade * Math.exp(-(((far - radius) / width) ** 2)) * (0.6 + 0.4 * other[n]);
+            }
+            picture[n * 4] = 255 * Math.min(1, value);
           }
         }
+        cleared = !waving;
         return picture;
       },
       onPaint: () => {
         canvas.dataset.pixels = 'ready';
       },
     });
+    return () => {
+      section.removeEventListener('hevium:impact', struck);
+      stop();
+    };
   }, []);
 
   return <canvas ref={field} className={`${styles.field} ${className}`.trim()} data-pixel-field="" aria-hidden="true" />;

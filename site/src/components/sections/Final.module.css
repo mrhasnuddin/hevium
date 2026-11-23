@@ -1,12 +1,15 @@
 /* The final call to action: the mark, a headline, one line and one button, in the middle of the screen. Behind
-   them a soft mint light and a field of stars; at both sides, from 1024px, the page's logos as coins that
-   drift up and down. Nothing else. */
+   them a soft mint light and a field of stars; at both sides, from 1024px, the page's logos as tokens that
+   drift up and down, turn over under the pointer and ring when clicked. Nothing else. */
 
 .final { position: relative; overflow: hidden; background: radial-gradient(ellipse 46% 50% at 50% 48%, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent); }
 .field { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; -webkit-mask: radial-gradient(ellipse 60% 60% at 50% 50%, #000, transparent); mask: radial-gradient(ellipse 60% 60% at 50% 50%, #000, transparent); }
+/* while a wave crosses it the field comes up to full strength, so the ring reads as an impact */
+.field { transition: opacity 0.6s ease; }
+.field[data-waves]:not([data-waves="0"]) { opacity: 1; transition-duration: 0.12s; }
 .final > :global(.container) { position: relative; }
 
-/* The words stand between two sides. A side is as wide as the screen leaves, so a coin can never reach the words. */
+/* The words stand between two sides. A side is as wide as the screen leaves, so a token can never reach the words. */
 .stage { display: grid; align-items: center; }
 .middle { display: grid; justify-items: center; }
 /* the mark: the Hevium star in the brand gradient, where a section's eyebrow would stand */
@@ -17,17 +20,36 @@
 
 .coins { display: none; }
 @media (min-width: 64rem) {
-  .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 42rem) minmax(0, 1fr); min-height: 30rem; }
-  /* A coin stands at --x across its side and --y down it, measured so that it stays inside the side whole. */
-  .coins { position: relative; display: block; align-self: stretch; }
-  .coins img {
-    position: absolute; left: calc((100% - var(--s)) * var(--x)); top: calc((100% - var(--s)) * var(--y)); width: var(--s); height: var(--s);
-    border-radius: 50%; object-fit: cover; background: var(--color-surface); box-shadow: 0 0 0 1px var(--color-border), 0 0 0 0.375rem color-mix(in srgb, var(--color-surface) 70%, transparent);
-    opacity: var(--o);
+  .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 42rem) minmax(0, 1fr); min-height: 34rem; }
+  .coins { position: relative; display: block; align-self: stretch; container-type: inline-size; }
+  /* A token stands at --x across its side and --y down it, measured so that it stays inside the side whole.
+     It is --z rem wide, and less where the side is narrow, so that six of them still have room. */
+  .token {
+    --s: min(calc(var(--z) * 1rem), calc(var(--z) * 6.6cqw));
+    position: absolute; left: calc((100% - var(--s)) * var(--x)); top: calc((100% - var(--s)) * var(--y)); width: var(--s); aspect-ratio: 1;
+    border-radius: 50%; opacity: var(--o); perspective: 24rem; cursor: pointer; transition: opacity var(--motion-ui);
   }
+  .token:hover { opacity: 1; }
+  /* The middle of the token, as on the Stocks coin: the logo on one face, the Hevium mark on the other. */
+  .flip { position: absolute; left: 50%; top: 50%; width: 54%; aspect-ratio: 1; translate: -50% -50%; transform-style: preserve-3d; transition: transform 0.6s var(--ease-out); }
+  .token:hover .flip { transform: rotateY(180deg); }
+  .flip img, .back { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+  .flip img { object-fit: cover; background: var(--color-surface); }
+  .back { transform: rotateY(180deg); background: var(--gradient-brand); }
+  .back::after { content: ""; position: absolute; inset: 24%; background: var(--color-on-accent); -webkit-mask: var(--mark-star) center / contain no-repeat; mask: var(--mark-star) center / contain no-repeat; }
+  /* A click: two rings leave the token, one after the other. The wave that follows is the field's (PixelArt.tsx). */
+  .pulse, .pulse::after { position: absolute; inset: 14%; border: var(--line-drawn) solid var(--color-accent); border-radius: 50%; opacity: 0; pointer-events: none; }
+  .pulse::after { content: ""; inset: calc(-1 * var(--line-drawn)); }
 }
 @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
   /* each at its own pace, out of step with the rest */
-  .coins img { animation: drift calc(6s + var(--n) * 0.37s) ease-in-out calc(var(--n) * -0.9s) infinite alternate; }
+  .token { animation: drift calc(6s + var(--n) * 0.37s) ease-in-out calc(var(--n) * -0.9s) infinite alternate; }
+  .pulse { animation: ring 0.9s var(--ease-out); }
+  .pulse::after { animation: ring 0.9s var(--ease-out) 0.16s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip { transition: none; }
+  .pulse { display: none; }
 }
 @keyframes drift { from { translate: 0 -0.5rem; } to { translate: 0 0.5rem; } }
+@keyframes ring { from { scale: 1; opacity: 0.9; } to { scale: 2.4; opacity: 0; } }

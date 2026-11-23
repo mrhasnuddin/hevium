@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
 import { PixelField } from '@/components/PixelArt';
 import { CHAIN_LOGOS, tickerLogo } from '@/config/site';
-import { CHAINS, CHAIN_ROUTE } from '@/content/sections';
+import { useWords } from '@/components/Words';
+import { CHAINS } from '@/content/sections';
 import styles from './Chains.module.css';
 
 const never = () => () => {};
@@ -20,6 +21,7 @@ const lane = (i: number) => {
 // chain the pointer is on. Under the pointer the hub turns to its filled look. With scripts off all five
 // chains stand at full strength.
 export function ChainRoute() {
+  const { CHAINS: chains, CHAIN_ROUTE, UI } = useWords().copy;
   const scripted = useSyncExternalStore(never, () => true, () => false);
   const [active, setActive] = useState(0);
   const held = useRef(false); // the pointer is on a chain, so the turn does not pass on
@@ -42,19 +44,19 @@ export function ChainRoute() {
       </div>
       <div className={styles.web} aria-hidden="true">
         <svg className={styles.lanes} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          {CHAINS.map((chain, i) => (
+          {chains.map((chain, i) => (
             <path key={chain.name} data-lane data-on={on === i ? '' : undefined} d={lane(i)} />
           ))}
         </svg>
         {/* the pulses: on each lane a short lit stretch, shown through a band that runs from the hub outward */}
-        {CHAINS.map((chain, i) => (
+        {chains.map((chain, i) => (
           <svg key={chain.name} className={styles.pulse} data-on={on === i ? '' : undefined} style={{ '--i': i } as CSSProperties} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             <path d={lane(i)} />
           </svg>
         ))}
       </div>
       <ul className={styles.rows} data-chains onPointerLeave={() => (held.current = false)}>
-        {CHAINS.map((chain, i) => (
+        {chains.map((chain, i) => (
           <li
             key={chain.name}
             data-on={on === i ? '' : undefined}
@@ -79,7 +81,7 @@ export function ChainRoute() {
               </span>
             </p>
             <p className={styles.trades}>
-              <span className="sr-only">Trades: </span>
+              <span className="sr-only">{UI.tradedHere} </span>
               {chain.trades.map((ticker) => (
                 <span key={ticker} data-token>
                   {/* eslint-disable-next-line @next/next/no-img-element -- the app's own icon, served by the app */}

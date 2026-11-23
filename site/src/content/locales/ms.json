@@ -1,0 +1,437 @@
+{
+  "FACTS": [
+    {
+      "value": "5",
+      "label": "Rantaian",
+      "words": "lima rantaian"
+    },
+    {
+      "value": "1.0%",
+      "label": "Yuran setiap dagangan",
+      "words": "1.0%"
+    },
+    {
+      "value": "20%",
+      "label": "Daripada yuran itu kepada perujuk",
+      "words": "20%"
+    }
+  ],
+  "FOOTER": {
+    "headline": "Satu terminal. Lima rantaian.",
+    "copyright": "© 2026 Hevium",
+    "backToTop": "Kembali ke atas"
+  },
+  "META": {
+    "title": "Hevium: Terminal Saham & Pelancaran Adil Berbilang Rantaian",
+    "description": "Dagangkan token pelancaran adil dengan pasangan saham dan dolar digital di lima rantaian. Yuran 1.0%, bukan kustodian, satu log masuk. Untuk pedagang dan ejen AI.",
+    "whatIs": "Hevium ialah terminal dagangan bukan kustodian dan launchpad pelancaran adil di lima rantaian: Base, Robinhood Chain, BNB Chain, Solana dan Elysium. Token dilancarkan pada keluk bonding dan boleh dipasangkan dengan saham dan dolar digital. Setiap dagangan dikenakan yuran 1.0%, dan 20% daripada yuran itu diberikan kepada perujuk."
+  },
+  "RISK_LINE": "Dagangan token mempunyai risiko, dan harga boleh jatuh ke sifar. Hevium bersifat bukan kustodian dan tidak memberikan nasihat pelaburan.",
+  "AGENT_CHART": "Carta garis harga sepanjang satu hari, dilukis semasa sesi berjalan. Setiap kali ejen membeli, huruf B menandakan garis itu dengan jumlahnya, 0.1 ETH, ketika harga menurun. Belian keempat ditahan pada bajet harian dan ditandakan dengan warna ambar.",
+  "AGENT_LIMITS": [
+    {
+      "label": "setiap dagangan",
+      "setting": "HEVIUM_MAX_TRADE_ETH",
+      "value": "0.1 ETH"
+    },
+    {
+      "label": "setiap hari",
+      "setting": "HEVIUM_DAILY_BUDGET_ETH",
+      "value": "0.3 ETH"
+    }
+  ],
+  "AGENT_PROMPT": {
+    "prompt": "Beli NVDA bernilai 0.1 ETH setiap kali harga turun. Maks 0.3/hari.",
+    "placeholder": "Tanya ejen anda",
+    "replies": [
+      {
+        "text": "Dibeli NVDA bernilai 0.1 ETH",
+        "time": "08:15",
+        "through": true
+      },
+      {
+        "text": "Dibeli NVDA bernilai 0.1 ETH",
+        "time": "11:45",
+        "through": true
+      },
+      {
+        "text": "Dibeli NVDA bernilai 0.1 ETH",
+        "time": "15:15",
+        "through": true
+      },
+      {
+        "text": "Ditahan 0.1 ETH · bajet harian dicapai",
+        "time": "18:45",
+        "through": false
+      }
+    ]
+  },
+  "AUDIT_NOTE": "Keselamatan telah diaudit",
+  "AUDIT_TEXT": "Kontrak Hevium telah melalui audit keselamatan. Alamat dan tetapan binaannya disenaraikan dalam dokumentasi, supaya sesiapa sahaja boleh menyemak apa yang telah diterbitkan di rantaian.",
+  "CHAINS": [
+    {
+      "name": "Base",
+      "suits": "Pengguna Coinbase dan pemegang aset hasil stabil",
+      "trades": [
+        "ETH",
+        "USDC",
+        "USD+",
+        "COIN"
+      ]
+    },
+    {
+      "name": "Robinhood Chain",
+      "suits": "Pedagang saham, dengan pasaran dibuka 24/7",
+      "trades": [
+        "NVDA",
+        "TSLA",
+        "AAPL",
+        "SPY"
+      ]
+    },
+    {
+      "name": "BNB Chain",
+      "suits": "Pelancaran bervolum tinggi, di seluruh dunia",
+      "trades": [
+        "BNB",
+        "USDT",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Solana",
+      "suits": "Pedagang pantas dan bot",
+      "trades": [
+        "SOL",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Elysium",
+      "suits": "Pedagang DeFi yang suka masuk awal",
+      "trades": [
+        "HYPE",
+        "USDC"
+      ]
+    }
+  ],
+  "CHAIN_ROUTE": "Logo Hevium berdiri sebagai hab, dengan satu laluan dari hab itu ke setiap satu daripada lima rantaian: Base, Robinhood Chain, BNB Chain, Solana dan Elysium. Satu denyutan bergerak dari hab di sepanjang laluan rantaian yang dipilih, dan satu belian tiba di sana.",
+  "CHAIN_STEPS": [
+    "Log masuk",
+    "Pilih rantaian",
+    "Berdagang"
+  ],
+  "EARN": {
+    "fee": "Yuran rujukan",
+    "name": "Letakkan nama anda",
+    "protocol": "0.80% protokol",
+    "you": "0.20% anda",
+    "perks": [
+      {
+        "title": "20% daripada yuran",
+        "text": "Satu perlima daripada yuran 1.0% apabila seseorang yang anda bawa membeli dalam sesuatu pelancaran, atau membuat swap token yang telah bergraduat di rantaian EVM."
+      },
+      {
+        "title": "Dibayar on-chain",
+        "text": "Swap membayar anda dalam transaksi yang sama. Bahagian anda daripada belian pelancaran terkumpul dalam kontrak eskrow untuk anda tuntut."
+      },
+      {
+        "title": "Pautan anda, kad anda",
+        "text": "Kongsi kad atau ulang tayang mana-mana dagangan, atau siarkan callout. Setiap satunya membawa pautan anda:"
+      }
+    ]
+  },
+  "ENGINES": [
+    {
+      "id": "stocks",
+      "label": "Saham",
+      "href": "#stocks",
+      "summary": "Token dipasangkan dengan saham dan dolar digital"
+    },
+    {
+      "id": "launch",
+      "label": "Pelancaran",
+      "href": "#launch",
+      "summary": "Bekalan tetap, pelancaran adil dalam 15 saat"
+    },
+    {
+      "id": "agents",
+      "label": "Ejen",
+      "href": "#agents",
+      "summary": "Aliran pesanan AI 24/7 melalui MCP dengan had kawalan"
+    },
+    {
+      "id": "earn",
+      "label": "Pendapatan",
+      "href": "#earn",
+      "summary": "Kongsi pautan anda dan peroleh 20% daripada yuran"
+    }
+  ],
+  "FAQ": [
+    {
+      "q": "Siapa yang memegang dana saya?",
+      "a": "Anda sendiri. Log masuk dengan Google mewujudkan dompet bukan kustodian untuk rantaian EVM, dan anda boleh memautkan dompet Solana seperti Phantom atau Solflare. Hevium tidak pernah memegang deposit, dan setiap dagangan diselesaikan on-chain."
+    },
+    {
+      "q": "Bagaimanakah pelancaran adil berfungsi?",
+      "a": "Setiap token mempunyai bekalan tetap sebanyak 1,000,000,000. 80% dijual pada keluk bonding yang terbuka kepada semua orang dan 20% diperuntukkan sebagai kecairan, tanpa apa-apa dicetak lebih awal untuk orang dalam. Pelindung pelancaran mengenakan cukai ke atas belian yang dibuat dalam lima saat pertama, bermula pada 95% dan menurun ke sifar, untuk mengekang bot sniper. Apabila keluk itu penuh, token bergraduat dengan sendirinya ke pool bursa di rantaiannya."
+    },
+    {
+      "q": "Apakah yang berlaku kepada kecairan selepas token bergraduat?",
+      "a": "Ia diletakkan di luar jangkauan. Di Base, BNB Chain dan Robinhood Chain, token pool dibakar ke alamat mati. Di Elysium, posisi kecairan itu dicetak terus ke alamat mati, dan di Solana ia dikunci secara kekal."
+    },
+    {
+      "q": "Berapakah kos berdagang?",
+      "a": "1.0% setiap dagangan, pada keluk pelancaran dan pada token yang telah bergraduat. Satu-satunya pengecualian ialah token yang telah bergraduat di Solana, yang swapnya dijalankan melalui Jupiter pada kadar 0.50%."
+    },
+    {
+      "q": "Bagaimanakah yuran rujukan berfungsi?",
+      "a": "Anda memperoleh 20% daripada yuran 1.0%, iaitu 0.20% daripada dagangan, apabila seseorang yang anda rujuk membeli pada keluk pelancaran atau membuat swap token yang telah bergraduat di rantaian EVM. Swap membayar anda dalam transaksi yang sama, dan bahagian anda daripada belian pada keluk terkumpul dalam kontrak eskrow untuk anda tuntut. Jualan pada keluk dan swap token yang telah bergraduat di Solana tidak membayar yuran rujukan."
+    },
+    {
+      "q": "Bolehkah ejen AI berdagang untuk saya?",
+      "a": "Boleh, melalui MCP. Sambungkan Claude, Cursor atau klien lain ke mcp.hevium.xyz dan luluskan sendiri setiap transaksi, atau jalankan pelayan itu sendiri dengan had setiap dagangan dan bajet harian. Ejen berdagang di kesemua lima rantaian."
+    },
+    {
+      "q": "Adakah kodnya telah melalui audit keselamatan?",
+      "a": "Ya. Kontrak Hevium telah melalui audit keselamatan. Alamat dan tetapan binaannya disenaraikan dalam dokumentasi, supaya sesiapa sahaja boleh menyemak apa yang telah diterbitkan di rantaian."
+    },
+    {
+      "q": "Apakah risikonya?",
+      "a": "Token yang dilancarkan di sini masih baharu dan boleh kehilangan seluruh nilainya. Harga pada keluk bonding bergerak pantas ke dua-dua arah, dan kontrak pintar boleh mempunyai kecacatan yang belum ditemui oleh mana-mana semakan. Halaman ini bukan nasihat kewangan. Berdagang hanya dengan jumlah yang anda mampu tanggung kerugiannya."
+    }
+  ],
+  "GUARANTEES": [
+    {
+      "title": "Kunci anda",
+      "text": "Hevium tidak pernah memegang deposit anda. Setiap dagangan diselesaikan on-chain dari dompet anda sendiri.",
+      "proof": "Dompet bukan kustodian"
+    },
+    {
+      "title": "Bekalan tetap",
+      "text": "Setiap token dilancarkan dengan bekalan tetap yang sama, dan tiada apa-apa dicetak lebih awal untuk orang dalam.",
+      "proof": "1,000,000,000 setiap token"
+    },
+    {
+      "title": "Kecairan dikunci",
+      "text": "Apabila token bergraduat, token poolnya dibakar atau dikunci secara kekal.",
+      "proof": "Dibakar ke 0x0000...dEaD"
+    },
+    {
+      "title": "Vault belian balik",
+      "text": "Token perbendaharaan dan token pencipta disimpan dalam vault on-chain yang melepaskannya dalam tempoh 180 hari atau membakarnya.",
+      "proof": "Vesting 180 hari"
+    }
+  ],
+  "HERO": {
+    "title": "Terminal saham & pelancaran adil berbilang rantaian.",
+    "highlight": "saham & pelancaran adil"
+  },
+  "LAUNCH_PRESS": "Sebuah mesin penempa syiling di bawah kubah menempa satu syiling sementara pembilang berjalan hingga lima belas. Setiap syiling terbahagi semasa keluar, ke dalam tiga bekas: empat daripada lima bahagian pergi kepada orang awam, satu daripada lima dikunci sebagai kecairan, dan bekas untuk orang dalam kekal kosong. Bot-bot kecil menyerbu mesin itu dan melantun dari kubah.",
+  "LAUNCH_SPLIT": [
+    {
+      "value": "80%",
+      "label": "awam"
+    },
+    {
+      "value": "20%",
+      "label": "kecairan dikunci"
+    },
+    {
+      "value": "0%",
+      "label": "orang dalam"
+    }
+  ],
+  "PROBLEMS": [
+    {
+      "title": "Kripto sahaja",
+      "body": "Token kekal terikat kepada token gas yang harganya tidak menentu, tanpa jambatan ke saham seperti NVDA atau TSLA."
+    },
+    {
+      "title": "Bot sniper",
+      "body": "Bot memborong bekalan semasa pelancaran, dan komuniti yang tiba kemudian menjadi jalan keluar mereka."
+    },
+    {
+      "title": "Manusia sahaja",
+      "body": "Dagangan berjalan melalui skrin web manual. Ejen AI tidak mendapat sambungan terus dan tiada had perbelanjaan."
+    }
+  ],
+  "PROBLEM_FACTS": [
+    "Aktif di 5 rantaian",
+    "0% peruntukan orang dalam"
+  ],
+  "SECTIONS": {
+    "problem": {
+      "eyebrow": "Masalah",
+      "title": "Launchpad generasi pertama terhalang oleh tiga tembok.",
+      "highlight": "tiga tembok"
+    },
+    "solution": {
+      "eyebrow": "Penyelesaian",
+      "title": "Satu terminal. Empat enjin.",
+      "highlight": "Empat enjin",
+      "lead": "Hevium menyatukan pasangan saham, pelancaran adil, ejen AI dan yuran rujukan dalam satu terminal."
+    },
+    "stocks": {
+      "eyebrow": "Saham",
+      "title": "Kepantasan meme bertemu Wall Street.",
+      "highlight": "Wall Street",
+      "lead": "Hari laporan pendapatan syarikat menggerakkan pasaran dan garis masa. Di Hevium, token boleh didagangkan berpasangan dengan saham yang menjadi tajuk berita."
+    },
+    "launch": {
+      "eyebrow": "Pelancaran",
+      "title": "Pelancaran adil dalam 15 saat.",
+      "highlight": "15 saat",
+      "lead": "Namakan, pilih pasangan dan ia terus aktif. Bekalannya tetap, tiada apa-apa dicetak lebih awal untuk orang dalam, dan pelindung pelancaran mengekang bot sniper."
+    },
+    "agents": {
+      "eyebrow": "Ejen",
+      "title": "Dibina untuk aliran pesanan AI 24/7.",
+      "highlight": "24/7",
+      "lead": "Sambungkan Claude, Cursor atau bot anda sendiri melalui MCP. Tetapkan had setiap dagangan dan bajet harian, dan ia berdagang sepanjang masa."
+    },
+    "earn": {
+      "eyebrow": "Pendapatan",
+      "title": "Bawa pedagang. Peroleh 20% daripada yuran.",
+      "highlight": "20% daripada yuran",
+      "lead": "Kongsi pautan anda dan jana pendapatan daripada yuran 1.0% atas dagangan mereka."
+    },
+    "chains": {
+      "eyebrow": "Lima rantaian",
+      "title": "Satu terminal, lima rantaian.",
+      "highlight": "lima rantaian",
+      "lead": "Log masuk dengan Google, pilih rantaian dan berdagang. Setiap rantaian membawa komunitinya sendiri dan pasangannya sendiri, semuanya aktif di mainnet."
+    },
+    "trust": {
+      "eyebrow": "Kepercayaan",
+      "title": "Jangan percaya. Sahkan.",
+      "highlight": "Sahkan",
+      "lead": "Empat jaminan yang boleh disemak oleh sesiapa sahaja on-chain, serta jawapan kepada soalan lazim."
+    },
+    "final": {
+      "title": "Mula berdagang dalam satu terminal.",
+      "highlight": "satu terminal",
+      "lead": "Pasangan saham, pelancaran adil, ejen AI dan yuran rujukan di lima rantaian. Log masuk dengan Google dan anda terus berada di dalam terminal."
+    }
+  },
+  "STOCK_COUNT": {
+    "value": "17+",
+    "label": "pasangan saham dan dolar"
+  },
+  "STOCK_RING": "Tiga belas ticker berputar dalam satu gelang: saham dan dana seperti NVDA, TSLA dan SPY, serta dolar digital USD+, USDC dan USDG. Sekeping syiling token jatuh ke atasnya satu demi satu, dan kedua-duanya didagangkan sebagai satu pasangan.",
+  "TRUST_FEED": [
+    {
+      "side": "buy",
+      "what": "Beli pada pasangan NVDA",
+      "where": "0.1 ETH di Robinhood Chain"
+    },
+    {
+      "side": "sell",
+      "what": "Jual pada pasangan COIN",
+      "where": "0.25 ETH di Base"
+    },
+    {
+      "side": "buy",
+      "what": "Beli pada keluk pelancaran",
+      "where": "0.05 BNB di BNB Chain"
+    },
+    {
+      "side": "buy",
+      "what": "Beli pada pasangan USD+",
+      "where": "120 USD+ di Base"
+    },
+    {
+      "side": "sell",
+      "what": "Jual pada keluk pelancaran",
+      "where": "2 HYPE di Elysium"
+    }
+  ],
+  "TRUST_WORDS": [
+    "Anda pegang.",
+    "Anda tandatangan.",
+    "Dagangan selesai."
+  ],
+  "UI": {
+    "launchApp": "Buka aplikasi",
+    "howItWorks": "Cara ia berfungsi",
+    "openTerminal": "Buka terminal",
+    "launchToken": "Lancarkan token",
+    "connectAgent": "Sambungkan ejen",
+    "becomeAffiliate": "Jadi affiliate",
+    "startTrading": "Mula berdagang",
+    "next": "Seterusnya: {name}",
+    "overview": "Ringkasan",
+    "menu": "Menu",
+    "mainNav": "Utama",
+    "backToTop": "Hevium, kembali ke atas",
+    "language": "Bahasa",
+    "whatIs": "Apa itu Hevium",
+    "faq": "FAQ",
+    "faqTitle": "Soalan anda, terjawab.",
+    "faqHighlight": "terjawab",
+    "stop": ".",
+    "securityAudit": "Audit keselamatan",
+    "signedByYou": "ditandatangani oleh anda",
+    "totalSupply": "Jumlah bekalan",
+    "mintedForInsiders": "Dicetak untuk orang dalam",
+    "graduatedOn": "Bergraduat di",
+    "poolTokens": "Token pool",
+    "sentTo": "Dihantar ke",
+    "status": "Status",
+    "pending": "Menunggu",
+    "burned": "Dibakar",
+    "vesting": "Vesting",
+    "vestingDay": "Hari {day} daripada 180",
+    "spentToday": "dibelanjakan hari ini",
+    "held": "ditahan",
+    "bought": "Dibeli",
+    "buy": "Beli",
+    "sold": "Dijual",
+    "mcpClients": "Klien MCP yang disokong",
+    "tradedHere": "Didagangkan:",
+    "shareCards": "Kad perkongsian",
+    "previousCard": "Kad sebelumnya",
+    "nextCard": "Kad seterusnya",
+    "referredVolume": "Volum rujukan",
+    "totalPnl": "Jumlah PnL",
+    "pair": "Pasangan {ticker}",
+    "cardOf": "Kad {n} daripada {total}: pasangan {ticker}",
+    "referralLink": "Pautan rujukan @{name}",
+    "product": "Produk",
+    "resources": "Sumber",
+    "fiveChains": "Lima rantaian",
+    "docs": "Dokumentasi",
+    "mcpServer": "Pelayan MCP",
+    "trust": "Kepercayaan",
+    "brandKit": "Kit jenama",
+    "terms": "Terma",
+    "privacy": "Privasi",
+    "ogAlt": "Hevium: Terminal Saham dan Pelancaran Adil Berbilang Rantaian di Base, Robinhood Chain, BNB Chain, Solana dan Elysium."
+  },
+  "NAV": [
+    {
+      "label": "Masalah",
+      "href": "#problem"
+    },
+    {
+      "label": "Penyelesaian",
+      "href": "#solution"
+    },
+    {
+      "label": "Rantaian",
+      "href": "#chains"
+    },
+    {
+      "label": "Kepercayaan",
+      "href": "#trust"
+    },
+    {
+      "label": "FAQ",
+      "href": "#faq"
+    },
+    {
+      "label": "Dokumentasi",
+      "href": "https://docs.hevium.xyz/"
+    }
+  ]
+}

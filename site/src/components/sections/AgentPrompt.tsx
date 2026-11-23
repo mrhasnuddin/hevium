@@ -1,6 +1,9 @@
+'use client';
+
 import type { CSSProperties } from 'react';
 import { Card } from '@/components/Card';
-import { AGENT_CLIENTS, AGENT_PROMPT } from '@/content/sections';
+import { AGENT_CLIENTS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import { SENT_AT, TRADES, TYPE_SPAN, TYPE_START } from '@/lib/agentSession';
 import styles from './Agents.module.css';
 
@@ -89,6 +92,7 @@ function ClientMark({ name }: { name: (typeof AGENT_CLIENTS)[number] }) {
 // Card showing one plain instruction and the agent's synced executions, and a bottom "Ask your agent" bar.
 // Everything reads --agent-t in CSS so it stays frame-locked to the chart and works without JavaScript.
 export function AgentPrompt() {
+  const { AGENT_PROMPT, UI } = useWords().copy;
   return (
     <div
       className={styles.session}
@@ -101,7 +105,7 @@ export function AgentPrompt() {
         } as CSSProperties
       }
     >
-      <ul className={styles.clients} data-clients aria-label="Supported MCP clients">
+      <ul className={styles.clients} data-clients aria-label={UI.mcpClients}>
         {AGENT_CLIENTS.map((client) => (
           <li key={client} className={styles.client} title={client}>
             <ClientMark name={client} />
@@ -137,7 +141,7 @@ export function AgentPrompt() {
                     </svg>
                   )}
                 </span>
-                <span className={styles.replyText}>{trade.text}</span>
+                <span className={styles.replyText}>{AGENT_PROMPT.replies[i].text}</span>
                 <span className={styles.replyTime}>{trade.time}</span>
               </li>
             ))}

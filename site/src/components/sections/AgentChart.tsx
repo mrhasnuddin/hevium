@@ -1,6 +1,8 @@
+'use client';
+
 import type { CSSProperties } from 'react';
 import { PixelField } from '@/components/PixelArt';
-import { AGENT_CHART, AGENT_LIMITS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import { CHART_X, HELD, PRICE, SPENT, TRADES, chartX, priceAt } from '@/lib/agentSession';
 import styles from './Agents.module.css';
 
@@ -14,6 +16,7 @@ const LINE = PRICE.map(([x, price]) => `${x},${100 - price}`).join(' ');
 // filling as the buys land. All of it follows the session's one number in CSS (see the module), so it needs
 // no script. The line itself is an illustration.
 export function AgentChart() {
+  const { AGENT_CHART, AGENT_LIMITS, UI } = useWords().copy;
   return (
     <figure className={styles.chart} style={{ '--chart-x': `calc(${CHART_X})`, '--spent': `calc(${SPENT})`, '--held': `calc(${HELD})` } as CSSProperties}>
       <div className={styles.plot} data-plot>
@@ -36,8 +39,8 @@ export function AgentChart() {
               <span className="trade-tag" data-side={trade.through ? 'buy' : 'held'} aria-hidden="true">
                 {trade.through ? 'B' : '!'}
               </span>
-              <span className="sr-only">{trade.through ? 'Bought' : 'Buy'}</span>
-              <span className={styles.amount}>{trade.through ? AGENT_LIMITS[0].value : 'held'}</span>
+              <span className="sr-only">{trade.through ? UI.bought : UI.buy}</span>
+              <span className={styles.amount}>{trade.through ? AGENT_LIMITS[0].value : UI.held}</span>
             </p>
           );
         })}
@@ -57,7 +60,7 @@ export function AgentChart() {
           ))}
         </dl>
         <p className={styles.budget}>
-          <span className={styles.label}>spent today</span>
+          <span className={styles.label}>{UI.spentToday}</span>
           <span className={styles.track} data-budget>
             <span />
           </span>

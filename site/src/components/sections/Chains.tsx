@@ -1,6 +1,8 @@
+'use client';
+
 import { AppLink } from '@/components/AppLink';
 import { SectionHead } from '@/components/SectionHead';
-import { CHAIN_STEPS, SECTIONS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import { ChainRoute } from './ChainRoute';
 import styles from './Chains.module.css';
 
@@ -8,6 +10,7 @@ import styles from './Chains.module.css';
 // button into the app. The page's "How it works" is those three steps, so the hero's button of that name
 // lands here: the empty anchor at the top holds the name `how`.
 export function Chains() {
+  const { CHAIN_STEPS, SECTIONS, UI } = useWords().copy;
   return (
     <section className={`section ${styles.section}`} id="chains" aria-labelledby="chains-title">
       <span className={styles.anchor} id="how" />
@@ -28,7 +31,7 @@ export function Chains() {
         <ChainRoute />
         <div className="section-foot">
           <AppLink className="btn btn-tonal" target="app" placement="chains">
-            Start trading
+            {UI.startTrading}
           </AppLink>
         </div>
       </div>

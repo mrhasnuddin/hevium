@@ -263,7 +263,7 @@ test.describe('nav bar and hero', () => {
     const page = await context.newPage();
     await page.goto('/');
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Launch app' }).first()).toHaveAttribute('href', /^https:\/\/hevium\.xyz\/\?utm_source=landing/);
+    await expect(page.getByRole('link', { name: 'Launch app' }).first()).toHaveAttribute('href', /^https:\/\/app\.hevium\.xyz\/\?utm_source=landing/);
     await expect(page.locator('[data-hero-art] img')).toBeVisible();
     await context.close();
   });

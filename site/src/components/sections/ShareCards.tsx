@@ -3,7 +3,9 @@
 import { Arrow } from '@/components/Arrow';
 import { useRef, useState, useSyncExternalStore, type CSSProperties, type PointerEvent } from 'react';
 import { SITE, tickerLogo } from '@/config/site';
-import { EARN, SHARE_CARDS } from '@/content/sections';
+import { useWords } from '@/components/Words';
+import { fill } from '@/content/langs';
+import { SHARE_CARDS } from '@/content/sections';
 import { priceLine } from '@/lib/priceLine';
 import styles from './Earn.module.css';
 
@@ -28,6 +30,7 @@ const LOOSE =['--dx', '--dy', '--dr', '--rx', '--ry']; // what a drag or a tilt 
 // and in its link. On the right the perks in words. With scripts off the stack stands as built, with no
 // field and no buttons.
 export function ShareCards() {
+  const { EARN, UI } = useWords().copy;
   const [order, setOrder] = useState(() => SHARE_CARDS.map((_, i) => i)); // which card lies where, front first
   const [name, setName] = useState('');
   const scripted = useSyncExternalStore(never, () => true, () => false);
@@ -85,7 +88,7 @@ export function ShareCards() {
   return (
     <div className={`section-piece ${styles.stage}`}>
       <div className={styles.play}>
-        <ul className={styles.stack} data-cards aria-label="Share cards">
+        <ul className={styles.stack} data-cards aria-label={UI.shareCards}>
           {SHARE_CARDS.map((card, i) => {
             const at = order.indexOf(i);
             const sold = (card.bought * (100 + parseFloat(card.result))) / 100;
@@ -121,7 +124,7 @@ export function ShareCards() {
                         <img className={styles.logo} data-logo src={tickerLogo(card.ticker)} alt="" width={64} height={64} loading="lazy" draggable={false} />
                         <p>
                           <span className={styles.pair} data-pair>
-                            {card.ticker} pair
+                            {fill(UI.pair, { ticker: card.ticker })}
                           </span>
                         </p>
                       </div>
@@ -134,11 +137,11 @@ export function ShareCards() {
                       </p>
                       <dl className={styles.rows}>
                         <div>
-                          <dt>Referred volume</dt>
+                          <dt>{UI.referredVolume}</dt>
                           <dd data-volume>{usd(card.volume)}</dd>
                         </div>
                         <div>
-                          <dt>Total PnL</dt>
+                          <dt>{UI.totalPnl}</dt>
                           <dd className={styles.gain}>
                             {plus}
                             {usd(sold - card.bought)} (
@@ -154,14 +157,14 @@ export function ShareCards() {
                             <span className="trade-tag" data-side="buy" aria-hidden="true">
                               B
                             </span>
-                            <span className="sr-only">Bought</span>
+                            <span className="sr-only">{UI.bought}</span>
                           </dt>
                           <dd>{usd(card.bought)}</dd>
                           <dt>
                             <span className="trade-tag" data-side="sell" aria-hidden="true">
                               S
                             </span>
-                            <span className="sr-only">Sold</span>
+                            <span className="sr-only">{UI.sold}</span>
                           </dt>
                           <dd>{usd(sold)}</dd>
                         </div>
@@ -172,7 +175,7 @@ export function ShareCards() {
                         {who[0].toUpperCase()}
                       </span>
                       <p className={styles.whose}>
-                        <span>@{who}&apos;s referral link</span>
+                        <span>{fill(UI.referralLink, { name: who })}</span>
                         <b>{link}</b>
                       </p>
                       <span className={styles.seal} aria-hidden="true" />
@@ -186,13 +189,13 @@ export function ShareCards() {
         {/* Always in the page, so the section is one height before and after the script runs. Until it runs they
             are out of sight and out of reach: a field and buttons that do nothing would be worse than none. */}
         <div className={styles.controls} data-idle={scripted ? undefined : ''}>
-          <button className={`btn btn-secondary btn-sm ${styles.turn}`} type="button" aria-label="Previous card" onClick={previous}>
+          <button className={`btn btn-secondary btn-sm ${styles.turn}`} type="button" aria-label={UI.previousCard} onClick={previous}>
             <Arrow to="left" />
           </button>
           <span className={styles.count} data-count>
             {front + 1} / {SHARE_CARDS.length}
           </span>
-          <button className={`btn btn-secondary btn-sm ${styles.turn}`} type="button" aria-label="Next card" onClick={next}>
+          <button className={`btn btn-secondary btn-sm ${styles.turn}`} type="button" aria-label={UI.nextCard} onClick={next}>
             <Arrow />
           </button>
           <label className={styles.field}>
@@ -201,7 +204,7 @@ export function ShareCards() {
           </label>
         </div>
         <p className="sr-only" aria-live="polite">
-          Card {front + 1} of {SHARE_CARDS.length}: {SHARE_CARDS[front].ticker} pair
+          {fill(UI.cardOf, { n: front + 1, total: SHARE_CARDS.length, ticker: SHARE_CARDS[front].ticker })}
         </p>
       </div>
 

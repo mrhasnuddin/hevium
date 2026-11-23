@@ -1,7 +1,8 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from './fixtures';
 
-const coins = (page: Page) => page.locator('#final [data-coins] img');
+const tokens = (page: Page) => page.locator('#final [data-coins] [data-token]');
+const coins = (page: Page) => page.locator('#final [data-token] img[data-logo]');
 // Whether two boxes share any ground.
 const overlap = (a: { x: number; y: number; width: number; height: number }, b: typeof a) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
@@ -27,7 +28,7 @@ test.describe('final call to action', () => {
     const cta = section.getByRole('link', { name: 'Launch app' });
     await expect(cta).toHaveClass(/\bbtn-primary\b/);
     const url = new URL((await cta.getAttribute('href'))!);
-    expect(url.origin).toBe('https://hevium.xyz');
+    expect(url.origin).toBe('https://app.hevium.xyz');
     expect(url.searchParams.get('utm_content')).toBe('final');
     expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await expect(section.getByRole('link')).toHaveCount(1);
@@ -53,15 +54,15 @@ test.describe('final call to action', () => {
       await expect(page.locator('#final [data-coins]').first()).toHaveAttribute('aria-hidden', 'true');
       await expect(coins(page)).toHaveCount(12);
       const srcs = await coins(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')!));
-      for (const src of srcs) expect(src).toMatch(/^https:\/\/hevium\.xyz\/(chains|tokens)\//);
+      for (const src of srcs) expect(src).toMatch(/^https:\/\/app\.hevium\.xyz\/(chains|tokens)\//);
       expect(srcs.filter((src) => src.includes('/chains/')).length).toBe(5); // all five chains
       expect(new Set(srcs).size).toBe(12);
       const words = await Promise.all(['[data-mark]', 'h2', 'header .lead', '[data-actions]'].map(async (part) => (await page.locator(`#final ${part}`).boundingBox())!));
       const section = (await page.locator('#final').boundingBox())!;
-      for (const coin of await coins(page).all()) {
-        const box = (await coin.boundingBox())!;
+      for (const coin of await coins(page).all()) await expect(coin).toHaveCSS('border-top-left-radius', '50%');
+      for (const token of await tokens(page).all()) {
+        const box = (await token.boundingBox())!;
         expect(Math.abs(box.width - box.height)).toBeLessThan(1); // round
-        await expect(coin).toHaveCSS('border-top-left-radius', '50%');
         for (const part of words) expect(overlap(box, part)).toBe(false);
         expect(box.x).toBeGreaterThanOrEqual(0);
         expect(box.x + box.width).toBeLessThanOrEqual(width);
@@ -70,6 +71,66 @@ test.describe('final call to action', () => {
       }
     });
   }
+
+  test('draws each as the Stocks token: a rim of star pixels with the logo in its middle', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.locator('#final').evaluate((section) => section.scrollIntoView());
+    await expect(tokens(page)).toHaveCount(12);
+    await expect(page.locator('#final [data-token] [data-pixels="ready"][data-scene="coin"]')).toHaveCount(12);
+    for (const token of await tokens(page).all()) {
+      const [whole, logo] = [(await token.boundingBox())!, (await token.locator('img[data-logo]').boundingBox())!];
+      expect(logo.width / whole.width).toBeGreaterThan(0.5);
+      expect(logo.width / whole.width).toBeLessThan(0.6);
+      expect(logo.width).toBeGreaterThanOrEqual(40); // a logo that can be read
+      expect(Math.abs(logo.x + logo.width / 2 - (whole.x + whole.width / 2))).toBeLessThan(1);
+      expect(Math.abs(logo.y + logo.height / 2 - (whole.y + whole.height / 2))).toBeLessThan(1);
+    }
+  });
+
+  test('turns a token over under the pointer, to the Hevium mark, and back when the pointer leaves', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.locator('#final').evaluate((section) => section.scrollIntoView());
+    const token = tokens(page).nth(2);
+    // a quarter turn or more shows the back: the first number of the matrix is the cosine of the turn
+    const turned = () => token.locator('[data-flip]').evaluate((el) => Number(getComputedStyle(el).transform.match(/-?[\d.]+/g)?.[1] ?? 1));
+    expect(await turned()).toBe(1);
+    await token.hover();
+    await expect.poll(turned).toBe(-1);
+    await expect(token.locator('[data-back]')).toHaveCSS('backface-visibility', 'hidden');
+    await expect(token.locator('img[data-logo]')).toHaveCSS('backface-visibility', 'hidden');
+    await page.mouse.move(720, 450);
+    await expect.poll(turned).toBe(1);
+  });
+
+  test('answers a click with rings from the token and a wave across the stars, as the hero floor answers a landing', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await page.locator('#final').evaluate((section) => section.scrollIntoView());
+    const field = page.locator('#final [data-pixel-field]');
+    await expect(field).toHaveAttribute('data-pixels', 'ready');
+    const token = tokens(page).nth(2);
+    await expect(token.locator('[data-pulse]')).toHaveCount(0);
+    // forced: a token that drifts is never "stable", which is all a plain click waits for
+    await token.click({ force: true });
+    await expect(token.locator('[data-pulse]')).toHaveCount(1);
+    await expect(field).toHaveAttribute('data-waves', '1');
+    await token.click({ force: true });
+    await expect(field).toHaveAttribute('data-waves', '2');
+    await expect(field).toHaveAttribute('data-waves', '0', { timeout: 5000 }); // the waves die away
+    // with reduced motion nothing is thrown across the screen
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.locator('#final').evaluate((section) => section.scrollIntoView());
+    await expect(field).toHaveAttribute('data-pixels', 'ready');
+    await tokens(page).nth(2).click();
+    await page.waitForTimeout(200);
+    expect(await field.getAttribute('data-waves')).not.toBe('1');
+    await expect(tokens(page).nth(2).locator('[data-pulse]')).toBeHidden();
+  });
 
   test('lets the coins drift, and holds them still with reduced motion', async ({ page }) => {
     const drifting = () => page.locator('#final').evaluate((section) => section.getAnimations({ subtree: true }).filter((animation) => animation.playState === 'running' && ((animation as CSSAnimation).animationName ?? '').includes('drift')).length);

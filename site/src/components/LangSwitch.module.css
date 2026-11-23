@@ -1,0 +1,24 @@
+/* The language switch. Its button is one of the bar's small buttons; its list hangs under the bar's end, in the
+   bar's own glass, with corners that run with the rows inside it. */
+.lang { display: flex; }
+.lang .button { gap: 0.3em; padding-inline: var(--space-3); font-weight: var(--weight-medium); }
+.button svg { width: 0.9em; height: 0.9em; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: rotate var(--motion-ui); }
+.lang:has(.list:popover-open) .button svg { rotate: 180deg; }
+
+.list {
+  inset: auto; margin: 0; padding: calc(var(--nav-inset) - 1px); overflow: visible; color: inherit;
+  /* under the bar, at its right end: the gutter, or the container's edge on a screen wider than the container */
+  top: calc(var(--space-4) + var(--nav-height) + var(--space-2)); right: max(var(--gutter), calc((100vw - var(--container-max)) / 2 + var(--gutter)));
+  min-width: 13rem;
+  background: color-mix(in srgb, var(--color-bg) 94%, transparent); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--color-border-strong); border-radius: var(--nav-radius);
+}
+.list a { display: flex; justify-content: space-between; align-items: center; gap: var(--space-6); min-height: 2.75rem; padding-inline: var(--space-3); border-radius: var(--button-radius); color: var(--color-text-secondary); font-size: var(--text-small); text-decoration: none; transition: color var(--motion-hover), background-color var(--motion-hover); }
+.list a[aria-current] { color: var(--color-accent-text); }
+.short { font: var(--weight-medium) var(--text-eyebrow)/1 var(--font-mono); letter-spacing: 0.08em; color: var(--color-text-muted); }
+.list a[aria-current] .short { color: inherit; }
+@media (hover: hover) and (pointer: fine) { .list a:hover { background: var(--color-surface-hover); color: var(--color-text); } }
+@media (prefers-reduced-motion: no-preference) {
+  .list:popover-open { transition: opacity var(--motion-ui), translate var(--motion-ui); }
+  @starting-style { .list:popover-open { opacity: 0; translate: 0 calc(-1 * var(--space-2)); } }
+}

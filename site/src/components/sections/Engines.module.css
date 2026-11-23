@@ -36,6 +36,12 @@
 
 /* Narrow: tabs. */
 @media (max-width: 63.999rem) {
+  /* Where the four names are longer than the screen (as in Malay or Vietnamese on a phone) the row scrolls
+     sideways. It is centred by its end margins, which give way when there is no room, so its start can be reached. */
+  .engines > .bar { justify-content: flex-start; padding-inline: calc(var(--space-3) / 2); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .engines > .bar::-webkit-scrollbar { display: none; }
+  .engines > .bar li:first-child { margin-left: auto; }
+  .engines > .bar li:last-child { margin-right: auto; }
   .engines[data-live] > .bar {
     position: sticky; top: var(--pin); z-index: 5;
     background: color-mix(in srgb, var(--color-bg) 86%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);

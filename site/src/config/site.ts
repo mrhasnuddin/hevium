@@ -7,14 +7,15 @@ export const asset = (path: string) => `${BASE}${path}`;
 export const SITE = {
   name: 'Hevium',
   origin: 'https://hevium.xyz',
-  path: '/home/',
-  app: 'https://hevium.xyz/',
+  path: '/',
+  app: 'https://app.hevium.xyz/',
   docs: 'https://docs.hevium.xyz/',
   mcp: 'https://mcp.hevium.xyz/',
-  brand: 'https://hevium.xyz/brand/',
+  brand: 'https://app.hevium.xyz/brand/',
   x: 'https://x.com/heviumxyz',
+  threads: 'https://www.threads.com/@hevium.xyz',
   refParam: 'ref', // open: confirm the name
-  appPaths: { app: '', launch: '', terminal: '', callouts: '', affiliate: '' }, // open: deep links into the app
+  appPaths: { app: '', launch: 'launch', terminal: 'terminal', callouts: '', affiliate: 'invite' }, // as the live site links them
   legal: { terms: '', privacy: '' }, // open: an empty address means the footer leaves the link out
 } as const;
 

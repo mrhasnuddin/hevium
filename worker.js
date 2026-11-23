@@ -1,8 +1,8 @@
-const CANONICAL_BASE = 'https://hevium.xyz/home/';
+const CANONICAL_BASE = 'https://hevium.xyz/';
 const CANONICAL_ORIGIN = 'https://hevium.xyz';
 
 // Dynamically rewrites Open Graph / Twitter share URLs to the active request origin
-// (e.g. *.workers.dev production and preview URLs) while leaving hevium.xyz/home/ untouched.
+// (e.g. *.workers.dev production and preview URLs) while leaving hevium.xyz untouched.
 export default {
   async fetch(request, env) {
     const response = await env.ASSETS.fetch(request);

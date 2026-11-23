@@ -1,0 +1,437 @@
+{
+  "FACTS": [
+    {
+      "value": "5",
+      "label": "Chuỗi",
+      "words": "năm chuỗi"
+    },
+    {
+      "value": "1.0%",
+      "label": "Phí mỗi giao dịch",
+      "words": "1.0%"
+    },
+    {
+      "value": "20%",
+      "label": "Phần phí đó chia cho người giới thiệu",
+      "words": "20%"
+    }
+  ],
+  "FOOTER": {
+    "headline": "Một terminal. Năm chuỗi.",
+    "copyright": "© 2026 Hevium",
+    "backToTop": "Về đầu trang"
+  },
+  "META": {
+    "title": "Hevium: Terminal đa chuỗi cho cổ phiếu và fair launch",
+    "description": "Giao dịch token fair launch ghép cặp với cổ phiếu và đô la số trên năm chuỗi. Phí 1.0%, phi lưu ký, một lần đăng nhập. Dành cho trader và AI agent.",
+    "whatIs": "Hevium là terminal giao dịch phi lưu ký kiêm launchpad fair launch trên năm chuỗi: Base, Robinhood Chain, BNB Chain, Solana và Elysium. Token ra mắt trên bonding curve và có thể ghép cặp với cổ phiếu và đô la số. Mỗi giao dịch tốn phí 1.0%, và 20% khoản phí đó thuộc về người giới thiệu."
+  },
+  "RISK_LINE": "Giao dịch token có rủi ro, và giá có thể giảm về không. Hevium là nền tảng phi lưu ký và không đưa ra lời khuyên đầu tư.",
+  "AGENT_CHART": "Biểu đồ đường của giá trong một ngày, được vẽ dần theo diễn biến của phiên. Mỗi lần agent mua, một chữ B đánh dấu lên đường giá kèm số tiền, 0.1 ETH, tại một nhịp giá giảm. Lệnh mua thứ tư bị giữ lại vì chạm ngân sách ngày và được đánh dấu bằng màu hổ phách.",
+  "AGENT_LIMITS": [
+    {
+      "label": "mỗi giao dịch",
+      "setting": "HEVIUM_MAX_TRADE_ETH",
+      "value": "0.1 ETH"
+    },
+    {
+      "label": "mỗi ngày",
+      "setting": "HEVIUM_DAILY_BUDGET_ETH",
+      "value": "0.3 ETH"
+    }
+  ],
+  "AGENT_PROMPT": {
+    "prompt": "Mua 0.1 ETH NVDA mỗi khi giá giảm. Tối đa 0.3/ngày.",
+    "placeholder": "Hỏi agent của bạn",
+    "replies": [
+      {
+        "text": "Đã mua 0.1 ETH NVDA",
+        "time": "08:15",
+        "through": true
+      },
+      {
+        "text": "Đã mua 0.1 ETH NVDA",
+        "time": "11:45",
+        "through": true
+      },
+      {
+        "text": "Đã mua 0.1 ETH NVDA",
+        "time": "15:15",
+        "through": true
+      },
+      {
+        "text": "Giữ lại 0.1 ETH · đã chạm ngân sách ngày",
+        "time": "18:45",
+        "through": false
+      }
+    ]
+  },
+  "AUDIT_NOTE": "Đã kiểm toán bảo mật",
+  "AUDIT_TEXT": "Các hợp đồng đã trải qua một đợt kiểm toán bảo mật. Địa chỉ và cấu hình build của chúng được liệt kê trong tài liệu, nên ai cũng có thể kiểm tra những gì đã được triển khai.",
+  "CHAINS": [
+    {
+      "name": "Base",
+      "suits": "Người dùng Coinbase và người giữ đô la số sinh lời",
+      "trades": [
+        "ETH",
+        "USDC",
+        "USD+",
+        "COIN"
+      ]
+    },
+    {
+      "name": "Robinhood Chain",
+      "suits": "Trader cổ phiếu, thị trường mở 24/7",
+      "trades": [
+        "NVDA",
+        "TSLA",
+        "AAPL",
+        "SPY"
+      ]
+    },
+    {
+      "name": "BNB Chain",
+      "suits": "Các đợt ra mắt khối lượng lớn, trên toàn cầu",
+      "trades": [
+        "BNB",
+        "USDT",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Solana",
+      "suits": "Trader tốc độ và bot",
+      "trades": [
+        "SOL",
+        "USDC"
+      ]
+    },
+    {
+      "name": "Elysium",
+      "suits": "Trader DeFi thích vào sớm",
+      "trades": [
+        "HYPE",
+        "USDC"
+      ]
+    }
+  ],
+  "CHAIN_ROUTE": "Biểu tượng Hevium đứng làm trung tâm, từ đó mỗi làn đường chạy tới một trong năm chuỗi: Base, Robinhood Chain, BNB Chain, Solana và Elysium. Một xung tín hiệu chạy từ trung tâm dọc theo làn của chuỗi được chọn, và một lệnh mua đáp xuống đó.",
+  "CHAIN_STEPS": [
+    "Đăng nhập",
+    "Chọn chuỗi",
+    "Giao dịch"
+  ],
+  "EARN": {
+    "fee": "Hoa hồng giới thiệu",
+    "name": "Gắn tên của bạn vào",
+    "protocol": "0.80% về giao thức",
+    "you": "0.20% về bạn",
+    "perks": [
+      {
+        "title": "20% phí",
+        "text": "Một phần năm của khoản phí 1.0% khi người bạn giới thiệu mua một token đang ra mắt, hoặc swap một token đã tốt nghiệp trên chuỗi EVM."
+      },
+      {
+        "title": "Trả on-chain",
+        "text": "Lệnh swap trả cho bạn ngay trong cùng giao dịch. Lệnh mua lúc ra mắt được cộng dồn trong một hợp đồng escrow để bạn nhận về."
+      },
+      {
+        "title": "Link của bạn, thẻ của bạn",
+        "text": "Chia sẻ thẻ hoặc bản phát lại của bất kỳ giao dịch nào, hoặc đăng một kèo. Mỗi thứ đều mang link của bạn:"
+      }
+    ]
+  },
+  "ENGINES": [
+    {
+      "id": "stocks",
+      "label": "Cổ phiếu",
+      "href": "#stocks",
+      "summary": "Token ghép cặp với cổ phiếu và đô la số"
+    },
+    {
+      "id": "launch",
+      "label": "Ra mắt",
+      "href": "#launch",
+      "summary": "Nguồn cung cố định, fair launch trong 15 giây"
+    },
+    {
+      "id": "agents",
+      "label": "Agent",
+      "href": "#agents",
+      "summary": "Luồng lệnh AI 24/7 qua MCP, có giới hạn an toàn"
+    },
+    {
+      "id": "earn",
+      "label": "Hoa hồng",
+      "href": "#earn",
+      "summary": "Chia sẻ link của bạn và giữ 20% phí"
+    }
+  ],
+  "FAQ": [
+    {
+      "q": "Ai giữ tiền của tôi?",
+      "a": "Chính bạn. Đăng nhập bằng Google sẽ tạo một ví phi lưu ký cho các chuỗi EVM, và bạn có thể liên kết ví Solana như Phantom hoặc Solflare. Hevium không bao giờ giữ tiền nạp, và mọi giao dịch đều hoàn tất on-chain."
+    },
+    {
+      "q": "Fair launch hoạt động thế nào?",
+      "a": "Mỗi token có nguồn cung cố định là 1,000,000,000. 80% được bán trên bonding curve mở cho tất cả mọi người và 20% được dành làm thanh khoản, không mint trước token nào cho nội bộ. Lớp bảo vệ lúc ra mắt đánh thuế các lệnh mua trong năm giây đầu tiên, bắt đầu từ 95% rồi giảm dần về không, nhằm răn đe bot sniper. Khi bonding curve đầy, token tự tốt nghiệp sang một pool thanh khoản của sàn giao dịch trên chính chuỗi của nó."
+    },
+    {
+      "q": "Thanh khoản sẽ ra sao sau khi token tốt nghiệp?",
+      "a": "Thanh khoản được đưa ra ngoài tầm với. Trên Base, BNB Chain và Robinhood Chain, token LP được đốt bằng cách gửi về địa chỉ chết. Trên Elysium, vị thế được mint thẳng về địa chỉ chết, còn trên Solana thì bị khóa vĩnh viễn."
+    },
+    {
+      "q": "Phí giao dịch là bao nhiêu?",
+      "a": "1.0% mỗi giao dịch, trên bonding curve cũng như với token đã tốt nghiệp. Ngoại lệ duy nhất là token đã tốt nghiệp trên Solana, được swap qua Jupiter với phí 0.50%."
+    },
+    {
+      "q": "Hoa hồng giới thiệu hoạt động thế nào?",
+      "a": "Bạn nhận 20% của khoản phí 1.0%, tức 0.20% giá trị giao dịch, khi người bạn giới thiệu mua trên bonding curve hoặc swap một token đã tốt nghiệp trên chuỗi EVM. Lệnh swap trả cho bạn ngay trong cùng giao dịch, còn lệnh mua trên bonding curve được cộng dồn trong một hợp đồng escrow để bạn nhận về. Lệnh bán trên bonding curve và lệnh swap token đã tốt nghiệp trên Solana không có hoa hồng giới thiệu."
+    },
+    {
+      "q": "AI agent có thể giao dịch thay tôi không?",
+      "a": "Có, qua MCP. Kết nối Claude, Cursor hoặc một client khác tới mcp.hevium.xyz và tự duyệt từng giao dịch, hoặc tự chạy máy chủ với hạn mức mỗi giao dịch và ngân sách mỗi ngày. Agent giao dịch được trên cả năm chuỗi."
+    },
+    {
+      "q": "Mã nguồn đã được kiểm toán bảo mật chưa?",
+      "a": "Rồi. Các hợp đồng đã trải qua một đợt kiểm toán bảo mật. Địa chỉ và cấu hình build của chúng được liệt kê trong tài liệu, nên ai cũng có thể kiểm tra những gì đã được triển khai."
+    },
+    {
+      "q": "Có những rủi ro nào?",
+      "a": "Token ra mắt tại đây đều mới và có thể mất toàn bộ giá trị. Giá trên bonding curve biến động nhanh theo cả hai chiều, và hợp đồng thông minh có thể có lỗi mà chưa đợt rà soát nào phát hiện. Trang này không phải là lời khuyên tài chính. Chỉ giao dịch số tiền mà bạn có thể chấp nhận mất."
+    }
+  ],
+  "GUARANTEES": [
+    {
+      "title": "Chìa khóa của bạn",
+      "text": "Hevium không bao giờ giữ tiền nạp của bạn. Mọi giao dịch đều hoàn tất on-chain từ chính ví của bạn.",
+      "proof": "Ví phi lưu ký"
+    },
+    {
+      "title": "Nguồn cung cố định",
+      "text": "Mọi token đều ra mắt với cùng một nguồn cung cố định, và không mint trước token nào cho nội bộ.",
+      "proof": "1,000,000,000 mỗi token"
+    },
+    {
+      "title": "Thanh khoản được khóa",
+      "text": "Khi một token tốt nghiệp, token LP của nó được đốt hoặc bị khóa vĩnh viễn.",
+      "proof": "Đã đốt về 0x0000...dEaD"
+    },
+    {
+      "title": "Vault mua lại",
+      "text": "Token của quỹ dự án và của người tạo nằm trong một vault on-chain, nơi chúng được mở khóa dần trong 180 ngày hoặc bị đốt.",
+      "proof": "Vesting 180 ngày"
+    }
+  ],
+  "HERO": {
+    "title": "Terminal đa chuỗi cho cổ phiếu & fair launch.",
+    "highlight": "cổ phiếu & fair launch"
+  },
+  "LAUNCH_PRESS": "Một máy dập xu dưới vòm kính dập ra một đồng xu trong lúc bộ đếm chạy tới mười lăm. Mỗi đồng xu tách ra khi rời máy và rơi vào ba ngăn: bốn phần năm về công chúng, một phần năm được khóa làm thanh khoản, còn ngăn dành cho nội bộ thì để trống. Những con bot nhỏ lao vào máy dập và bật ra khỏi vòm kính.",
+  "LAUNCH_SPLIT": [
+    {
+      "value": "80%",
+      "label": "công chúng"
+    },
+    {
+      "value": "20%",
+      "label": "thanh khoản được khóa"
+    },
+    {
+      "value": "0%",
+      "label": "nội bộ"
+    }
+  ],
+  "PROBLEMS": [
+    {
+      "title": "Chỉ có crypto",
+      "body": "Token bị trói vào các token gas biến động mạnh, không có cầu nối nào tới cổ phiếu như NVDA hay TSLA."
+    },
+    {
+      "title": "Bot sniper",
+      "body": "Bot gom nguồn cung ngay lúc ra mắt, và cộng đồng đến sau trở thành nơi để chúng thoát hàng."
+    },
+    {
+      "title": "Chỉ dành cho con người",
+      "body": "Giao dịch phải qua các màn hình web thao tác bằng tay. AI agent không có kết nối trực tiếp và không có giới hạn chi tiêu."
+    }
+  ],
+  "PROBLEM_FACTS": [
+    "Hoạt động trên 5 chuỗi",
+    "0% phân bổ cho nội bộ"
+  ],
+  "SECTIONS": {
+    "problem": {
+      "eyebrow": "Vấn đề",
+      "title": "Launchpad thế hệ đầu vấp phải ba bức tường.",
+      "highlight": "ba bức tường"
+    },
+    "solution": {
+      "eyebrow": "Giải pháp",
+      "title": "Một terminal. Bốn động cơ.",
+      "highlight": "Bốn động cơ",
+      "lead": "Hevium gom cặp cổ phiếu, fair launch, AI agent và hoa hồng giới thiệu vào một terminal."
+    },
+    "stocks": {
+      "eyebrow": "Cổ phiếu",
+      "title": "Tốc độ meme gặp Phố Wall.",
+      "highlight": "Phố Wall",
+      "lead": "Ngày công bố kết quả kinh doanh khuấy động cả thị trường lẫn mạng xã hội. Trên Hevium, token có thể giao dịch theo cặp với chính cổ phiếu đang lên trang nhất."
+    },
+    "launch": {
+      "eyebrow": "Ra mắt",
+      "title": "Fair launch trong 15 giây.",
+      "highlight": "15 giây",
+      "lead": "Đặt tên, chọn một cặp là token hoạt động ngay. Nguồn cung cố định, không mint trước token nào cho nội bộ, và lớp bảo vệ lúc ra mắt răn đe bot sniper."
+    },
+    "agents": {
+      "eyebrow": "Agent",
+      "title": "Sinh ra cho luồng lệnh AI 24/7.",
+      "highlight": "24/7",
+      "lead": "Kết nối Claude, Cursor hoặc bot của riêng bạn qua MCP. Đặt hạn mức mỗi giao dịch và ngân sách mỗi ngày, rồi nó giao dịch suốt ngày đêm."
+    },
+    "earn": {
+      "eyebrow": "Hoa hồng",
+      "title": "Mời trader về. Giữ 20% phí.",
+      "highlight": "20% phí",
+      "lead": "Chia sẻ link của bạn và nhận phần từ khoản phí 1.0% trên những gì họ giao dịch."
+    },
+    "chains": {
+      "eyebrow": "Năm chuỗi",
+      "title": "Một terminal, năm chuỗi.",
+      "highlight": "năm chuỗi",
+      "lead": "Đăng nhập bằng Google, chọn chuỗi và giao dịch. Mỗi chuỗi có cộng đồng riêng và các cặp riêng, tất cả đều đang chạy trên mainnet."
+    },
+    "trust": {
+      "eyebrow": "Tin cậy",
+      "title": "Đừng tin. Hãy kiểm chứng.",
+      "highlight": "Hãy kiểm chứng",
+      "lead": "Bốn điều bảo đảm mà ai cũng có thể kiểm tra on-chain, cùng câu trả lời cho những câu hỏi thường gặp."
+    },
+    "final": {
+      "title": "Bắt đầu giao dịch trong một terminal.",
+      "highlight": "một terminal",
+      "lead": "Cặp cổ phiếu, fair launch, AI agent và hoa hồng giới thiệu trên năm chuỗi. Đăng nhập bằng Google là bạn vào ngay."
+    }
+  },
+  "STOCK_COUNT": {
+    "value": "17+",
+    "label": "cặp cổ phiếu và đô la"
+  },
+  "STOCK_RING": "Mười ba mã quay thành một vòng: cổ phiếu và quỹ như NVDA, TSLA và SPY, cùng các đô la số USD+, USDC và USDG. Một đồng token lần lượt rơi xuống từng mã, và hai bên giao dịch thành một cặp.",
+  "TRUST_FEED": [
+    {
+      "side": "buy",
+      "what": "Mua trên cặp NVDA",
+      "where": "0.1 ETH trên Robinhood Chain"
+    },
+    {
+      "side": "sell",
+      "what": "Bán trên cặp COIN",
+      "where": "0.25 ETH trên Base"
+    },
+    {
+      "side": "buy",
+      "what": "Mua trên bonding curve",
+      "where": "0.05 BNB trên BNB Chain"
+    },
+    {
+      "side": "buy",
+      "what": "Mua trên cặp USD+",
+      "where": "120 USD+ trên Base"
+    },
+    {
+      "side": "sell",
+      "what": "Bán trên bonding curve",
+      "where": "2 HYPE trên Elysium"
+    }
+  ],
+  "TRUST_WORDS": [
+    "Bạn giữ.",
+    "Bạn ký.",
+    "Giao dịch hoàn tất."
+  ],
+  "UI": {
+    "launchApp": "Mở ứng dụng",
+    "howItWorks": "Cách hoạt động",
+    "openTerminal": "Mở terminal",
+    "launchToken": "Ra mắt token",
+    "connectAgent": "Kết nối agent",
+    "becomeAffiliate": "Trở thành affiliate",
+    "startTrading": "Bắt đầu giao dịch",
+    "next": "Tiếp theo: {name}",
+    "overview": "Tổng quan",
+    "menu": "Menu",
+    "mainNav": "Chính",
+    "backToTop": "Hevium, về đầu trang",
+    "language": "Ngôn ngữ",
+    "whatIs": "Hevium là gì",
+    "faq": "FAQ",
+    "faqTitle": "Câu hỏi, đã có lời đáp.",
+    "faqHighlight": "đã có lời đáp",
+    "stop": ".",
+    "securityAudit": "Kiểm toán bảo mật",
+    "signedByYou": "do bạn ký",
+    "totalSupply": "Tổng cung",
+    "mintedForInsiders": "Mint cho nội bộ",
+    "graduatedOn": "Tốt nghiệp trên",
+    "poolTokens": "Token LP",
+    "sentTo": "Gửi tới",
+    "status": "Trạng thái",
+    "pending": "Đang chờ",
+    "burned": "Đã đốt",
+    "vesting": "Vesting",
+    "vestingDay": "Ngày {day}/180",
+    "spentToday": "đã chi hôm nay",
+    "held": "giữ lại",
+    "bought": "Đã mua",
+    "buy": "Mua",
+    "sold": "Đã bán",
+    "mcpClients": "Các client MCP được hỗ trợ",
+    "tradedHere": "Giao dịch:",
+    "shareCards": "Thẻ chia sẻ",
+    "previousCard": "Thẻ trước",
+    "nextCard": "Thẻ sau",
+    "referredVolume": "Khối lượng giới thiệu",
+    "totalPnl": "Tổng PnL",
+    "pair": "Cặp {ticker}",
+    "cardOf": "Thẻ {n} trên {total}: cặp {ticker}",
+    "referralLink": "Link giới thiệu của @{name}",
+    "product": "Sản phẩm",
+    "resources": "Tài nguyên",
+    "fiveChains": "Năm chuỗi",
+    "docs": "Tài liệu",
+    "mcpServer": "Máy chủ MCP",
+    "trust": "Tin cậy",
+    "brandKit": "Bộ nhận diện",
+    "terms": "Điều khoản",
+    "privacy": "Quyền riêng tư",
+    "ogAlt": "Hevium: Terminal đa chuỗi cho cổ phiếu và fair launch trên Base, Robinhood Chain, BNB Chain, Solana và Elysium."
+  },
+  "NAV": [
+    {
+      "label": "Vấn đề",
+      "href": "#problem"
+    },
+    {
+      "label": "Giải pháp",
+      "href": "#solution"
+    },
+    {
+      "label": "Chuỗi",
+      "href": "#chains"
+    },
+    {
+      "label": "Tin cậy",
+      "href": "#trust"
+    },
+    {
+      "label": "FAQ",
+      "href": "#faq"
+    },
+    {
+      "label": "Tài liệu",
+      "href": "https://docs.hevium.xyz/"
+    }
+  ]
+}

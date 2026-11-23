@@ -100,7 +100,7 @@ test.describe('launch section', () => {
     await expect(cta).toHaveClass(/\bbtn\b/);
     expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const url = new URL((await cta.getAttribute('href'))!);
-    expect(url.origin).toBe('https://hevium.xyz');
+    expect(url.origin).toBe('https://app.hevium.xyz');
     expect(url.searchParams.get('utm_source')).toBe('landing');
     expect(url.searchParams.get('utm_content')).toBe('launch');
   });

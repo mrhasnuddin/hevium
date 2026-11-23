@@ -1,8 +1,11 @@
+'use client';
+
 import { Card } from '@/components/Card';
 import { Eyebrow } from '@/components/Eyebrow';
 import { PixelArt } from '@/components/PixelArt';
 import { CHAIN_LOGOS, asset } from '@/config/site';
-import { PROBLEMS, PROBLEM_FACTS, SECTIONS, type SectionCopy } from '@/content/sections';
+import type { SectionCopy } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import type { SceneName } from '@/lib/pixelScenes';
 import styles from './Problem.module.css';
 
@@ -28,7 +31,7 @@ function PartHead({ id, eyebrow, title, highlight, lead }: SectionCopy & { id: s
 }
 
 function Wall({ index, className }: { index: number; className?: string }) {
-  const wall = PROBLEMS[index];
+  const wall = useWords().copy.PROBLEMS[index];
   return (
     <Card as="article" className={className}>
       <div className={styles.thumb}>
@@ -46,6 +49,7 @@ function Wall({ index, className }: { index: number; className?: string }) {
 // features-04: a fact over a card, a card over a fact, and one tall card. Each card's object is drawn in
 // star pixels: it moves, and it leans toward the pointer.
 export function Problem() {
+  const { PROBLEM_FACTS, SECTIONS } = useWords().copy;
   return (
     <div className={styles.part} id="problem">
       <PartHead id="problem" {...SECTIONS.problem} />

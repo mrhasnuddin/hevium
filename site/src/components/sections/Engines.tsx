@@ -2,7 +2,9 @@
 
 import { Eyebrow } from '@/components/Eyebrow';
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode, type TouchEvent } from 'react';
-import { ENGINES, SECTIONS } from '@/content/sections';
+import { useWords } from '@/components/Words';
+import { fill } from '@/content/langs';
+import { ENGINES } from '@/content/sections';
 import styles from './Engines.module.css';
 
 const IDS = ENGINES.map((engine) => engine.href.slice(1));
@@ -42,15 +44,18 @@ const never = () => () => {};
 // tabs: one engine shows at a time, a swipe or the button at its foot turns to the next, and a link to an
 // engine opens it. Which way it behaves is CSS (see the module). With scripts off it is the head, four links
 // and four sections one after another.
-// `after` is the section that follows the frame: where the last engine's way on leads.
-export function Engines({ children, after }: { children: ReactNode; after: { label: string; href: string } }) {
+// The last engine's way on leads to the section that follows the frame: Five chains.
+export function Engines({ children }: { children: ReactNode }) {
+  const { ENGINES: engines, SECTIONS, UI } = useWords().copy;
   const scripted = useSyncExternalStore(never, () => true, () => false);
   const narrow = useSyncExternalStore(onWidth, () => matchMedia(NARROW).matches, () => false);
   const open = useSyncExternalStore(onAddress, named, () => ''); // narrow: the engine that is open
   const [inView, setInView] = useState(IDS[0]); // wide: the engine passing the middle of the screen
   const from = useRef<{ x: number; y: number } | null>(null);
+  const tabs = useRef<HTMLOListElement>(null);
   const active = narrow ? open || IDS[0] : inView;
-  const next = ENGINES[IDS.indexOf(active) + 1]; // none after the last engine: the way on leaves the frame
+  const next = engines[IDS.indexOf(active) + 1]; // none after the last engine: the way on leaves the frame
+  const after = { label: SECTIONS.chains.eyebrow, href: '#chains' };
   const { title, highlight } = SECTIONS.solution;
   const at = title.indexOf(highlight);
 
@@ -67,6 +72,15 @@ export function Engines({ children, after }: { children: ReactNode; after: { lab
     const [top, line] = [panel.getBoundingClientRect().top, parseFloat(getComputedStyle(panel).scrollMarginTop)];
     if (top < line - 8 || top > innerHeight * 0.7) panel.scrollIntoView({ block: 'start' });
   }, [narrow, open]);
+
+  // Narrow: where the row of tabs is wider than the screen, bring the open one to its middle.
+  useEffect(() => {
+    const bar = tabs.current!;
+    const tab = bar.querySelector(`a[href="#${active}"]`);
+    if (!narrow || !tab || bar.scrollWidth <= bar.clientWidth) return;
+    const [row, box] = [bar.getBoundingClientRect(), tab.getBoundingClientRect()];
+    bar.scrollTo({ left: bar.scrollLeft + box.left - row.left - (row.width - box.width) / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }, [narrow, active]);
 
   function swipeEnd(event: TouchEvent) {
     const start = from.current;
@@ -105,8 +119,8 @@ export function Engines({ children, after }: { children: ReactNode; after: { lab
           </header>
         </div>
       </div>
-      <ol className={`pill-row ${styles.bar}`} data-tabs>
-        {ENGINES.map((engine, i) => (
+      <ol className={`pill-row ${styles.bar}`} data-tabs ref={tabs}>
+        {engines.map((engine, i) => (
           <li key={engine.href}>
             <a
               className="pill"
@@ -140,7 +154,7 @@ export function Engines({ children, after }: { children: ReactNode; after: { lab
             turnTo(next.href.slice(1));
           }}
         >
-          Next: {(next ?? after).label}
+          {fill(UI.next, { name: (next ?? after).label })}
         </a>
       </p>
     </div>

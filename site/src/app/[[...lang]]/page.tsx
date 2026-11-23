@@ -12,18 +12,23 @@ import { Launch } from '@/components/sections/Launch';
 import { Stocks } from '@/components/sections/Stocks';
 import { Trust } from '@/components/sections/Trust';
 import { WhatIs } from '@/components/sections/WhatIs';
-import { SECTIONS } from '@/content/sections';
-import { STRUCTURED } from '@/lib/seo';
+import { WordsProvider } from '@/components/Words';
+import { getCopy } from '@/content/copy';
+import { structured } from '@/lib/seo';
+import { langFrom } from './layout';
 
-export default function Home() {
+export default async function Home({ params }: PageProps<'/[[...lang]]'>) {
+  const lang = langFrom((await params).lang);
+  // The page is drawn in this language, and the visitor can change it without loading the page again: every
+  // part reads its words from this store (components/Words.tsx).
   return (
-    <>
+    <WordsProvider lang={lang} copy={getCopy(lang)}>
       <Entrance />
       <Nav />
       <main>
         <Hero />
         <WhatIs />
-        <Engines after={{ label: SECTIONS.chains.eyebrow, href: '#chains' }}>
+        <Engines>
           <Stocks />
           <Launch />
           <Agents />
@@ -36,7 +41,7 @@ export default function Home() {
       <Footer />
       <Away />
       {/* who Hevium is and the questions it answers, for search and answer engines (lib/seo.ts) */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED).replace(/</g, '\\u003c') }} />
-    </>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structured(lang)).replace(/</g, '\\u003c') }} />
+    </WordsProvider>
   );
 }

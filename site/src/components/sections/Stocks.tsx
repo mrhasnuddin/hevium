@@ -1,9 +1,12 @@
+'use client';
+
 import type { CSSProperties } from 'react';
 import { AppLink } from '@/components/AppLink';
 import { PixelArt, PixelField } from '@/components/PixelArt';
 import { SectionHead } from '@/components/SectionHead';
 import { asset, tickerLogo } from '@/config/site';
-import { SECTIONS, STOCK_COUNT, STOCK_RING, TICKERS } from '@/content/sections';
+import { TICKERS } from '@/content/sections';
+import { useWords } from '@/components/Words';
 import { priceLine } from '@/lib/priceLine';
 import styles from './Stocks.module.css';
 
@@ -15,6 +18,7 @@ const place = (i: number) => ({ '--i': i }) as CSSProperties;
 // next. The ring, the drop, and which logo and line show are all CSS (see the module). The tickers are a
 // list of real text; the logos are the app's own icons and say nothing the list does not.
 export function Stocks() {
+  const { SECTIONS, STOCK_COUNT, STOCK_RING, UI } = useWords().copy;
   return (
     <section className="section" id="stocks" aria-labelledby="stocks-title">
       <div className="container">
@@ -49,7 +53,7 @@ export function Stocks() {
             <strong>{STOCK_COUNT.value}</strong> {STOCK_COUNT.label}
           </p>
           <AppLink className="btn btn-tonal" target="terminal" placement="stocks">
-            Open the terminal
+            {UI.openTerminal}
           </AppLink>
         </div>
       </div>
