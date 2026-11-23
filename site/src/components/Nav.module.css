@@ -3,51 +3,443 @@
 
 /* The bar's corners run with its button's: the button's radius plus the room around the button (--nav-radius).
    The padding at the button's end is that room less the 1px edge, so there is as much beside the button as above it. */
-.nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); height: var(--nav-height); padding-inline: var(--space-4) calc(var(--nav-inset) - 1px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); }
-@media (prefers-reduced-motion: no-preference) {
-  .nav { transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-fast) ease; }
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  height: var(--nav-height);
+  padding-inline: var(--space-4) calc(var(--nav-inset) - 1px);
+  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--nav-radius);
 }
-.nav[data-hidden="true"]:not(:focus-within):not(:has(.links:popover-open)) {
+.nav[data-scrolled="true"] {
+  border-color: var(--color-border-strong);
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nav { transition: translate var(--dur-base) var(--ease-out), opacity var(--dur-fast) ease, border-color var(--motion-hover), background-color var(--motion-hover); }
+}
+.nav[data-hidden="true"]:not(:focus-within):not(:has(.links:popover-open)):not(:has(.dropdown[open])) {
   translate: 0 calc(-100% - var(--space-6));
   opacity: 0;
   pointer-events: none;
 }
 
 /* The logo, each link and the small buttons are 44px tall to press, whatever they look. */
-.logo { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.logo { display: inline-flex; align-items: center; min-height: 2.75rem; flex: none; }
 .logo img { height: 1.5rem; width: auto; }
 
 /* The links are a popover. This takes off the box a browser gives one; below 1024px it stays hidden until opened. */
-.links { inset: auto; gap: var(--space-8); margin: 0; padding: 0; overflow: visible; background: none; border: 0; color: inherit; font-size: var(--text-small); }
-.links a:not(:global(.btn)) { display: flex; align-items: center; min-height: 2.75rem; color: var(--nav-link); text-decoration: none; transition: color var(--motion-hover), background-color var(--motion-hover); }
+.links {
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: none;
+  border: 0;
+  color: inherit;
+  font-size: var(--text-small);
+  list-style: none;
+}
 
-/* Open below 1024px: a panel of the bar's own glass, hung under the bar and as wide as it. A link's corners run with the panel's. */
-.links:popover-open { display: flex; flex-direction: column; gap: 0; top: calc(var(--space-4) + var(--nav-height) + var(--space-2)); right: var(--gutter); left: var(--gutter); width: auto; padding: calc(var(--nav-inset) - 1px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--nav-border); border-radius: var(--nav-radius); font-size: var(--text-body); }
-.links:popover-open a:not(:global(.btn)) { padding-inline: var(--space-2); border-radius: var(--button-radius); }
+.link,
+.trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--nav-link);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--motion-hover), background-color var(--motion-hover);
+}
+.trigger::-webkit-details-marker { display: none; }
+
+.chevron {
+  width: 0.95em;
+  height: 0.95em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: rotate var(--motion-ui), color var(--motion-hover);
+}
+.dropdown[open] .chevron { rotate: 180deg; color: var(--color-accent-text); }
+
+.extArrow {
+  width: 0.8em;
+  height: 0.8em;
+  color: var(--color-text-muted);
+  transition: transform var(--motion-ui), color var(--motion-hover);
+}
+
+/* Shared Solution engine items (rendered inside the mega-dropdown on desktop and inside the accordion on mobile). */
+.panelHead { display: none; }
+.grid { display: grid; gap: var(--space-2); }
+.engine {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  text-decoration: none;
+  color: var(--color-text);
+  border-radius: var(--button-radius);
+  transition: background-color var(--motion-hover), border-color var(--motion-hover), color var(--motion-hover);
+}
+.engineCopy { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.engineName {
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text);
+  transition: color var(--motion-hover);
+}
+.engineDesc {
+  font-size: var(--text-caption);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+.engine[data-active="true"] .engineName { color: var(--color-accent-text); }
+
+/* ==================== MOBILE / TABLET (< 1024px) ==================== */
+/* Namada-inspired clean hairline drawer: bold rows, expandable Solution with animated thumbnails, no visual noise. */
+.links:popover-open {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  top: calc(var(--space-4) + var(--nav-height) + var(--space-2));
+  right: var(--gutter);
+  left: var(--gutter);
+  width: auto;
+  max-height: calc(100svh - var(--nav-height) - var(--space-8));
+  overflow-y: auto;
+  padding: var(--space-2) calc(var(--nav-inset) - 1px) calc(var(--nav-inset) - 1px);
+  background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--nav-radius);
+  font-size: var(--text-body-lg);
+}
+.links:popover-open .item + .item {
+  border-top: 1px solid var(--color-border);
+}
+.links:popover-open .link,
+.links:popover-open .trigger {
+  justify-content: space-between;
+  min-height: 3.25rem;
+  padding-inline: var(--space-3);
+  border-radius: var(--button-radius);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-title);
+}
+.links:popover-open .link[data-active="true"],
+.links:popover-open .trigger[data-active="true"],
+.links:popover-open .dropdown[open] .trigger {
+  color: var(--color-accent-text);
+}
+.links:popover-open .panel {
+  padding: var(--space-1) var(--space-2) var(--space-3);
+}
+.links:popover-open .engine {
+  min-height: 3.75rem;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+.links:popover-open .engineName { font-size: var(--text-body); }
+.links:popover-open .engine[data-active="true"] {
+  border-color: var(--color-accent-tint-strong);
+  background: color-mix(in srgb, var(--color-accent-soft) 55%, var(--color-surface));
+}
+@media (min-width: 40rem) and (max-width: 63.999rem) {
+  .links:popover-open .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* Launch app is the menu's last row below 1024px, at full size and as wide as the links. From 1024px it is in the bar. */
 .cta { display: none; }
-.links:popover-open .cta { display: block; margin-top: var(--space-2); }
+.links:popover-open .cta {
+  display: block;
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
 .links:popover-open .cta :global(.btn) { width: 100%; }
 @media (max-width: 63.999rem) { .actions > :global(.btn-primary) { display: none; } }
+
 @media (prefers-reduced-motion: no-preference) {
-  .links:popover-open { transition: opacity var(--motion-ui), translate var(--motion-ui); }
-  @starting-style { .links:popover-open { opacity: 0; translate: 0 calc(-1 * var(--space-2)); } }
+  .links:popover-open { transition: opacity var(--motion-ui), translate var(--motion-ui), scale var(--motion-ui); }
+  @starting-style { .links:popover-open { opacity: 0; translate: 0 calc(-1 * var(--space-2)); scale: 0.985; } }
 }
 
-.actions { display: flex; align-items: center; gap: var(--space-2); }
+.actions { display: flex; align-items: center; gap: var(--space-2); flex: none; }
 
-/* The menu button: two bars at the drawn-line weight that cross when the menu is open. */
-.nav .menu { flex-direction: column; gap: 0.375rem; width: var(--button-height-sm); padding: 0; }
+/* ==================== NAMADA-INSPIRED 3x2 GEOMETRIC MATRIX TRIGGER ==================== */
+.nav .menu {
+  position: relative;
+  width: var(--button-height-sm);
+  padding: 0;
+  background: color-mix(in srgb, var(--color-bg) 55%, transparent);
+  border-color: var(--color-border-strong);
+  transition: background-color var(--motion-hover), border-color var(--motion-hover), color var(--motion-hover), transform var(--motion-press);
+}
 .nav .menu::after { inset-inline: calc(-0.125rem - 1px); }
-.menu span { width: 1rem; height: var(--line-drawn); border-radius: 1px; background: currentColor; transition: translate var(--motion-ui), rotate var(--motion-ui); }
-.nav:has(.links:popover-open) .menu span:first-child { translate: 0 calc((0.375rem + var(--line-drawn)) / 2); rotate: 45deg; }
-.nav:has(.links:popover-open) .menu span:last-child { translate: 0 calc((0.375rem + var(--line-drawn)) / -2); rotate: -45deg; }
 
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 3px;
+  transition: gap var(--motion-ui), opacity var(--motion-ui), scale var(--motion-ui);
+}
+.matrix i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--color-text);
+  transition: width var(--motion-ui), height var(--motion-ui), background-color var(--motion-hover), border-radius var(--motion-ui);
+}
+.matrix .mintTile { background: var(--color-accent); }
+
+.closeIcon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  scale: 0.7;
+  rotate: -45deg;
+  transition: opacity var(--motion-ui), scale var(--motion-ui), rotate var(--motion-ui);
+}
+.closeIcon i {
+  position: absolute;
+  width: 1rem;
+  height: var(--line-drawn);
+  border-radius: var(--radius-pill);
+  background: currentColor;
+}
+.closeIcon i:first-child { rotate: 45deg; }
+.closeIcon i:last-child { rotate: -45deg; }
+
+.nav:has(.links:popover-open) .menu {
+  background: var(--color-accent-tint);
+  border-color: var(--color-accent-tint-strong);
+  color: var(--color-accent-text);
+}
+.nav:has(.links:popover-open) .matrix { opacity: 0; scale: 0.65; }
+.nav:has(.links:popover-open) .closeIcon { opacity: 1; scale: 1; rotate: 0deg; }
+
+/* ==================== DESKTOP (>= 1024px) ==================== */
 @media (min-width: 64rem) {
-  .links { position: static; display: flex; width: auto; height: auto; }
+  .links {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
+    width: auto;
+    height: auto;
+  }
+  .item,
+  .hasMenu,
+  .dropdown { position: static; }
+
+  .link,
+  .trigger {
+    gap: 0.35rem;
+    padding-inline: var(--space-1);
+    color: var(--nav-link);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+  }
+  /* Subtle bottom mint hairline rule for active / open state — no boxy pills. */
+  .link::after,
+  .trigger::after {
+    content: "";
+    position: absolute;
+    left: var(--space-1);
+    right: var(--space-1);
+    bottom: 0.35rem;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    opacity: 0;
+    transition: transform var(--motion-ui), opacity var(--motion-hover);
+  }
+  .link[data-active="true"],
+  .trigger[data-active="true"],
+  .dropdown[open] .trigger { color: var(--color-text); }
+  .link[data-active="true"]::after,
+  .trigger[data-active="true"]::after,
+  .dropdown[open] .trigger::after { transform: scaleX(1); opacity: 1; }
+
+  /* Subtle hairline divider separating Docs utility link from the 5 page sections. */
+  .docsItem {
+    position: relative;
+    padding-left: clamp(1rem, 1.8vw, 1.75rem);
+  }
+  .docsItem::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    translate: 0 -50%;
+    width: 1px;
+    height: 1rem;
+    background: var(--color-border-strong);
+  }
+
+  /* Namada-inspired full-width mega-dropdown anchored cleanly under the floating bar. */
+  .panel {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    left: 0;
+    right: 0;
+    padding: var(--space-6) var(--space-6) var(--space-4);
+    background:
+      linear-gradient(90deg, transparent 8%, var(--color-accent-tint) 50%, transparent 92%) top / 100% 1px no-repeat,
+      var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--nav-radius);
+  }
+  /* Invisible hover bridge between the nav bar and panel so diagonal cursor moves never drop hover. */
+  .panel::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(-1 * var(--space-3));
+    height: var(--space-3);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .dropdown[open] .panel {
+      animation: panel-in var(--dur-base) var(--ease-out);
+    }
+  }
+
+  .panelHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: 0 var(--space-3) var(--space-4);
+    margin-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .panelHead > div { display: flex; align-items: baseline; gap: var(--space-3); }
+  .panelTitle {
+    margin: 0;
+    font: var(--weight-display) var(--text-title)/1.1 var(--font-display);
+    letter-spacing: var(--tracking-display-md);
+    color: var(--color-text);
+  }
+  .panelSub {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+  .overview {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding-inline: var(--space-2);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--motion-hover);
+  }
+  .overview :global(.icon) { transition: transform var(--motion-ui); }
+
+  /* Namada-style gapped architectural 2x2 hairline grid. */
+  .grid {
+    position: relative;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+  .grid::before {
+    content: "";
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    top: 50%;
+    height: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+  }
+  .grid::after {
+    content: "";
+    position: absolute;
+    top: var(--space-3);
+    bottom: var(--space-3);
+    left: 50%;
+    width: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+  }
+
+  .engine {
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-6);
+    margin: var(--space-2);
+    min-height: 5.5rem;
+  }
+  /* Hevium 2px left mint rule on hover/active (per DESIGN.md). */
+  .engine::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: var(--space-4);
+    bottom: var(--space-4);
+    width: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    transform: scaleY(0);
+    opacity: 0;
+    transition: transform var(--motion-ui), opacity var(--motion-hover);
+  }
+  .engine[data-active="true"]::before { transform: scaleY(1); opacity: 1; }
+  .engineName { font-size: 1.125rem; }
+  .engineDesc { font-size: var(--text-small); max-width: 40ch; }
+
   .nav .menu { display: none; }
 }
+
+@keyframes panel-in {
+  from { opacity: 0; translate: 0 calc(-1 * var(--space-2)); scale: 0.99; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .links a:not(:global(.btn)):hover { color: var(--nav-link-hover); }
-  .links:popover-open a:not(:global(.btn)):hover { background: var(--color-surface-hover); }
+  .link:hover,
+  .trigger:hover { color: var(--nav-link-hover); }
+  .link[data-external="true"]:hover .extArrow { color: var(--color-accent-text); transform: translate(1px, -1px); }
+
+  /* Namada-inspired matrix squeeze on hover */
+  .nav .menu:hover { border-color: var(--color-accent-tint-strong); }
+  .nav .menu:hover .matrix { gap: 1.5px; }
+  .nav .menu:hover .matrix i { width: 4.5px; height: 4.5px; background: var(--color-accent); border-radius: 1.5px; }
+
+  .links:popover-open .link:hover,
+  .links:popover-open .trigger:hover { background: var(--color-surface-hover); color: var(--color-text); }
+  .links:popover-open .engine:hover { border-color: var(--color-accent-tint-strong); background: var(--color-surface-raised); }
+  .links:popover-open .engine:hover .engineName { color: var(--color-accent-text); }
+
+  @media (min-width: 64rem) {
+    .overview:hover { color: var(--color-accent-text); }
+    .overview:hover :global(.icon) { transform: translateX(3px); }
+    .engine:hover { background: color-mix(in srgb, var(--color-surface) 85%, transparent); }
+    .engine:hover::before { transform: scaleY(1); opacity: 1; }
+    .engine:hover .engineName { color: var(--color-accent-text); }
+  }
 }

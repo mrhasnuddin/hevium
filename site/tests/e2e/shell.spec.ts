@@ -94,18 +94,36 @@ test.describe('nav bar and hero', () => {
     for (const link of await links.all()) expect(await link.getAttribute('href')).not.toMatch(/ref=|script/i);
   });
 
-  test('lists the six nav links, and opens Docs in a new tab', async ({ page }) => {
+  test('lists the rearranged nav items, expands Solution into its four engines as plain links, and opens Docs in a new tab', async ({ page, hasTouch }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/');
-    await expect(page.locator('nav ul a:not(.btn)')).toHaveText(['Stocks', 'Launch', 'Agents', 'Earn', 'FAQ', 'Docs']);
-    const docs = page.locator('nav ul a', { hasText: 'Docs' });
+    await expect(page.locator('nav ul [data-nav-item]')).toHaveText(['Problem', 'Solution', 'Chains', 'Trust', 'FAQ', 'Docs']);
+    const docs = page.locator('nav ul a[data-nav-item]', { hasText: 'Docs' });
     await expect(docs).toHaveAttribute('target', '_blank');
     await expect(docs).toHaveAttribute('rel', /noopener/);
+
+    // Solution opens a mega-dropdown with the four engines: a name and a line each, and no picture
+    const solution = page.locator('nav ul summary[data-nav-item]');
+    if (hasTouch) await solution.click();
+    else await solution.hover();
+    const panel = page.locator('nav [data-solution-menu]');
+    await expect(panel).toBeVisible();
+    const engines = panel.locator('[data-engine]');
+    await expect(engines).toHaveCount(4);
+    await expect(engines.locator('span:first-child')).toHaveText(['Stocks', 'Launch', 'Agents', 'Earn']);
+    await expect(engines.locator('svg, img, canvas')).toHaveCount(0);
+    for (const engine of await engines.all()) await expect(engine.locator('span')).toHaveCount(2);
+
+    // Choosing an engine shuts the dropdown and navigates there
+    await engines.nth(2).click();
+    await expect(panel).toBeHidden();
+    await expect(page).toHaveURL(/#agents$/);
   });
 
   test('shows the nav links from 1024px up, and gives each target 44px to press', async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 800 });
     await page.goto('/');
-    for (const target of await page.locator('nav > a:first-child, nav ul a:not(.btn)').all()) {
+    for (const target of await page.locator('nav > a:first-child, nav ul [data-nav-item]').all()) {
       await expect(target).toBeVisible();
       expect((await target.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     }
@@ -141,7 +159,7 @@ test.describe('nav bar and hero', () => {
     }
   });
 
-  test('folds the links into a menu below 1024px', async ({ page }) => {
+  test('folds the links into a menu below 1024px, with Solution expanding inline', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await page.goto('/');
     const menu = page.locator('nav').getByRole('button', { name: 'Menu' });
@@ -153,16 +171,23 @@ test.describe('nav bar and hero', () => {
     await expect(page.locator('nav').getByRole('link', { name: 'Launch app' })).toHaveCount(0); // not in the bar
 
     await menu.click();
-    await expect(page.locator('nav ul a:not(.btn)')).toHaveText(['Stocks', 'Launch', 'Agents', 'Earn', 'FAQ', 'Docs']);
-    for (const link of await page.locator('nav ul a').all()) {
-      await expect(link).toBeVisible();
-      expect(Math.round((await link.boundingBox())!.height)).toBeGreaterThanOrEqual(44); // rounded: the panel is still easing in, a hair off the pixel
+    await expect(page.locator('nav ul [data-nav-item]')).toHaveText(['Problem', 'Solution', 'Chains', 'Trust', 'FAQ', 'Docs']);
+    for (const item of await page.locator('nav ul [data-nav-item]').all()) {
+      await expect(item).toBeVisible();
+      expect(Math.round((await item.boundingBox())!.height)).toBeGreaterThanOrEqual(44);
     }
+
+    // Expanding Solution reveals the four engines inline, as plain links
+    await page.locator('nav ul summary[data-nav-item]').click();
+    await expect(page.locator('nav [data-solution-menu] [data-engine]')).toHaveCount(4);
+    await expect(page.locator('nav [data-solution-menu] [data-engine] svg')).toHaveCount(0);
+    await page.locator('nav ul summary[data-nav-item]').click();
+
     // Launch app is the menu's last row: the primary button, as wide as the links, tagged as the nav's
     const launch = page.locator('nav ul').getByRole('link', { name: 'Launch app' });
     await expect(launch).toHaveClass(/\bbtn-primary\b/);
     await expect(launch).toHaveAttribute('href', /utm_content=nav/);
-    const [button, row, last] = [(await launch.boundingBox())!, (await page.locator('nav ul a:not(.btn)').first().boundingBox())!, (await page.locator('nav ul a:not(.btn)').last().boundingBox())!];
+    const [button, row, last] = [(await launch.boundingBox())!, (await page.locator('nav ul [data-nav-item]').first().boundingBox())!, (await page.locator('nav ul [data-nav-item]').last().boundingBox())!];
     expect(button.x).toBeCloseTo(row.x, 0);
     expect(button.width).toBeCloseTo(row.width, 0);
     expect(button.y).toBeGreaterThanOrEqual(last.y + last.height);
@@ -182,7 +207,7 @@ test.describe('nav bar and hero', () => {
     // choosing a link shuts the menu and goes there (this part needs the page's script, so it may take a second try)
     await expect(async () => {
       if (await links.isHidden()) await menu.click();
-      await page.locator('nav ul a', { hasText: 'FAQ' }).click();
+      await page.locator('nav ul a[data-nav-item]', { hasText: 'FAQ' }).click();
       await expect(links).toBeHidden({ timeout: 1000 });
     }).toPass();
     await expect(page).toHaveURL(/#faq$/);
@@ -197,7 +222,7 @@ test.describe('nav bar and hero', () => {
       await page.setViewportSize({ width: 1024, height: 800 });
       await expect(menu).toBeHidden();
       // back in the bar, in a row between the logo and the button
-      const tops = await page.locator('nav ul a:not(.btn)').evaluateAll((links) => links.map((link) => Math.round(link.getBoundingClientRect().top)));
+      const tops = await page.locator('nav ul [data-nav-item]').evaluateAll((items) => items.map((item) => Math.round(item.getBoundingClientRect().top)));
       expect(new Set(tops).size).toBe(1);
       const [bar, list] = [(await page.locator('nav').boundingBox())!, (await page.locator('nav ul').boundingBox())!];
       expect(list.y).toBeGreaterThanOrEqual(bar.y);
@@ -206,13 +231,15 @@ test.describe('nav bar and hero', () => {
     }).toPass();
   });
 
-  test('opens the menu with no script', async ({ browser, baseURL }) => {
+  test('opens the menu and Solution accordion with no script', async ({ browser, baseURL }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, baseURL, viewport: { width: 390, height: 800 } });
     const page = await context.newPage();
     await page.goto('/');
     await page.locator('nav').getByRole('button', { name: 'Menu' }).click();
-    await expect(page.locator('nav ul a:not(.btn)')).toHaveCount(6);
-    await expect(page.locator('nav ul a').first()).toBeVisible();
+    await expect(page.locator('nav ul [data-nav-item]')).toHaveCount(6);
+    await expect(page.locator('nav ul [data-nav-item]').first()).toBeVisible();
+    await page.locator('nav ul summary[data-nav-item]').click();
+    await expect(page.locator('nav [data-solution-menu] [data-engine]')).toHaveCount(4);
     await expect(page.locator('nav ul').getByRole('link', { name: 'Launch app' })).toBeVisible();
     await context.close();
   });

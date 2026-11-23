@@ -199,9 +199,11 @@ test('the faq asks six to eight questions and carries what the rest of the page 
   for (const fact of ['graduates by itself', 'Curve sells', '0.50%', 'all five chains', 'can lose all of their value', 'not financial advice']) expect(said, fact).toContain(fact);
 });
 
-test('the solution names the four sections that follow it, by the names the nav bar and their eyebrows use', () => {
+test('the solution names the four sections that follow it, inside the Solution nav menu and their eyebrows', () => {
   expect(sections.ENGINES.map((engine) => engine.href)).toEqual(['#stocks', '#launch', '#agents', '#earn']);
-  expect(sections.ENGINES).toEqual(sections.NAV.slice(0, 4));
+  const solutionNav = sections.NAV.find((item) => item.href === '#solution');
+  expect(solutionNav?.children).toEqual(sections.ENGINES);
+  expect(sections.NAV.map((item) => item.label)).toEqual(['Problem', 'Solution', 'Chains', 'Trust', 'FAQ', 'Docs']);
   const eyebrows = [sections.SECTIONS.stocks, sections.SECTIONS.launch, sections.SECTIONS.agents, sections.SECTIONS.earn].map((s) => s.eyebrow);
   expect(sections.ENGINES.map((engine) => engine.label)).toEqual(eyebrows);
   expect(sections.SECTIONS.solution.title).toBe('One terminal. Four engines.');

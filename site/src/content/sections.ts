@@ -2,18 +2,27 @@
 // `highlight` is the one phrase of the headline set in the accent colour, so it must appear in `title`.
 export type SectionCopy = { eyebrow?: string; title: string; highlight: string; lead?: string };
 
-// The nav bar's links, in page order. Docs is the only one that leaves the page.
-export const NAV: { label: string; href: string; external?: true }[] = [
-  { label: 'Stocks', href: '#stocks' },
-  { label: 'Launch', href: '#launch' },
-  { label: 'Agents', href: '#agents' },
-  { label: 'Earn', href: '#earn' },
+export type EngineId = 'stocks' | 'launch' | 'agents' | 'earn';
+export type EngineLink = { id: EngineId; label: string; href: string; summary: string };
+export type NavItem = { label: string; href: string; external?: true; children?: readonly EngineLink[] };
+
+// The four engines the solution names, in page order, with a short line for the Solution menu.
+export const ENGINES: readonly EngineLink[] = [
+  { id: 'stocks', label: 'Stocks', href: '#stocks', summary: 'Tokens paired with stocks and digital dollars' },
+  { id: 'launch', label: 'Launch', href: '#launch', summary: 'Fixed supply, fair launch in 15 seconds' },
+  { id: 'agents', label: 'Agents', href: '#agents', summary: '24/7 AI orderflow over MCP with guardrails' },
+  { id: 'earn', label: 'Earn', href: '#earn', summary: 'Share your link and keep 20% of the fee' },
+];
+
+// The nav bar's links, in page order. Solution expands into the four engines; Docs leaves the page.
+export const NAV: readonly NavItem[] = [
+  { label: 'Problem', href: '#problem' },
+  { label: 'Solution', href: '#solution', children: ENGINES },
+  { label: 'Chains', href: '#chains' },
+  { label: 'Trust', href: '#trust' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Docs', href: 'https://docs.hevium.xyz/', external: true },
 ];
-
-// The four engines the solution names: the four sections that follow it, as the nav bar names them.
-export const ENGINES = NAV.slice(0, 4);
 
 // The hero is the headline and two buttons over the 3D scene, which needs the rest of the screen.
 export const HERO = {
