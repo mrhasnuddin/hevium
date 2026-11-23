@@ -1,0 +1,98 @@
+/* How the page's parts come in, once each, the first time they are scrolled to (components/Away.tsx marks them:
+   `data-enter` while a part is held back, `data-seen` once it has come up). Heads all come in one way. Each
+   section's piece comes in a way of its own. Only moves and fades, so nothing shifts the page. With scripts
+   off or reduced motion nothing is marked and everything stands in place. */
+
+[data-enter] { --enter: var(--dur-reveal) var(--ease-out); }
+
+/* A visit that is neither the first nor a refresh: no loader, the headline's rise alone. */
+html[data-entrance="rise"] [data-hero] h1 { animation: head-rise 0.6s var(--ease-out) both; }
+@keyframes head-rise { from { opacity: 0; translate: 0 1rem; } }
+
+/* Heads: eyebrow, headline, line, one after another. */
+.section-head[data-enter] > * { transition: opacity var(--enter), translate var(--enter); }
+.section-head[data-enter] > :nth-child(2) { transition-delay: 60ms; }
+.section-head[data-enter] > :nth-child(3) { transition-delay: 120ms; }
+.section-head[data-enter]:not([data-seen]) > * { opacity: 0; translate: 0 0.75rem; }
+
+/* The problem: the walls rise, a column after a column. (Each wall's object assembles from scattered stars:
+   that is the pixel canvas's own doing, see lib/pixelCanvas.ts.) */
+#problem[data-enter] .card { transition: opacity var(--enter), translate var(--enter); }
+#problem[data-enter] > div > :nth-child(2) .card { transition-delay: 90ms; }
+#problem[data-enter] > div > .card:nth-child(3) { transition-delay: 180ms; }
+#problem[data-enter]:not([data-seen]) .card { opacity: 0; translate: 0 1.5rem; }
+
+/* The solution: the four pills left to right, the line reaching each as it arrives. */
+[data-tabs][data-enter] li { transition: opacity 0.4s ease, scale 0.4s var(--ease-out); }
+[data-tabs][data-enter] li::before { transform-origin: left; transition: scale 0.4s var(--ease-out); }
+[data-tabs][data-enter] li:nth-child(2), [data-tabs][data-enter] li:nth-child(2)::before { transition-delay: 100ms; }
+[data-tabs][data-enter] li:nth-child(3), [data-tabs][data-enter] li:nth-child(3)::before { transition-delay: 200ms; }
+[data-tabs][data-enter] li:nth-child(4), [data-tabs][data-enter] li:nth-child(4)::before { transition-delay: 300ms; }
+[data-tabs][data-enter]:not([data-seen]) li { opacity: 0; scale: 0.9; }
+[data-tabs][data-enter]:not([data-seen]) li::before { scale: 0 1; }
+
+/* Stocks: the tickers close in from both sides to their places on the ring. */
+[data-ring][data-enter] { transition: opacity var(--enter), scale 0.9s var(--ease-out); }
+[data-ring][data-enter]:not([data-seen]) { opacity: 0; scale: 1.25; }
+
+/* Launch: the press assembles in stars, then its three shares come up under it. */
+#launch figure[data-enter] dl > div { transition: opacity var(--enter), translate var(--enter); transition-delay: 300ms; }
+#launch figure[data-enter] dl > div:nth-child(2) { transition-delay: 380ms; }
+#launch figure[data-enter] dl > div:nth-child(3) { transition-delay: 460ms; }
+#launch figure[data-enter]:not([data-seen]) dl > div { opacity: 0; translate: 0 0.75rem; }
+
+/* Agents: the clients pop in turn, the prompt card rises, the chart comes in from its side. */
+[data-session][data-enter] [data-clients] > li { transition: opacity 0.4s ease, scale 0.4s var(--ease-out); }
+[data-session][data-enter] [data-clients] > li:nth-child(2) { transition-delay: 70ms; }
+[data-session][data-enter] [data-clients] > li:nth-child(3) { transition-delay: 140ms; }
+[data-session][data-enter] [data-clients] > li:nth-child(4) { transition-delay: 210ms; }
+[data-session][data-enter] [data-prompt] .card { transition: opacity var(--enter), translate var(--enter); transition-delay: 250ms; }
+[data-session][data-enter] figure { transition: opacity var(--enter), translate var(--enter); transition-delay: 350ms; }
+[data-session][data-enter]:not([data-seen]) [data-clients] > li { opacity: 0; scale: 0.6; }
+[data-session][data-enter]:not([data-seen]) [data-prompt] .card { opacity: 0; translate: 0 1rem; }
+[data-session][data-enter]:not([data-seen]) figure { opacity: 0; translate: 1.5rem 0; }
+
+/* Earn: the cards are dealt. They start as one stack and fan out to their places, by the cards' own transition. */
+[data-cards][data-enter] { transition: opacity 0.4s ease; }
+[data-cards][data-enter]:not([data-seen]) { opacity: 0; }
+[data-cards][data-enter]:not([data-seen]) > li { transform: none; filter: none; }
+
+/* Five chains: the hub lands, the lanes run out from it, and each chain arrives as its lane does. */
+#chains figure[data-enter] [data-hub] { transition: opacity 0.5s ease, scale 0.6s var(--ease-out); }
+#chains figure[data-enter] > div[aria-hidden] { clip-path: inset(-30% -5% -30% 0); transition: clip-path 0.7s var(--ease-out) 0.15s; }
+#chains figure[data-enter] li { transition: opacity 0.5s ease, translate 0.5s var(--ease-out); transition-delay: 350ms; }
+#chains figure[data-enter] li:nth-child(2) { transition-delay: 420ms; }
+#chains figure[data-enter] li:nth-child(3) { transition-delay: 490ms; }
+#chains figure[data-enter] li:nth-child(4) { transition-delay: 560ms; }
+#chains figure[data-enter] li:nth-child(5) { transition-delay: 630ms; }
+#chains figure[data-enter]:not([data-seen]) [data-hub] { opacity: 0; scale: 0.6; }
+#chains figure[data-enter]:not([data-seen]) > div[aria-hidden] { clip-path: inset(-30% 100% -30% 0); }
+#chains figure[data-enter]:not([data-seen]) li { opacity: 0; translate: 0.75rem 0; }
+
+/* Trust: each cell of the bento rises as it is reached, the second of a row a step behind the first. */
+[data-bento] > li[data-enter] { transition: opacity var(--enter), translate var(--enter); }
+[data-bento] > li[data-enter]:nth-child(odd) { transition-delay: 80ms; }
+[data-bento] > li[data-enter]:not([data-seen]) { opacity: 0; translate: 0 1.5rem; }
+
+/* FAQ: its head as the others, and the questions in from the right, one after another. */
+#faq[data-enter] > :first-child > * { transition: opacity var(--enter), translate var(--enter); }
+#faq[data-enter] > :first-child > :nth-child(2) { transition-delay: 60ms; }
+#faq[data-enter]:not([data-seen]) > :first-child > * { opacity: 0; translate: 0 0.75rem; }
+#faq[data-enter] details { transition: opacity 0.5s ease, translate 0.5s var(--ease-out); }
+#faq[data-enter] details:nth-of-type(2) { transition-delay: 50ms; }
+#faq[data-enter] details:nth-of-type(3) { transition-delay: 100ms; }
+#faq[data-enter] details:nth-of-type(4) { transition-delay: 150ms; }
+#faq[data-enter] details:nth-of-type(5) { transition-delay: 200ms; }
+#faq[data-enter] details:nth-of-type(6) { transition-delay: 250ms; }
+#faq[data-enter] details:nth-of-type(7) { transition-delay: 300ms; }
+#faq[data-enter] details:nth-of-type(8) { transition-delay: 350ms; }
+#faq[data-enter]:not([data-seen]) details { opacity: 0; translate: 1.25rem 0; }
+
+/* Final: the mark draws itself, the button follows, and the coins drift in from the two sides. */
+#final[data-enter] [data-mark] { clip-path: inset(0 0 0 0); transition: clip-path 0.7s var(--ease-out) 0.1s; }
+#final[data-enter] [data-actions] { transition: opacity var(--enter); transition-delay: 300ms; }
+#final[data-enter] [data-coins] { transition: opacity 0.9s ease, translate 0.9s var(--ease-out); }
+#final[data-enter]:not([data-seen]) [data-mark] { clip-path: inset(0 100% 0 0); }
+#final[data-enter]:not([data-seen]) [data-actions] { opacity: 0; }
+#final[data-enter]:not([data-seen]) [data-coins] { opacity: 0; translate: -3rem 0; }
+#final[data-enter]:not([data-seen]) [data-coins] ~ [data-coins] { translate: 3rem 0; }

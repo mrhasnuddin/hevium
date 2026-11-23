@@ -17,6 +17,7 @@ type Frame = {
   reach: number; // how far the pointer's pull carries, CSS px
   pull: number; // how far it moves a star at most, CSS px
   phases?: Float32Array; // each cell's place in the shimmer, worked out once for the grid (see `phases`)
+  spread?: number; // 0 the picture, 1 its stars thrown apart and gone: the loader's hand-off, and an object assembling
 };
 
 const LEAN = -0.3; // the shear that makes a star lean like the mark
@@ -37,6 +38,8 @@ export function phases(cols: number, rows: number) {
 export function paintPixels(ctx: CanvasRenderingContext2D, frame: Frame) {
   const { cols, rows, cell, ratio, picture, time, pointer, reach, pull } = frame;
   const phase = frame.phases?.length === cols * rows ? frame.phases : phases(cols, rows);
+  const spread = frame.spread ?? 0;
+  const [midX, midY, throwBy] = [(cols * cell) / 2, (rows * cell) / 2, Math.max(cols, rows) * cell * 0.5];
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   for (let y = 0; y < rows; y++) {
@@ -48,6 +51,11 @@ export function paintPixels(ctx: CanvasRenderingContext2D, frame: Frame) {
 
       let px = (x + 0.5) * cell;
       let py = (y + 0.5) * cell;
+      if (spread) {
+        // outward from the middle, each star by an amount of its own
+        px += ((px - midX) * 1.6 + (phase[y * cols + x] / 6.283 - 0.5) * throwBy) * spread;
+        py += ((py - midY) * 1.6 + (grain(y, x) - 0.5) * throwBy) * spread;
+      }
       let near = 0;
       // with no pointer near, which is all the time on a phone, there is nothing to work out
       if (pointer.pull) {
@@ -62,7 +70,7 @@ export function paintPixels(ctx: CanvasRenderingContext2D, frame: Frame) {
       // the star: four points with hollow sides
       const r = cell * (0.16 + 0.8 * value) * (1 + near * 0.35) * 0.66;
       const k = r * 0.18;
-      ctx.globalAlpha = Math.min(1, 0.22 + 0.78 * value + near * 0.3);
+      ctx.globalAlpha = Math.min(1, 0.22 + 0.78 * value + near * 0.3) * Math.max(0, 1 - spread);
       ctx.setTransform(ratio, 0, LEAN * ratio, ratio, px * ratio, py * ratio);
       ctx.beginPath();
       ctx.moveTo(0, -r);

@@ -29,6 +29,7 @@ export function HeroScene() {
     const ready = () => {
       if (said || gone) return; // a mount that was thrown away, as React does once in development, says nothing
       said = true;
+      document.documentElement.dataset.scene = 'ready'; // for a listener that starts after this has been said
       document.dispatchEvent(new CustomEvent('hevium:scene-ready'));
     };
 
@@ -49,30 +50,48 @@ export function HeroScene() {
       // a software renderer would hold the page up for seconds at a time, so it counts as no WebGL
       document.createElement('canvas').getContext('webgl2', { failIfMajorPerformanceCaveat: true }) !== null;
     let late: ReturnType<typeof setTimeout> | undefined;
+    let rafId = 0;
+    let idleId = 0;
+    let timerId: ReturnType<typeof setTimeout> | undefined;
     if (!able) queueMicrotask(ready); // not at once: a mount that is about to be thrown away must not speak
     else {
       late = setTimeout(ready, 2500);
-      const mine = turn.then(async () => {
+      const startMount = () => {
         if (gone) return;
-        const { mountHeroScene } = await import('@/hero');
-        if (gone) return;
-        const mounted = await mountHeroScene(surface, { reducedMotion: false, onProgress() {} });
-        if (gone) return mounted.dispose();
-        handle = mounted;
-        box.classList.add('is-live');
-      });
-      // a download or a mount that fails leaves the poster, and the next mount still gets its turn
-      turn = mine
-        .catch(() => {})
-        .finally(() => {
-          clearTimeout(late);
-          ready();
+        const mine = turn.then(async () => {
+          if (gone) return;
+          const { mountHeroScene } = await import('@/hero');
+          if (gone) return;
+          const mounted = await mountHeroScene(surface, { reducedMotion: false, onProgress: (fraction) => document.dispatchEvent(new CustomEvent('hevium:scene-progress', { detail: fraction })) });
+          if (gone) return mounted.dispose();
+          handle = mounted;
+          box.classList.add('is-live');
         });
+        // a download or a mount that fails leaves the poster, and the next mount still gets its turn
+        turn = mine
+          .catch(() => {})
+          .finally(() => {
+            clearTimeout(late);
+            ready();
+          });
+      };
+      // Yield past first paint so the SVG poster and headline render before downloading Three.js + Rapier.
+      rafId = requestAnimationFrame(() => {
+        if (gone) return;
+        if ('requestIdleCallback' in window) {
+          idleId = window.requestIdleCallback(startMount, { timeout: 300 });
+        } else {
+          timerId = setTimeout(startMount, 0);
+        }
+      });
     }
 
     return () => {
       gone = true;
       off.abort();
+      if (rafId) cancelAnimationFrame(rafId);
+      if (idleId && 'cancelIdleCallback' in window) window.cancelIdleCallback(idleId);
+      clearTimeout(timerId);
       clearTimeout(late);
       handle?.dispose();
     };

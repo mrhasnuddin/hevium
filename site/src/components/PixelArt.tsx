@@ -26,6 +26,7 @@ export function PixelArt({ scene, fallback, cell = 7, className = '' }: { scene:
       reach: 70,
       pull: 6,
       stillAt: STILL_AT,
+      arrive: true,
       picture(cols, rows, time) {
         if (sketch.width !== cols || sketch.height !== rows) {
           sketch.width = cols;
@@ -67,6 +68,7 @@ export function PixelField({ className = '' }: { className?: string }) {
       reach: 90,
       pull: 7,
       stillAt: STILL_AT,
+      maxDpr: 1,
       watch: canvas.closest('section') ?? canvas,
       picture(cols, rows, time) {
         if (picture.length !== cols * rows * 4) {
@@ -211,7 +213,7 @@ export function PixelWordmark({ src, className = '' }: { src: string; className?
   return (
     <span ref={host} className={`${styles.wordmark} ${className}`.trim()} data-pixels="" data-wordmark-pixels="">
       {/* eslint-disable-next-line @next/next/no-img-element -- static export uses plain <img> as no-JS fallback and raster mask */}
-      <img ref={imgRef} src={src} alt="" width={360} height={110} decoding="async" />
+      <img ref={imgRef} src={src} alt="" width={360} height={110} loading="lazy" decoding="async" />
       <canvas aria-hidden="true" />
     </span>
   );

@@ -1,0 +1,12 @@
+/* The opening's cover. It is in the page as built and drawn only when the script in the head has asked for it,
+   so with no script there is no cover. Four seconds on, CSS lifts it by itself, whatever the page's script does. */
+.cover { display: none; }
+:global(html[data-entrance="load"]) .cover { position: fixed; inset: 0; z-index: var(--z-loader); display: block; animation: lift 0.4s 4s forwards; }
+@keyframes lift { to { opacity: 0; visibility: hidden; } }
+
+.cover { --mark: clamp(11rem, 26vw, 17rem); } /* the mark's picture, with the air it carries round the drawing */
+.ground { position: absolute; inset: 0; background: var(--color-bg); }
+.pixels { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--pixel-ink); }
+/* the mark itself, unseen until the hand-off, standing exactly where its stars are drawn */
+.mark { position: absolute; top: 50%; left: 50%; width: var(--mark); height: var(--mark); translate: -50% -50%; opacity: 0; }
+.percent { position: absolute; inset: calc(50% + var(--mark) * 0.3) 0 auto; text-align: center; font: var(--weight-medium) var(--text-small)/1 var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--color-accent-text); }

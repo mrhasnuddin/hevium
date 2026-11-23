@@ -1,4 +1,5 @@
 import { Away } from '@/components/Away';
+import { Entrance } from '@/components/Entrance';
 import { Footer } from '@/components/Footer';
 import { Nav } from '@/components/Nav';
 import { Agents } from '@/components/sections/Agents';
@@ -12,10 +13,12 @@ import { Stocks } from '@/components/sections/Stocks';
 import { Trust } from '@/components/sections/Trust';
 import { WhatIs } from '@/components/sections/WhatIs';
 import { SECTIONS } from '@/content/sections';
+import { STRUCTURED } from '@/lib/seo';
 
 export default function Home() {
   return (
     <>
+      <Entrance />
       <Nav />
       <main>
         <Hero />
@@ -32,6 +35,8 @@ export default function Home() {
       </main>
       <Footer />
       <Away />
+      {/* who Hevium is and the questions it answers, for search and answer engines (lib/seo.ts) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED).replace(/</g, '\\u003c') }} />
     </>
   );
 }

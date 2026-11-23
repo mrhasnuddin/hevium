@@ -1,13 +1,14 @@
 import { test as base, expect } from '@playwright/test';
 
-// The entrance loader shows once per session. Marking the session as loaded lets specs skip it.
+// The opening (loader, hand-off, reveal) and the sections' entrances are switched off for the specs, so they
+// measure the page where it stands; entrance.spec.ts runs with them on.
 // This one keeps WebGL, for the specs that are about the live hero scene.
 export const liveTest = base.extend({
   // Named `run`, not Playwright's usual `use`, which the React lint rule mistakes for the `use` hook.
   page: async ({ page }, run) => {
     await page.addInitScript(() => {
       try {
-        sessionStorage.setItem('hevium:loaded', '1');
+        sessionStorage.setItem('hevium:loaded', 'off');
       } catch {}
     });
     await run(page);
