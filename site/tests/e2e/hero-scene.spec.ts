@@ -55,8 +55,7 @@ test.describe('hero scene slot', () => {
     expect(errors).toEqual([]);
   });
 
-  liveTest('where the browser can only draw slowly, keeps the poster and never downloads the scene', async ({ page, viewport }) => {
-    liveTest.skip(viewport!.width < 768, 'phones get the poster whatever draws it');
+  liveTest('where the browser can only draw slowly, keeps the poster and never downloads the scene', async ({ page }) => {
     // What a browser without a GPU answers when asked to refuse a slow renderer. The test browser is
     // started with its software renderer allowed, and so says yes to everything.
     await page.addInitScript(() => {
@@ -73,19 +72,6 @@ test.describe('hero scene slot', () => {
     await expect(art(page)).not.toHaveClass(/is-live/);
     expect(bodies.filter((body) => body.includes(SCENE))).toEqual([]);
     expect(await ready(page)).toBe(1);
-  });
-
-  liveTest('on a phone never downloads the scene', async ({ page, viewport }) => {
-    liveTest.skip(viewport!.width >= 768, 'desktops get the scene');
-    const bodies = scripts(page);
-    await countReady(page);
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    await expect.poll(() => ready(page)).toBe(1);
-    expect(bodies.length).toBeGreaterThan(0);
-    expect(bodies.filter((body) => body.includes(SCENE))).toEqual([]);
-    await expect(art(page).locator('img')).toBeVisible();
-    await expect(art(page)).not.toHaveClass(/is-live/);
   });
 });
 
@@ -181,5 +167,27 @@ liveTest.describe('live hero scene', { tag: '@gpu' }, () => {
     await expect(art(page)).toHaveClass(/is-live/, { timeout: 30_000 });
     await page.waitForTimeout(500);
     expect(await ready(page)).toBe(1);
+  });
+
+  liveTest('renders on mobile with dragging locked below 768px and unlocked at 768px+', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/');
+    await expect(art(page)).toHaveClass(/is-live/, { timeout: 30_000 });
+    await expect(canvas(page)).toHaveAttribute('data-drag-locked', 'true');
+
+    // Attempt mouse drag across lower half logos: cursor must never switch to grab/grabbing while locked.
+    for (const x of [90, 140, 180, 220, 270]) {
+      await page.mouse.move(x, 660);
+      expect(await canvas(page).evaluate((el) => (el as HTMLCanvasElement).style.cursor)).toBe('');
+    }
+    await page.mouse.move(140, 660);
+    await page.mouse.down();
+    await page.mouse.move(210, 620, { steps: 5 });
+    expect(await canvas(page).evaluate((el) => (el as HTMLCanvasElement).style.cursor)).toBe('');
+    await page.mouse.up();
+
+    // Crossing the 768px breakpoint unlocks dragging reactively without reload.
+    await page.setViewportSize({ width: 768, height: 900 });
+    await expect(canvas(page)).toHaveAttribute('data-drag-locked', 'false');
   });
 });

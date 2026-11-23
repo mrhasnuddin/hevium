@@ -17,4 +17,7 @@
   transform: translate(-50%, 50%); transition: opacity var(--motion-reveal);
   pointer-events: none; /* once the scene is live the poster is unseen, and the cube under it takes the pointer */
 }
+@media (max-width: 47.999rem) {
+  .poster { bottom: calc(24svh + min(38.7cqw, 24svh)); width: max(14cqw, 4.75rem); }
+}
 .art:global(.is-live) .poster { opacity: 0; }

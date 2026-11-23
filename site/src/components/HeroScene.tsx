@@ -9,9 +9,13 @@ import styles from './HeroScene.module.css';
 // two scenes starting on one canvas would trip over each other, so each mount waits its turn.
 let turn: Promise<unknown> = Promise.resolve();
 
+/** Viewport width (px) below which 3D logo dragging is locked so mobile scrolling stays undisturbed. */
+export const HERO_DRAG_BREAKPOINT = 768;
+
 /**
- * The hero's art: a poster, and over it the 3D scene wherever a device can run it. The scene is
- * downloaded only at 768px and wider, with reduced motion off and WebGL2 on a GPU on offer.
+ * The hero's art: a poster, and over it the 3D scene wherever a device has WebGL2 on a GPU and
+ * reduced motion off. Below `HERO_DRAG_BREAKPOINT` (768px), the 3D assets render with dragging
+ * locked so touch/mobile scrolling is never interrupted.
  *
  * Whatever happens, `hevium:scene-ready` goes out exactly once, so the loader never waits in vain:
  * at once when there will be no scene, when the scene is up, when it fails, or after 2500ms.
@@ -45,7 +49,6 @@ export function HeroScene() {
     listen('focusout', launch(false));
 
     const able =
-      matchMedia('(min-width: 768px)').matches &&
       !matchMedia('(prefers-reduced-motion: reduce)').matches &&
       // a software renderer would hold the page up for seconds at a time, so it counts as no WebGL
       document.createElement('canvas').getContext('webgl2', { failIfMajorPerformanceCaveat: true }) !== null;
@@ -62,7 +65,11 @@ export function HeroScene() {
           if (gone) return;
           const { mountHeroScene } = await import('@/hero');
           if (gone) return;
-          const mounted = await mountHeroScene(surface, { reducedMotion: false, onProgress: (fraction) => document.dispatchEvent(new CustomEvent('hevium:scene-progress', { detail: fraction })) });
+          const mounted = await mountHeroScene(surface, {
+            reducedMotion: false,
+            dragMinWidth: HERO_DRAG_BREAKPOINT,
+            onProgress: (fraction) => document.dispatchEvent(new CustomEvent('hevium:scene-progress', { detail: fraction })),
+          });
           if (gone) return mounted.dispose();
           handle = mounted;
           box.classList.add('is-live');

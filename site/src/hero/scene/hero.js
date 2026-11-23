@@ -13,6 +13,8 @@ import { LOGOS, MARK } from './logos.js';
 
 const VIEW_WIDTH = 13; // world units visible across the canvas at the pile
 const FLOOR_FROM_BOTTOM = 1.4; // world units between the fold and the line the pile stands on
+const MOBILE_VIEW_WIDTH = 8.4; // closer mobile framing so cube and inner pile read clearly
+const MOBILE_FLOOR_FROM_BOTTOM = 2.4;
 const CUBE = 1.7;
 const LOGO_SIZE = 1.4;
 const CORRIDOR = 0.36; // logos live between invisible walls at z = ±CORRIDOR, so they stay upright
@@ -20,6 +22,7 @@ const STEP = 1 / 60;
 // The most pixels the scene will draw. Past this the multisampled buffers outgrow a laptop GPU's
 // memory: at 3840 x 2678 an RTX 3060 fell from 6ms a frame to 130ms. 6 million is 1.5x at 1920 wide.
 const MAX_PIXELS = 6e6;
+const MOBILE_MAX_PIXELS = 1.5e6;
 // The cube's front face sits level with the front of the corridor. Any further forward and it would
 // cover the logos beside it, and three's glass does not show other glass through it.
 const CUBE_Z = CORRIDOR - CUBE / 2;
@@ -47,19 +50,21 @@ const rad = THREE.MathUtils.degToRad;
  * the extra height is floor running on below the fold.
  *
  * @param {HTMLCanvasElement} canvas
- * @param {{ reducedMotion?: boolean, onProgress?: (fraction: number) => void }} [options]
+ * @param {{ reducedMotion?: boolean, dragMinWidth?: number, onProgress?: (fraction: number) => void }} [options]
  */
-export async function mountHeroScene(canvas, { reducedMotion = false, onProgress = () => {} } = {}) {
+export async function mountHeroScene(canvas, { reducedMotion = false, dragMinWidth = 768, onProgress = () => {} } = {}) {
   const STEPS = LOGOS.length + 3; // the physics engine, the mark and the floor's font, then each logo
   let loaded = 0;
   const done = (value) => (onProgress(++loaded / STEPS), value); // one step finished
   done(await RAPIER.init());
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  // Draw at 1.5x at least: on an ordinary 1x screen that is what keeps the thin bright rims smooth.
+  // Draw at 1.5x at least on desktop: on an ordinary 1x screen that is what keeps the thin bright rims smooth.
   // Measured free on an RTX 3060 at 1920 wide. Slower machines fall back to 1, see the frame loop,
-  // and resize keeps the total under MAX_PIXELS.
-  let sharpness = THREE.MathUtils.clamp(devicePixelRatio, 1.5, 2);
+  // and resize keeps the total under MAX_PIXELS (or MOBILE_MAX_PIXELS below dragMinWidth).
+  let sharpness = window.innerWidth < dragMinWidth
+    ? Math.min(devicePixelRatio, 1.5)
+    : THREE.MathUtils.clamp(devicePixelRatio, 1.5, 2);
   renderer.toneMapping = THREE.NeutralToneMapping; // keeps the brand mint from washing out to white
   canvas.style.touchAction = 'pan-y'; // touch scrolls the page; dragging is for mouse and pen
   renderer.setClearColor(0x000000, 0); // what a view with no backdrop clears to; the floor's mirror image is one
@@ -193,9 +198,23 @@ export async function mountHeroScene(canvas, { reducedMotion = false, onProgress
   };
   const listening = new AbortController(); // dispose() ends every listener at once
   const listen = (type, handler) => canvas.addEventListener(type, handler, { signal: listening.signal });
+  const dragQuery = matchMedia(`(min-width: ${dragMinWidth}px)`);
+  let dragLocked = !dragQuery.matches;
+  const syncDragLock = () => {
+    dragLocked = !dragQuery.matches;
+    canvas.dataset.dragLocked = dragLocked ? 'true' : 'false';
+    if (dragLocked) {
+      drag = null;
+      hovered = null;
+      canvas.style.cursor = '';
+    }
+  };
+  syncDragLock();
+  dragQuery.addEventListener('change', syncDragLock, { signal: listening.signal });
+
   const hover = (e) => { // what the pointer is on: a logo, the cube, or neither
     const hit = pick(e);
-    hovered = hit && e.pointerType !== 'touch' ? logos[meshes.indexOf(hit.object)] : null;
+    hovered = !dragLocked && hit && e.pointerType !== 'touch' ? logos[meshes.indexOf(hit.object)] : null;
     overCube = !hit && ray.intersectObject(glass, false).length > 0;
     canvas.style.cursor = hovered ? 'grab' : '';
   };
@@ -209,6 +228,7 @@ export async function mountHeroScene(canvas, { reducedMotion = false, onProgress
     overCube = false;
   });
   listen('pointerdown', (e) => {
+    if (dragLocked) return;
     const hit = e.button === 0 && e.pointerType !== 'touch' && pick(e);
     if (!hit) return;
     drag = {
@@ -351,19 +371,25 @@ export async function mountHeroScene(canvas, { reducedMotion = false, onProgress
   const resize = () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
-    renderer.setPixelRatio(Math.min(sharpness, Math.sqrt(MAX_PIXELS / (w * h))));
+    const mobile = w < dragMinWidth;
+    const maxPixels = mobile ? MOBILE_MAX_PIXELS : MAX_PIXELS;
+    const viewWidth = mobile ? MOBILE_VIEW_WIDTH : VIEW_WIDTH;
+    const floorFromBottom = mobile ? MOBILE_FLOOR_FROM_BOTTOM : FLOOR_FROM_BOTTOM;
+    renderer.setPixelRatio(Math.min(sharpness, Math.sqrt(maxPixels / (w * h))));
     renderer.setSize(w, h, false); // the page sizes the canvas; only its drawing buffer changes here
     composer.setPixelRatio(renderer.getPixelRatio());
     composer.setSize(w, h);
     smooth.material.uniforms.resolution.value.set(1 / (w * renderer.getPixelRatio()), 1 / (h * renderer.getPixelRatio()));
     redraw = true;
     camera.aspect = w / h;
-    // Fit VIEW_WIDTH across the canvas and put the floor line FLOOR_FROM_BOTTOM above the fold. The
+    // Fit viewWidth across the canvas and put the floor line floorFromBottom above the fold. The
     // fold is the bottom of the box the art box is positioned in; any canvas below it shows more floor.
     const art = canvas.parentElement;
     const fold = Math.min(h, (art.offsetParent ?? art).clientHeight - art.offsetTop);
-    const lookY = (fold - h / 2) * (VIEW_WIDTH / w) - FLOOR_FROM_BOTTOM;
-    camera.position.set(0, lookY + 0.4, VIEW_WIDTH / (2 * Math.tan(rad(camera.fov / 2)) * camera.aspect));
+    const lookY = (fold - h / 2) * (viewWidth / w) - floorFromBottom;
+    const dist = viewWidth / (2 * Math.tan(rad(camera.fov / 2)) * camera.aspect);
+    camera.position.set(0, lookY + 0.4, dist);
+    camera.far = Math.max(100, dist + 40);
     camera.lookAt(0, lookY, 0);
     camera.updateProjectionMatrix();
     camera.updateMatrixWorld(); // the floor reads it before the first render
@@ -376,6 +402,7 @@ export async function mountHeroScene(canvas, { reducedMotion = false, onProgress
     dispose() {
       renderer.setAnimationLoop(null);
       listening.abort();
+      delete canvas.dataset.dragLocked;
       watching.disconnect();
       sizing.disconnect();
       world.free(); // the physics engine's memory is not garbage collected

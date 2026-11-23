@@ -8,5 +8,5 @@ export type HeroSceneHandle = {
 
 export type MountHeroScene = (
   canvas: HTMLCanvasElement,
-  opts: { reducedMotion: boolean; onProgress(fraction: number): void },
+  opts: { reducedMotion: boolean; dragMinWidth?: number; onProgress(fraction: number): void },
 ) => Promise<HeroSceneHandle>;
