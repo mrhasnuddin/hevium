@@ -79,11 +79,11 @@ test.describe('problem section', () => {
     const logos = page.locator('#problem .card-stat').first().locator('img');
     expect(await logos.evaluateAll((imgs) => imgs.map((img) => img.getAttribute('alt')))).toEqual(['Base', 'Robinhood Chain', 'BNB Chain', 'Solana', 'Elysium']);
     expect(await logos.evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')))).toEqual([
-      'https://app.hevium.xyz/chains/base.svg',
-      'https://app.hevium.xyz/chains/robinhood.webp',
-      'https://app.hevium.xyz/chains/bnb.svg',
-      'https://app.hevium.xyz/chains/solana.png',
-      'https://app.hevium.xyz/chains/elysium.svg',
+      '/chains/base.svg',
+      '/chains/robinhood.webp',
+      '/chains/bnb.svg',
+      '/chains/solana.png',
+      '/chains/elysium.svg',
     ]);
     // each a round mark the same size, with room reserved before it loads
     for (const logo of await logos.all()) {

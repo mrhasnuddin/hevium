@@ -37,7 +37,7 @@ export function Stocks() {
               <PixelArt scene="coin" cell={5} fallback={asset('/art/coin.svg')} />
               {TICKERS.map((ticker, i) => (
                 // eslint-disable-next-line @next/next/no-img-element -- the app's own icon, served by the app
-                <img key={ticker} className={styles.logo} data-logo src={tickerLogo(ticker)} alt="" width={64} height={64} loading="lazy" style={place(i)} />
+                <img key={ticker} className={styles.logo} data-logo src={tickerLogo(ticker)} alt="" width={64} height={64} loading="lazy" decoding="async" style={place(i)} />
               ))}
             </div>
           </div>

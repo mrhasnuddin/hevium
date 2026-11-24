@@ -83,11 +83,17 @@ export function createLogo(svgText, { size = 1, depth = 0.26, bevel = 0.014 } = 
   };
   mesh.userData.setLit(0);
 
-  // Collision shape: the outline redrawn coarser (within 0.8%), cut into flat triangles in the
+  // Collision shape: the outline redrawn coarser (within 2.0%), cut into flat triangles in the
   // mesh's own coordinates. The scene turns each triangle into a prism 2 x halfDepth thick, which
   // keeps hollows and notches real, so logos can hook into each other.
-  const flat = new THREE.ShapeGeometry(redraw(0.008)).rotateX(Math.PI).translate(-centre.x, -centre.y, 0).scale(k, k, k);
-  mesh.userData.collision = { triangles: flat.toNonIndexed().attributes.position.array, halfDepth: (depth * size) / 2 };
+  const flat = new THREE.ShapeGeometry(redraw(0.02)).rotateX(Math.PI).translate(-centre.x, -centre.y, 0).scale(k, k, k);
+  const flatNonIdx = flat.toNonIndexed();
+  mesh.userData.collision = {
+    triangles: new Float32Array(flatNonIdx.attributes.position.array),
+    halfDepth: (depth * size) / 2,
+  };
+  flatNonIdx.dispose();
+  flat.dispose();
   return mesh;
 }
 

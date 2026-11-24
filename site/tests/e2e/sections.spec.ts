@@ -103,7 +103,7 @@ test.describe('stocks section', () => {
 
   test('holds each ticker\'s own logo for the coin, as the app shows it', async ({ page }) => {
     await page.goto('/');
-    expect(await logos(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')))).toEqual(LOGOS.map((file) => `https://app.hevium.xyz/tokens/${file}`));
+    expect(await logos(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')))).toEqual(LOGOS.map((file) => `/tokens/${file}`));
     // the ring names each ticker in text, so the pictures say nothing more
     expect(await logos(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('alt')))).toEqual(LOGOS.map(() => ''));
   });
@@ -209,11 +209,12 @@ test.describe('stocks section', () => {
 
   test('ends in a link to the terminal, tagged as coming from this section', async ({ page }) => {
     await page.goto('/');
-    const href = await page.locator('#stocks').getByRole('link', { name: 'Open the terminal' }).getAttribute('href');
+    const cta = page.locator('#stocks').getByRole('link', { name: 'Open the terminal' });
+    const href = await cta.getAttribute('href');
     const url = new URL(href!);
     expect(url.origin).toBe('https://app.hevium.xyz');
-    expect(url.searchParams.get('utm_source')).toBe('landing');
-    expect(url.searchParams.get('utm_content')).toBe('stocks');
+    expect(url.pathname).toBe('/terminal');
+    await expect(cta).toHaveAttribute('data-placement', 'stocks');
   });
 
   test('makes the way into the terminal a button, not an underlined text link', async ({ page }) => {
@@ -240,7 +241,7 @@ test.describe('stocks section', () => {
     await expect(ring(page)).toHaveText(TICKERS);
     await expect(page.locator('#stocks [data-coin] [data-pixels] img')).toHaveCount(1);
     await expect(logos(page)).toHaveCount(13);
-    await expect(page.locator('#stocks').getByRole('link', { name: 'Open the terminal' })).toHaveAttribute('href', /utm_content=stocks/);
+    await expect(page.locator('#stocks').getByRole('link', { name: 'Open the terminal' })).toHaveAttribute('href', 'https://app.hevium.xyz/terminal');
     await context.close();
   });
 });

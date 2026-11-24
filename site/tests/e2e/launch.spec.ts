@@ -101,8 +101,8 @@ test.describe('launch section', () => {
     expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const url = new URL((await cta.getAttribute('href'))!);
     expect(url.origin).toBe('https://app.hevium.xyz');
-    expect(url.searchParams.get('utm_source')).toBe('landing');
-    expect(url.searchParams.get('utm_content')).toBe('launch');
+    expect(url.pathname).toBe('/launch');
+    await expect(cta).toHaveAttribute('data-placement', 'launch');
   });
 
   test('is where the nav bar\'s Launch link leads', async ({ page }) => {
@@ -130,7 +130,7 @@ test.describe('launch section', () => {
     await expect(page.locator('#launch figure img')).toBeVisible();
     await expect(page.locator('#launch figure img')).toHaveAttribute('src', /\/art\/launch-press\.svg$/);
     await expect(page.locator('#launch dl dd')).toHaveText(['80%', '20%', '0%']);
-    await expect(page.locator('#launch').getByRole('link', { name: 'Launch a token' })).toHaveAttribute('href', /utm_content=launch/);
+    await expect(page.locator('#launch').getByRole('link', { name: 'Launch a token' })).toHaveAttribute('href', 'https://app.hevium.xyz/launch');
     await context.close();
   });
 });

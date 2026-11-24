@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next';
 
-// A fully static site. Production builds set NEXT_PUBLIC_BASE_PATH=/home, where the page is served.
+// A fully static site served at root on hevium.xyz (NEXT_PUBLIC_BASE_PATH defaults to '').
 const config: NextConfig = {
   output: 'export',
   trailingSlash: true,

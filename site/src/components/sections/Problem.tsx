@@ -59,7 +59,7 @@ export function Problem() {
             <span className={styles.chains}>
               {CHAIN_LOGOS.map((chain) => (
                 // eslint-disable-next-line @next/next/no-img-element -- the app's own logo, served by the app
-                <img key={chain.name} src={chain.src} alt={chain.name} width={28} height={28} loading="lazy" />
+                <img key={chain.name} src={chain.src} alt={chain.name} width={28} height={28} loading="lazy" decoding="async" />
               ))}
             </span>
             {PROBLEM_FACTS[0]}

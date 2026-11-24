@@ -121,7 +121,7 @@ export function ShareCards() {
                     <div className={styles.main}>
                       <div className={styles.token}>
                         {/* eslint-disable-next-line @next/next/no-img-element -- the app's own icon, served by the app */}
-                        <img className={styles.logo} data-logo src={tickerLogo(card.ticker)} alt="" width={64} height={64} loading="lazy" draggable={false} />
+                        <img className={styles.logo} data-logo src={tickerLogo(card.ticker)} alt="" width={64} height={64} loading="lazy" decoding="async" draggable={false} />
                         <p>
                           <span className={styles.pair} data-pair>
                             {fill(UI.pair, { ticker: card.ticker })}

@@ -40,7 +40,7 @@ test.describe('languages', () => {
       for (const id of ['chains', 'trust', 'final']) expect(squeeze(await page.locator(`#${id} h2`).first().textContent()), id).toBe(copy.SECTIONS[id].title);
       await expect(page.locator('#final .btn-primary')).toHaveText(copy.UI.launchApp);
       // the way into the app is the same in every language
-      await expect(page.locator('#final .btn-primary')).toHaveAttribute('href', /^https:\/\/app\.hevium\.xyz\/\?.*utm_content=final/);
+      await expect(page.locator('#final .btn-primary')).toHaveAttribute('href', 'https://app.hevium.xyz/');
       // the questions a search engine or an assistant reads are in the page's language
       const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
       const graph = blocks.flatMap((block) => JSON.parse(block)['@graph'] ?? [JSON.parse(block)]) as { '@type': string; inLanguage?: string; mainEntity?: { name: string }[] }[];

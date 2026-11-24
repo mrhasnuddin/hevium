@@ -56,7 +56,7 @@ test.describe('search and answer engines', () => {
     await page.goto('/');
     const blocks = await page.locator('script[type="application/ld+json"]').evaluateAll((scripts) => scripts.flatMap((script) => JSON.parse(script.textContent!)['@graph'] ?? JSON.parse(script.textContent!)));
     const of = (type: string) => blocks.find((block: { '@type': string }) => block['@type'] === type);
-    expect(of('Organization')).toMatchObject({ name: 'Hevium', url: 'https://hevium.xyz/', sameAs: ['https://x.com/heviumxyz', 'https://www.threads.com/@hevium.xyz'] });
+    expect(of('Organization')).toMatchObject({ name: 'Hevium', url: HOME, sameAs: ['https://x.com/heviumxyz', 'https://www.threads.com/@hevium.xyz'] });
     expect(of('Organization').logo).toMatch(/^https:\/\/hevium\.xyz\/.+\.(png|svg)$/);
     expect(of('WebSite')).toMatchObject({ name: 'Hevium', url: HOME });
     expect(of('WebPage')).toMatchObject({ url: HOME, name: TITLE });
@@ -73,13 +73,21 @@ test.describe('search and answer engines', () => {
     expect(await sitemap.text()).toContain(`<loc>${HOME}</loc>`);
   });
 
+  test('serves robots.txt pointing to the root sitemap and llms.txt', async ({ request }) => {
+    const robots = await request.get('/robots.txt');
+    expect(robots.status()).toBe(200);
+    const body = await robots.text();
+    expect(body).toContain('Sitemap: https://hevium.xyz/sitemap.xml');
+    expect(body).toContain('LLMs-txt: https://hevium.xyz/llms.txt');
+  });
+
   test('serves llms.txt: what Hevium is, its facts and its questions, in plain text', async ({ page, request }) => {
     const file = await request.get('/llms.txt');
     expect(file.status()).toBe(200);
     const text = await file.text();
     expect(text).toMatch(/^# Hevium\n/);
     expect(text).toContain('Hevium is a non-custodial trading terminal and fair-launch launchpad on five chains');
-    for (const link of ['https://hevium.xyz/', 'https://docs.hevium.xyz/', 'https://mcp.hevium.xyz/']) expect(text).toContain(link);
+    for (const link of ['https://hevium.xyz/', 'https://app.hevium.xyz/', 'https://docs.hevium.xyz/', 'https://mcp.hevium.xyz/']) expect(text).toContain(link);
     await page.goto('/');
     for (const question of await page.locator('#faq [data-question]').allTextContents()) expect(text, question).toContain(question);
     // the same lines the page keeps out

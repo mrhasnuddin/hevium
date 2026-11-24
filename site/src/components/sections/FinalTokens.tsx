@@ -23,7 +23,7 @@ function Token({ spot: [src, x, y, size, strength], n }: { spot: TokenSpot; n: n
       <PixelArt scene="coin" cell={4} fallback={asset('/art/coin.svg')} />
       <span className={styles.flip} data-flip>
         {/* eslint-disable-next-line @next/next/no-img-element -- the app's own logo, served by the app */}
-        <img data-logo src={src} alt="" width={88} height={88} loading="lazy" />
+        <img data-logo src={src} alt="" width={88} height={88} loading="lazy" decoding="async" />
         <span className={styles.back} data-back />
       </span>
       {hits > 0 && <span key={hits} className={styles.pulse} data-pulse />}

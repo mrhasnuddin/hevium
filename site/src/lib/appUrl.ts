@@ -10,13 +10,9 @@ export function readRef(search: string): string | null {
   return ref !== null && REF.test(ref) ? ref : null;
 }
 
-/** A link into the app, tagged with where on this page it sits and with the visitor's referral code. */
-export function appUrl(target: AppTarget, { ref, placement }: { ref?: string | null; placement?: string } = {}): string {
+/** A link into the app, carrying the visitor's referral code when present. */
+export function appUrl(target: AppTarget, { ref }: { ref?: string | null; placement?: string } = {}): string {
   const url = new URL(SITE.appPaths[target], SITE.app);
-  url.searchParams.set('utm_source', 'landing');
-  url.searchParams.set('utm_medium', 'cta');
-  url.searchParams.set('utm_campaign', 'home');
-  if (placement) url.searchParams.set('utm_content', placement);
   if (ref && REF.test(ref)) url.searchParams.set(SITE.refParam, ref);
   return url.href;
 }

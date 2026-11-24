@@ -21,6 +21,34 @@ type Frame = {
 };
 
 const LEAN = -0.3; // the shear that makes a star lean like the mark
+const SPRITE_SIZE = 64;
+const SPRITE_HALF = SPRITE_SIZE / 2;
+const SPRITE_R = 26; // leaves >= 6px margin inside 64x64 even with LEAN = -0.3
+const starSprites = new Map<string, HTMLCanvasElement>();
+
+function getStarSprite(ink: string): HTMLCanvasElement | null {
+  if (typeof document === 'undefined') return null;
+  let sprite = starSprites.get(ink);
+  if (sprite) return sprite;
+  sprite = document.createElement('canvas');
+  sprite.width = SPRITE_SIZE;
+  sprite.height = SPRITE_SIZE;
+  const sctx = sprite.getContext('2d');
+  if (!sctx) return null;
+  const k = SPRITE_R * 0.18;
+  sctx.fillStyle = ink;
+  sctx.setTransform(1, 0, LEAN, 1, SPRITE_HALF, SPRITE_HALF);
+  sctx.beginPath();
+  sctx.moveTo(0, -SPRITE_R);
+  sctx.quadraticCurveTo(k, -k, SPRITE_R, 0);
+  sctx.quadraticCurveTo(k, k, 0, SPRITE_R);
+  sctx.quadraticCurveTo(-k, k, -SPRITE_R, 0);
+  sctx.quadraticCurveTo(-k, -k, 0, -SPRITE_R);
+  sctx.fill();
+  if (starSprites.size > 16) starSprites.clear();
+  starSprites.set(ink, sprite);
+  return sprite;
+}
 
 // A cell's own steady number from 0 to 1, so its shimmer is out of step with its neighbours'.
 export const grain = (x: number, y: number) => {
@@ -40,8 +68,11 @@ export function paintPixels(ctx: CanvasRenderingContext2D, frame: Frame) {
   const phase = frame.phases?.length === cols * rows ? frame.phases : phases(cols, rows);
   const spread = frame.spread ?? 0;
   const [midX, midY, throwBy] = [(cols * cell) / 2, (rows * cell) / 2, Math.max(cols, rows) * cell * 0.5];
+  const ink = String(ctx.fillStyle || '#97FBE3');
+  const sprite = getStarSprite(ink);
+  const [canvasW, canvasH] = [ctx.canvas.width, ctx.canvas.height];
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.clearRect(0, 0, canvasW, canvasH);
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       const i = (y * cols + x) * 4;
@@ -69,17 +100,29 @@ export function paintPixels(ctx: CanvasRenderingContext2D, frame: Frame) {
 
       // the star: four points with hollow sides
       const r = cell * (0.16 + 0.8 * value) * (1 + near * 0.35) * 0.66;
-      const k = r * 0.18;
-      ctx.globalAlpha = Math.min(1, 0.22 + 0.78 * value + near * 0.3) * Math.max(0, 1 - spread);
-      ctx.setTransform(ratio, 0, LEAN * ratio, ratio, px * ratio, py * ratio);
-      ctx.beginPath();
-      ctx.moveTo(0, -r);
-      ctx.quadraticCurveTo(k, -k, r, 0);
-      ctx.quadraticCurveTo(k, k, 0, r);
-      ctx.quadraticCurveTo(-k, k, -r, 0);
-      ctx.quadraticCurveTo(-k, -k, 0, -r);
-      ctx.fill();
+      const alpha = Math.min(1, 0.22 + 0.78 * value + near * 0.3) * Math.max(0, 1 - spread);
+      if (alpha <= 0) continue;
+      if (sprite) {
+        const drawSize = SPRITE_SIZE * ((r * ratio) / SPRITE_R);
+        const dx = px * ratio - drawSize * 0.5;
+        const dy = py * ratio - drawSize * 0.5;
+        if (dx + drawSize < 0 || dy + drawSize < 0 || dx > canvasW || dy > canvasH) continue;
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(sprite, dx, dy, drawSize, drawSize);
+      } else {
+        const k = r * 0.18;
+        ctx.globalAlpha = alpha;
+        ctx.setTransform(ratio, 0, LEAN * ratio, ratio, px * ratio, py * ratio);
+        ctx.beginPath();
+        ctx.moveTo(0, -r);
+        ctx.quadraticCurveTo(k, -k, r, 0);
+        ctx.quadraticCurveTo(k, k, 0, r);
+        ctx.quadraticCurveTo(-k, k, -r, 0);
+        ctx.quadraticCurveTo(-k, -k, 0, -r);
+        ctx.fill();
+      }
     }
   }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1;
 }

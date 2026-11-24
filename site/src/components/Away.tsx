@@ -38,9 +38,36 @@ export function Away() {
         entering.observe(part);
       });
     }
+
+    // Latch the "What is Hevium" statement sheet once it has been scrolled through so scrolling back up
+    // never un-lights the text, hides the figures, or stalls the scroll-driven timeline.
+    const statement = document.getElementById('what-is-hevium');
+    const sheet = statement?.closest('section#about > .container > div') as HTMLElement | null;
+    let raf = 0;
+    const checkStatement = () => {
+      raf = 0;
+      if (!statement || !sheet || sheet.hasAttribute('data-read')) return;
+      if (window.scrollY <= 10) return;
+      const rect = statement.getBoundingClientRect();
+      const lit = Number(getComputedStyle(statement).getPropertyValue('--statement-read') || 0);
+      if (lit >= 0.98 || rect.top + rect.height * 0.5 <= innerHeight * 0.5) {
+        sheet.setAttribute('data-read', '');
+        removeEventListener('scroll', onScroll);
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(checkStatement);
+    };
+    if (statement && sheet) {
+      addEventListener('scroll', onScroll, { passive: true });
+      checkStatement();
+    }
+
     return () => {
       watching.disconnect();
       entering.disconnect();
+      removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
     };
   }, []);
   return null;

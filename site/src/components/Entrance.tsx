@@ -138,8 +138,8 @@ export function Entrance() {
         const { gsap } = await import('gsap');
         if (gone) return;
         const hero = document.querySelector<HTMLElement>('[data-hero]')!;
-        const poster = hero.querySelector<HTMLElement>('[data-hero-art] img')!;
-        const live = hero.querySelector('[data-hero-art]')!.classList.contains('is-live');
+        const artBox = hero.querySelector<HTMLElement>('[data-hero-art]')!;
+        const poster = artBox.querySelector<HTMLElement>('img')!;
         const split = splitLines(hero.querySelector('h1')!);
         const [from, to] = [mark.getBoundingClientRect(), poster.getBoundingClientRect()];
         const throwing = { by: 0 };
@@ -168,8 +168,10 @@ export function Entrance() {
             0.05,
           )
           // the mark gives way to what stands there: the poster, or the cube's own mark where the scene is up
-          .set(poster, { clearProps: 'opacity' }, 0.6)
-          .to(mark, { opacity: 0, duration: live ? 0.3 : 0.01 }, 0.6)
+          .add(() => {
+            if (!artBox.classList.contains('is-live')) gsap.set(poster, { clearProps: 'opacity' });
+          }, 0.6)
+          .to(mark, { opacity: 0, duration: artBox.classList.contains('is-live') ? 0.3 : 0.01 }, 0.6)
           // the reveal
           .to(split.lines, { yPercent: 0, duration: 0.7, stagger: 0.07 }, 0.3)
           .to('[data-hero] p', { opacity: 1, y: 0, duration: 0.5 }, 0.55)

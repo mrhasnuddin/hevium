@@ -79,6 +79,7 @@ export function llmsTxt() {
     ...FAQ.flatMap((item) => [`### ${item.q}`, '', item.a, '']),
     '## Links',
     '',
+    `- [Website](${HOME})`,
     `- [App](${SITE.app})`,
     `- [Docs](${SITE.docs})`,
     `- [MCP server](${SITE.mcp})`,

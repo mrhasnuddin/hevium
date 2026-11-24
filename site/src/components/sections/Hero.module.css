@@ -8,6 +8,12 @@
 .title { max-width: 20ch; margin: 0 auto var(--space-6); font: var(--weight-display) var(--hero-title-size)/var(--leading-display-lg) var(--font-display); letter-spacing: var(--tracking-display-lg); text-wrap: balance; }
 .actions { justify-content: center; }
 
+/* On mobile portrait screens, sit the headline and CTAs lower so they balance cleanly above the 3D glass cube. */
+@media (max-width: 47.999rem) {
+  .copy { inset: max(21svh, calc(var(--space-4) + var(--nav-height) + var(--space-8))) 0 auto; }
+  .title { margin-bottom: var(--space-8); }
+}
+
 /* The scene's floor runs past the bottom of the hero and fades out. What follows sits on top of
    that tail, and the section right after gives up its top rule, which would cut across the fade. */
 .hero ~ :global(.section) { position: relative; z-index: var(--z-content); }

@@ -1,0 +1,10 @@
+{
+  "name": "hevium-landing",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "cd site && npx -y pnpm@9.15.9 install --frozen-lockfile && npx -y pnpm@9.15.9 run build && cd .. && rm -rf dist out && cp -R site/out dist && cp -R site/out out",
+    "dev": "cd site && npx -y pnpm@9.15.9 dev"
+  },
+  "packageManager": "pnpm@9.15.9"
+}

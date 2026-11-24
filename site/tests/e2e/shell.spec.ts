@@ -78,7 +78,7 @@ test.describe('nav bar and hero', () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/');
     const placement = async (scope: string) =>
-      new URL((await page.locator(scope).getByRole('link', { name: 'Launch app' }).getAttribute('href'))!).searchParams.get('utm_content');
+      await page.locator(scope).getByRole('link', { name: 'Launch app' }).getAttribute('data-placement');
     expect(await placement('nav')).toBe('nav');
     expect(await placement('[data-hero]')).toBe('hero');
   });
@@ -186,7 +186,8 @@ test.describe('nav bar and hero', () => {
     // Launch app is the menu's last row: the primary button, as wide as the links, tagged as the nav's
     const launch = page.locator('nav ul').getByRole('link', { name: 'Launch app' });
     await expect(launch).toHaveClass(/\bbtn-primary\b/);
-    await expect(launch).toHaveAttribute('href', /utm_content=nav/);
+    await expect(launch).toHaveAttribute('href', 'https://app.hevium.xyz/');
+    await expect(launch).toHaveAttribute('data-placement', 'nav');
     const [button, row, last] = [(await launch.boundingBox())!, (await page.locator('nav ul [data-nav-item]').first().boundingBox())!, (await page.locator('nav ul [data-nav-item]').last().boundingBox())!];
     expect(button.x).toBeCloseTo(row.x, 0);
     expect(button.width).toBeCloseTo(row.width, 0);
@@ -263,7 +264,7 @@ test.describe('nav bar and hero', () => {
     const page = await context.newPage();
     await page.goto('/');
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Launch app' }).first()).toHaveAttribute('href', /^https:\/\/app\.hevium\.xyz\/\?utm_source=landing/);
+    await expect(page.getByRole('link', { name: 'Launch app' }).first()).toHaveAttribute('href', 'https://app.hevium.xyz/');
     await expect(page.locator('[data-hero-art] img')).toBeVisible();
     await context.close();
   });

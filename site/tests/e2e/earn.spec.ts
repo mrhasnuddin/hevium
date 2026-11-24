@@ -40,7 +40,7 @@ test.describe('earn section', () => {
     await expect(perks.locator('dd').nth(1)).toContainText('same transaction');
     await expect(perks.locator('dd').nth(1)).toContainText('claim');
     await expect(perks.locator('dd').nth(2)).toContainText('callout');
-    await expect(perks.locator('dd').nth(2)).toContainText('hevium.xyz/?ref=you'); // the visitor's own link, once they type a name
+    await expect(perks.locator('dd').nth(2)).toContainText('app.hevium.xyz/?ref=you'); // the visitor's own link, once they type a name
   });
 
   test('lays out five sample cards in the shape of a PnL card: brand, pair, stat rows, and a referral panel at the foot', async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe('earn section', () => {
       const card = cards(page).nth(n);
       await expect(card).toContainText('Hevium');
       await expect(card).toContainText(`${ticker} pair`);
-      await expect(card.locator('img[data-logo]')).toHaveAttribute('src', new RegExp(`^https://app\\.hevium\\.xyz/tokens/${ticker.toLowerCase()}\\.`));
+      await expect(card.locator('img[data-logo]')).toHaveAttribute('src', new RegExp(`^/tokens/${ticker.toLowerCase()}\\.`));
       await expect(card.locator('dl dt')).toHaveCount(4);
       await expect(card.locator('dl dt').nth(0)).toHaveText('Referred volume');
       await expect(card.locator('dl dt').nth(1)).toHaveText('Total PnL');
@@ -63,7 +63,7 @@ test.describe('earn section', () => {
       await expect(card.locator('dl dt').nth(3)).toContainText('Sold');
       await expect(card.locator('[data-result]')).toHaveText(/^\+\d{1,2}%$/);
       await expect(card).toContainText("@you's referral link");
-      await expect(card).toContainText('hevium.xyz/?ref=you');
+      await expect(card).toContainText('app.hevium.xyz/?ref=you');
       await expect(card).not.toContainText(/sample/i); // shown as a card, with no tag calling it a sample
     }
     await expect(page.locator('#earn .section-foot > *')).toHaveCount(1); // the button alone, with no line beside it
@@ -127,13 +127,13 @@ test.describe('earn section', () => {
     await nameField(page).fill('Dean');
     for (const card of await cards(page).all()) {
       await expect(card).toContainText('@dean');
-      await expect(card).toContainText('hevium.xyz/?ref=dean');
+      await expect(card).toContainText('app.hevium.xyz/?ref=dean');
     }
-    await expect(page.locator('#earn [data-perks]')).toContainText('hevium.xyz/?ref=dean');
+    await expect(page.locator('#earn [data-perks]')).toContainText('app.hevium.xyz/?ref=dean');
     await nameField(page).fill('De an! 99');
-    await expect(front(page)).toContainText('hevium.xyz/?ref=dean99');
+    await expect(front(page)).toContainText('app.hevium.xyz/?ref=dean99');
     await nameField(page).fill('');
-    await expect(front(page)).toContainText('hevium.xyz/?ref=you');
+    await expect(front(page)).toContainText('app.hevium.xyz/?ref=you');
   });
 
   test('turns the stack with its two buttons, and says which card is in front', async ({ page }) => {
@@ -234,8 +234,8 @@ test.describe('earn section', () => {
     expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const url = new URL((await cta.getAttribute('href'))!);
     expect(url.origin).toBe('https://app.hevium.xyz');
-    expect(url.searchParams.get('utm_source')).toBe('landing');
-    expect(url.searchParams.get('utm_content')).toBe('earn');
+    expect(url.pathname).toBe('/invite');
+    await expect(cta).toHaveAttribute('data-placement', 'earn');
   });
 
   test('is where the nav bar\'s Earn link leads', async ({ page }) => {
@@ -269,11 +269,11 @@ test.describe('earn section', () => {
     await page.goto('/#earn');
     await expect(page.locator('#earn h2')).toBeVisible();
     await expect(cards(page)).toHaveCount(5);
-    await expect(front(page)).toContainText('hevium.xyz/?ref=you');
+    await expect(front(page)).toContainText('app.hevium.xyz/?ref=you');
     await expect(page.locator('#earn [data-split]')).toContainText('0.20% you');
     // the field and the buttons need the script, so without it they are out of sight and out of reach
     for (const control of await page.locator('#earn input, #earn button').all()) await expect(control).toBeHidden();
-    await expect(page.locator('#earn').getByRole('link', { name: 'Become an affiliate' })).toHaveAttribute('href', /utm_content=earn/);
+    await expect(page.locator('#earn').getByRole('link', { name: 'Become an affiliate' })).toHaveAttribute('href', 'https://app.hevium.xyz/invite');
     await context.close();
   });
 });

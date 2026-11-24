@@ -10,6 +10,8 @@ type Options = {
   stillAt: number; // the moment shown when nothing may move, seconds
   /** Maximum devicePixelRatio for this canvas (defaults to 2; coarse pointers cap at 1). */
   maxDpr?: number;
+  /** Minimum ms between idle shimmer frames (defaults to 30ms). */
+  frameMs?: number;
   /** The picture at this moment, as RGBA with one pixel per star. */
   picture: (cols: number, rows: number, time: number) => Uint8ClampedArray;
   /** Where the pointer is watched: the canvas itself, unless the canvas lies behind other things. */
@@ -24,7 +26,7 @@ type Options = {
 // Keeps a canvas of star pixels alive (lib/pixels.ts): sizes it, paints it while it is on screen, and
 // feeds it the pointer. With reduced motion it shows one still moment that still answers the pointer.
 // The stars take the canvas's CSS `color`. Returns the function that stops it.
-export function runPixels(canvas: HTMLCanvasElement, { cell, reach, pull, stillAt, maxDpr = 2, picture, watch = canvas, onPaint, spread, arrive }: Options) {
+export function runPixels(canvas: HTMLCanvasElement, { cell, reach, pull, stillAt, maxDpr = 2, frameMs = FRAME, picture, watch = canvas, onPaint, spread, arrive }: Options) {
   const found = canvas.getContext('2d');
   if (!found) return () => {};
   const ctx = found;
@@ -36,6 +38,7 @@ export function runPixels(canvas: HTMLCanvasElement, { cell, reach, pull, stillA
   let rows = 0;
   let ratio = 1;
   let seen = false;
+  let hidden = typeof document !== 'undefined' && document.hidden;
   let dirty = true;
   let frame = 0;
   let last = 0; // when it was last painted
@@ -76,16 +79,16 @@ export function runPixels(canvas: HTMLCanvasElement, { cell, reach, pull, stillA
   }
   function loop(now: number) {
     // the pointer's pull is played on every frame; a canvas at rest skips every other one
-    if (pointer.inside || pointer.pull > 0 || spread || thrown(now) > 0 || now - last >= FRAME) {
+    if (pointer.inside || pointer.pull > 0 || spread || thrown(now) > 0 || now - last >= frameMs) {
       last = now;
       paint(now);
     }
     // with reduced motion the loop only runs to play the pointer's pull in or out, then stops
     const moving = !still || (pointer.inside ? pointer.pull < 0.998 : pointer.pull > 0);
-    frame = seen && moving ? requestAnimationFrame(loop) : 0;
+    frame = seen && !hidden && moving ? requestAnimationFrame(loop) : 0;
   }
   const wake = () => {
-    if (!frame && seen) frame = requestAnimationFrame(loop);
+    if (!frame && seen && !hidden) frame = requestAnimationFrame(loop);
   };
 
   function move(event: PointerEvent) {
@@ -118,6 +121,18 @@ export function runPixels(canvas: HTMLCanvasElement, { cell, reach, pull, stillA
     { rootMargin: '200px 0px' },
   );
   watching.observe(canvas);
+  const onVisibility = () => {
+    hidden = document.hidden;
+    if (hidden) {
+      if (frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    } else if (seen) {
+      wake();
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibility);
   watch.addEventListener('pointermove', move);
   watch.addEventListener('pointerleave', leave);
   watch.addEventListener('pointercancel', leave);
@@ -126,6 +141,7 @@ export function runPixels(canvas: HTMLCanvasElement, { cell, reach, pull, stillA
     cancelAnimationFrame(frame);
     resized.disconnect();
     watching.disconnect();
+    document.removeEventListener('visibilitychange', onVisibility);
     watch.removeEventListener('pointermove', move);
     watch.removeEventListener('pointerleave', leave);
     watch.removeEventListener('pointercancel', leave);

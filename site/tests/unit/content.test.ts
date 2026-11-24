@@ -129,8 +129,8 @@ test('the five chains are the ones the logos name, in that order, each with who 
     expect(chain.suits.trim().split(/\s+/).length, chain.name).toBeLessThanOrEqual(7);
     expect(chain.trades.length, chain.name).toBeGreaterThanOrEqual(2);
     expect(chain.trades.length, chain.name).toBeLessThanOrEqual(4);
-    // every asset named has an icon the app itself serves (checked against hevium.xyz on 2026-11-22)
-    for (const ticker of chain.trades) expect(tickerLogo(ticker), ticker).toMatch(/^https:\/\/app\.hevium\.xyz\/(tokens|chains)\/[a-z]+\.(svg|png)$/);
+    // every asset named has a self-hosted icon in public/
+    for (const ticker of chain.trades) expect(tickerLogo(ticker), ticker).toMatch(/^\/(tokens|chains)\/[a-z]+\.(svg|png)$/);
     expect(sections.CHAIN_ROUTE).toContain(chain.name);
   }
   expect(sections.CHAIN_STEPS).toEqual(['Sign in', 'Pick a chain', 'Trade']);
@@ -148,8 +148,8 @@ test('the ticker ring holds thirteen tickers as text: ten stocks and funds and t
   expect(sections.TICKERS[0]).toBe('NVDA'); // the pair shown when nothing moves
 });
 
-test('every ticker in the ring has the app\'s own icon for the coin', () => {
-  for (const ticker of sections.TICKERS) expect(tickerLogo(ticker), ticker).toMatch(/^https:\/\/app\.hevium\.xyz\/tokens\/[a-z]+\.(svg|png)$/);
+test('every ticker in the ring has its own self-hosted icon for the coin', () => {
+  for (const ticker of sections.TICKERS) expect(tickerLogo(ticker), ticker).toMatch(/^\/tokens\/[a-z]+\.(svg|png)$/);
   expect(new Set(sections.TICKERS.map(tickerLogo)).size).toBe(13);
 });
 

@@ -84,14 +84,17 @@ p.statement { position: relative; overflow: clip; padding-block: clamp(var(--spa
 /* shortcut: a browser without scroll-driven CSS shows the sheet finished and lit; add a scroll listener that sets the two properties if that browser has to move too. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .sheet { animation: rise linear both; animation-timeline: view(); animation-range: cover 0% cover 42vh; }
+    .sheet { animation: rise linear both; animation-timeline: view(); animation-range: cover 0% cover 42vh; animation-play-state: running !important; }
     /* The reading runs on the statement's own passage up the screen and keeps the lit edge about
        two thirds of the way down it. It is done a little before the statement stands in the middle:
        where the section is one screen, that is by the time the section fills the screen. */
     p.statement { view-timeline: --statement block; }
-    .body { timeline-scope: --statement; animation: read linear both; animation-timeline: --statement; animation-range: cover 20% cover 44%; }
+    .body { timeline-scope: --statement; animation: read linear both; animation-timeline: --statement; animation-range: cover 20% cover 44%; animation-play-state: running !important; }
   }
 }
+/* Once the statement has been read through, keep it standing upright and fully lit when scrolling back up. */
+.sheet[data-read] { animation: none !important; opacity: 1 !important; transform: none !important; }
+.sheet[data-read] .body { animation: none !important; --statement-read: 1 !important; }
 @keyframes rise {
   from { opacity: 0.35; transform: perspective(90rem) rotateX(22deg) translateY(var(--space-8)); }
   to { opacity: 1; transform: perspective(90rem) rotateX(0deg) translateY(0); }

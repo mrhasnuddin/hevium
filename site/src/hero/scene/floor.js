@@ -137,7 +137,7 @@ export async function createFloor(reducedMotion) {
 
   // The mirror image is the scene drawn from under the floor, at half size: one pixel covers
   // many of its pixels, so more would be wasted.
-  const reflection = new THREE.WebGLRenderTarget(1, 1, { samples: 4, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+  const reflection = new THREE.WebGLRenderTarget(1, 1, { samples: 2, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
   uniforms.uReflection.value = reflection.texture;
   const mirror = new THREE.PerspectiveCamera();
   const size = new THREE.Vector2(), forward = new THREE.Vector3();

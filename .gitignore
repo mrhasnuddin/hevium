@@ -4,6 +4,8 @@ hero.mp4
 font ref.jpg
 
 node_modules/
+dist/
+out/
 site/.next/
 site/out/
 site/test-results/

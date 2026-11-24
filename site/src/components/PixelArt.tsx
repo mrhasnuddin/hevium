@@ -89,6 +89,7 @@ export function PixelField({ className = '' }: { className?: string }) {
       pull: 7,
       stillAt: STILL_AT,
       maxDpr: 1,
+      frameMs: 42,
       watch: section as HTMLElement,
       picture(cols, rows, time) {
         if (picture.length !== cols * rows * 4) {
@@ -196,14 +197,17 @@ export function PixelWordmark({ src, className = '' }: { src: string; className?
       maskReady = anyInk;
     };
 
-    const start = () => {
+    const start = async () => {
       if (disposed || !img.complete || !img.naturalWidth) return;
+      await img.decode?.().catch(() => {});
+      if (disposed) return;
       stop();
       stop = runPixels(canvas, {
         cell,
         reach: 110,
         pull: 9,
         stillAt: STILL_AT,
+        frameMs: 42,
         watch: wrap.closest('footer') ?? wrap,
         picture(cols, rows, time) {
           if (!maskReady || maskCols !== cols || maskRows !== rows) {
@@ -236,15 +240,18 @@ export function PixelWordmark({ src, className = '' }: { src: string; className?
       });
     };
 
+    const onLoad = () => {
+      void start();
+    };
     if (img.complete && img.naturalWidth > 0) {
-      start();
+      void start();
     } else {
-      img.addEventListener('load', start, { once: true });
+      img.addEventListener('load', onLoad, { once: true });
     }
 
     return () => {
       disposed = true;
-      img.removeEventListener('load', start);
+      img.removeEventListener('load', onLoad);
       stop();
       delete wrap.dataset.pixels;
     };
@@ -253,7 +260,7 @@ export function PixelWordmark({ src, className = '' }: { src: string; className?
   return (
     <span ref={host} className={`${styles.wordmark} ${className}`.trim()} data-pixels="" data-wordmark-pixels="">
       {/* eslint-disable-next-line @next/next/no-img-element -- static export uses plain <img> as no-JS fallback and raster mask */}
-      <img ref={imgRef} src={src} alt="" width={360} height={110} loading="lazy" decoding="async" />
+      <img ref={imgRef} src={src} alt="" width={360} height={110} decoding="sync" />
       <canvas aria-hidden="true" />
     </span>
   );
