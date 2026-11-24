@@ -1,9 +1,9 @@
 {
   "FACTS": [
     {
-      "value": "5",
+      "value": "6",
       "label": "Rantaian",
-      "words": "lima rantaian"
+      "words": "enam rantaian"
     },
     {
       "value": "1.0%",
@@ -17,14 +17,14 @@
     }
   ],
   "FOOTER": {
-    "headline": "Satu terminal. Lima rantaian.",
+    "headline": "Satu terminal. Enam rantaian.",
     "copyright": "© 2026 Hevium",
     "backToTop": "Kembali ke atas"
   },
   "META": {
     "title": "Hevium: Terminal Saham & Pelancaran Adil Berbilang Rantaian",
-    "description": "Dagangkan token pelancaran adil dengan pasangan saham dan dolar digital di lima rantaian. Yuran 1.0%, bukan kustodian, satu log masuk. Untuk pedagang dan ejen AI.",
-    "whatIs": "Hevium ialah terminal dagangan bukan kustodian dan launchpad pelancaran adil di lima rantaian: Base, Robinhood Chain, BNB Chain, Solana dan Elysium. Token dilancarkan pada keluk bonding dan boleh dipasangkan dengan saham dan dolar digital. Setiap dagangan dikenakan yuran 1.0%, dan 20% daripada yuran itu diberikan kepada perujuk."
+    "description": "Dagangkan token pelancaran adil dengan pasangan saham dan dolar digital di enam rantaian. Yuran 1.0%, bukan kustodian, satu log masuk. Untuk pedagang dan ejen AI.",
+    "whatIs": "Hevium ialah terminal dagangan bukan kustodian dan launchpad pelancaran adil di enam rantaian: Base, Robinhood Chain, BNB Chain, Solana, Elysium dan HyperEVM. Token dilancarkan pada keluk bonding dan boleh dipasangkan dengan saham dan dolar digital. Setiap dagangan dikenakan yuran 1.0%, dan 20% daripada yuran itu diberikan kepada perujuk."
   },
   "RISK_LINE": "Dagangan token mempunyai risiko, dan harga boleh jatuh ke sifar. Hevium bersifat bukan kustodian dan tidak memberikan nasihat pelaburan.",
   "AGENT_CHART": "Carta garis harga sepanjang satu hari, dilukis semasa sesi berjalan. Setiap kali ejen membeli, huruf B menandakan garis itu dengan jumlahnya, 0.1 ETH, ketika harga menurun. Belian keempat ditahan pada bajet harian dan ditandakan dengan warna ambar.",
@@ -113,9 +113,18 @@
         "HYPE",
         "USDC"
       ]
+    },
+    {
+      "name": "HyperEVM",
+      "suits": "Pedagang Hyperliquid dan pemegang HYPE",
+      "trades": [
+        "HYPE",
+        "USDC",
+        "USDT0"
+      ]
     }
   ],
-  "CHAIN_ROUTE": "Logo Hevium berdiri sebagai hab, dengan satu laluan dari hab itu ke setiap satu daripada lima rantaian: Base, Robinhood Chain, BNB Chain, Solana dan Elysium. Satu denyutan bergerak dari hab di sepanjang laluan rantaian yang dipilih, dan satu belian tiba di sana.",
+  "CHAIN_ROUTE": "Logo Hevium berdiri sebagai hab, dengan satu laluan dari hab itu ke setiap satu daripada enam rantaian: Base, Robinhood Chain, BNB Chain, Solana, Elysium dan HyperEVM. Satu denyutan bergerak dari hab di sepanjang laluan rantaian yang dipilih, dan satu belian tiba di sana.",
   "CHAIN_STEPS": [
     "Log masuk",
     "Pilih rantaian",
@@ -178,7 +187,7 @@
     },
     {
       "q": "Apakah yang berlaku kepada kecairan selepas token bergraduat?",
-      "a": "Ia diletakkan di luar jangkauan. Di Base, BNB Chain dan Robinhood Chain, token pool dibakar ke alamat mati. Di Elysium, posisi kecairan itu dicetak terus ke alamat mati, dan di Solana ia dikunci secara kekal."
+      "a": "Ia diletakkan di luar jangkauan. Di Base, BNB Chain dan Robinhood Chain, token pool dibakar ke alamat mati. Di Elysium dan HyperEVM, posisi kecairan itu dicetak terus ke alamat mati, dan di Solana ia dikunci secara kekal."
     },
     {
       "q": "Berapakah kos berdagang?",
@@ -190,7 +199,7 @@
     },
     {
       "q": "Bolehkah ejen AI berdagang untuk saya?",
-      "a": "Boleh, melalui MCP. Sambungkan Claude, Cursor atau klien lain ke mcp.hevium.xyz dan luluskan sendiri setiap transaksi, atau jalankan pelayan itu sendiri dengan had setiap dagangan dan bajet harian. Ejen berdagang di kesemua lima rantaian."
+      "a": "Boleh, melalui MCP. Sambungkan Claude, Cursor atau klien lain ke mcp.hevium.xyz dan luluskan sendiri setiap transaksi, atau jalankan pelayan itu sendiri dengan had setiap dagangan dan bajet harian. Ejen berdagang di kesemua enam rantaian."
     },
     {
       "q": "Adakah kodnya telah melalui audit keselamatan?",
@@ -257,7 +266,7 @@
     }
   ],
   "PROBLEM_FACTS": [
-    "Aktif di 5 rantaian",
+    "Aktif di 6 rantaian",
     "0% peruntukan orang dalam"
   ],
   "SECTIONS": {
@@ -297,9 +306,9 @@
       "lead": "Kongsi pautan anda dan jana pendapatan daripada yuran 1.0% atas dagangan mereka."
     },
     "chains": {
-      "eyebrow": "Lima rantaian",
-      "title": "Satu terminal, lima rantaian.",
-      "highlight": "lima rantaian",
+      "eyebrow": "Enam rantaian",
+      "title": "Satu terminal, enam rantaian.",
+      "highlight": "enam rantaian",
       "lead": "Log masuk dengan Google, pilih rantaian dan berdagang. Setiap rantaian membawa komunitinya sendiri dan pasangannya sendiri, semuanya aktif di mainnet."
     },
     "trust": {
@@ -311,7 +320,7 @@
     "final": {
       "title": "Mula berdagang dalam satu terminal.",
       "highlight": "satu terminal",
-      "lead": "Pasangan saham, pelancaran adil, ejen AI dan yuran rujukan di lima rantaian. Log masuk dengan Google dan anda terus berada di dalam terminal."
+      "lead": "Pasangan saham, pelancaran adil, ejen AI dan yuran rujukan di enam rantaian. Log masuk dengan Google dan anda terus berada di dalam terminal."
     }
   },
   "STOCK_COUNT": {
@@ -343,7 +352,7 @@
     {
       "side": "sell",
       "what": "Jual pada keluk pelancaran",
-      "where": "2 HYPE di Elysium"
+      "where": "2 HYPE di HyperEVM"
     }
   ],
   "TRUST_WORDS": [
@@ -399,14 +408,14 @@
     "referralLink": "Pautan rujukan @{name}",
     "product": "Produk",
     "resources": "Sumber",
-    "fiveChains": "Lima rantaian",
+    "chains": "Enam rantaian",
     "docs": "Dokumentasi",
     "mcpServer": "Pelayan MCP",
     "trust": "Kepercayaan",
     "brandKit": "Kit jenama",
     "terms": "Terma",
     "privacy": "Privasi",
-    "ogAlt": "Hevium: Terminal Saham dan Pelancaran Adil Berbilang Rantaian di Base, Robinhood Chain, BNB Chain, Solana dan Elysium."
+    "ogAlt": "Hevium: Terminal Saham dan Pelancaran Adil Berbilang Rantaian di Base, Robinhood Chain, BNB Chain, Solana, Elysium dan HyperEVM."
   },
   "NAV": [
     {

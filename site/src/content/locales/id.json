@@ -1,9 +1,9 @@
 {
   "FACTS": [
     {
-      "value": "5",
+      "value": "6",
       "label": "Chain",
-      "words": "lima chain"
+      "words": "enam chain"
     },
     {
       "value": "1.0%",
@@ -17,14 +17,14 @@
     }
   ],
   "FOOTER": {
-    "headline": "Satu terminal. Lima chain.",
+    "headline": "Satu terminal. Enam chain.",
     "copyright": "© 2026 Hevium",
     "backToTop": "Kembali ke atas"
   },
   "META": {
     "title": "Hevium: Terminal Saham dan Fair Launch Multi-Chain",
-    "description": "Trading token fair launch yang dipasangkan dengan saham dan dolar digital di lima chain. Biaya 1.0%, non-kustodial, satu login. Untuk trader dan agen AI.",
-    "whatIs": "Hevium adalah terminal trading non-kustodial sekaligus launchpad fair launch di lima chain: Base, Robinhood Chain, BNB Chain, Solana, dan Elysium. Token diluncurkan pada bonding curve dan bisa dipasangkan dengan saham serta dolar digital. Setiap transaksi dikenai biaya 1.0%, dan 20% dari biaya itu masuk ke pemberi referral."
+    "description": "Trading token fair launch yang dipasangkan dengan saham dan dolar digital di enam chain. Biaya 1.0%, non-kustodial, satu login. Untuk trader dan agen AI.",
+    "whatIs": "Hevium adalah terminal trading non-kustodial sekaligus launchpad fair launch di enam chain: Base, Robinhood Chain, BNB Chain, Solana, Elysium, dan HyperEVM. Token diluncurkan pada bonding curve dan bisa dipasangkan dengan saham serta dolar digital. Setiap transaksi dikenai biaya 1.0%, dan 20% dari biaya itu masuk ke pemberi referral."
   },
   "RISK_LINE": "Trading token mengandung risiko, dan harga bisa turun hingga nol. Hevium bersifat non-kustodial dan tidak memberikan nasihat investasi.",
   "AGENT_CHART": "Grafik garis harga sepanjang satu hari, digambar seiring sesi berjalan. Setiap kali agen membeli, huruf B menandai garis itu beserta jumlahnya, 0.1 ETH, saat harga sedang turun. Pembelian keempat ditahan karena anggaran harian tercapai dan ditandai dengan warna kuning tua.",
@@ -113,9 +113,18 @@
         "HYPE",
         "USDC"
       ]
+    },
+    {
+      "name": "HyperEVM",
+      "suits": "Trader Hyperliquid dan pemegang HYPE",
+      "trades": [
+        "HYPE",
+        "USDC",
+        "USDT0"
+      ]
     }
   ],
-  "CHAIN_ROUTE": "Logo Hevium berdiri sebagai pusat, dengan jalur yang memanjang darinya ke masing-masing dari lima chain: Base, Robinhood Chain, BNB Chain, Solana, dan Elysium. Sebuah denyut bergerak dari pusat menyusuri jalur chain yang dipilih, dan sebuah pembelian mendarat di sana.",
+  "CHAIN_ROUTE": "Logo Hevium berdiri sebagai pusat, dengan jalur yang memanjang darinya ke masing-masing dari enam chain: Base, Robinhood Chain, BNB Chain, Solana, Elysium, dan HyperEVM. Sebuah denyut bergerak dari pusat menyusuri jalur chain yang dipilih, dan sebuah pembelian mendarat di sana.",
   "CHAIN_STEPS": [
     "Masuk",
     "Pilih chain",
@@ -178,7 +187,7 @@
     },
     {
       "q": "Apa yang terjadi pada likuiditas setelah token lulus?",
-      "a": "Likuiditasnya ditaruh di luar jangkauan siapa pun. Di Base, BNB Chain, dan Robinhood Chain, token pool dibakar ke alamat mati. Di Elysium, posisinya dicetak langsung ke alamat mati, dan di Solana dikunci permanen."
+      "a": "Likuiditasnya ditaruh di luar jangkauan siapa pun. Di Base, BNB Chain, dan Robinhood Chain, token pool dibakar ke alamat mati. Di Elysium dan HyperEVM, posisinya dicetak langsung ke alamat mati, dan di Solana dikunci permanen."
     },
     {
       "q": "Berapa biaya trading?",
@@ -190,7 +199,7 @@
     },
     {
       "q": "Bisakah agen AI trading untukku?",
-      "a": "Bisa, lewat MCP. Hubungkan Claude, Cursor, atau klien lain ke mcp.hevium.xyz dan setujui sendiri setiap transaksi, atau jalankan servernya sendiri dengan batas per transaksi dan anggaran per hari. Agen trading di kelima chain."
+      "a": "Bisa, lewat MCP. Hubungkan Claude, Cursor, atau klien lain ke mcp.hevium.xyz dan setujui sendiri setiap transaksi, atau jalankan servernya sendiri dengan batas per transaksi dan anggaran per hari. Agen trading di keenam chain."
     },
     {
       "q": "Apakah kodenya sudah diaudit keamanannya?",
@@ -257,7 +266,7 @@
     }
   ],
   "PROBLEM_FACTS": [
-    "Aktif di 5 chain",
+    "Aktif di 6 chain",
     "0% alokasi orang dalam"
   ],
   "SECTIONS": {
@@ -297,9 +306,9 @@
       "lead": "Bagikan link kamu dan dapatkan bagian dari biaya 1.0% atas setiap transaksi mereka."
     },
     "chains": {
-      "eyebrow": "Lima chain",
-      "title": "Satu terminal, lima chain.",
-      "highlight": "lima chain",
+      "eyebrow": "Enam chain",
+      "title": "Satu terminal, enam chain.",
+      "highlight": "enam chain",
       "lead": "Masuk dengan Google, pilih chain, lalu trading. Setiap chain punya komunitas dan pair-nya sendiri, semuanya aktif di mainnet."
     },
     "trust": {
@@ -311,7 +320,7 @@
     "final": {
       "title": "Mulai trading di satu terminal.",
       "highlight": "satu terminal",
-      "lead": "Pair saham, fair launch, agen AI, dan komisi referral di lima chain. Masuk dengan Google dan kamu siap mulai."
+      "lead": "Pair saham, fair launch, agen AI, dan komisi referral di enam chain. Masuk dengan Google dan kamu siap mulai."
     }
   },
   "STOCK_COUNT": {
@@ -343,7 +352,7 @@
     {
       "side": "sell",
       "what": "Jual di kurva peluncuran",
-      "where": "2 HYPE di Elysium"
+      "where": "2 HYPE di HyperEVM"
     }
   ],
   "TRUST_WORDS": [
@@ -399,14 +408,14 @@
     "referralLink": "Link referral @{name}",
     "product": "Produk",
     "resources": "Sumber daya",
-    "fiveChains": "Lima chain",
+    "chains": "Enam chain",
     "docs": "Dokumentasi",
     "mcpServer": "Server MCP",
     "trust": "Kepercayaan",
     "brandKit": "Brand kit",
     "terms": "Ketentuan",
     "privacy": "Privasi",
-    "ogAlt": "Hevium: Terminal Saham dan Fair Launch Multi-Chain di Base, Robinhood Chain, BNB Chain, Solana, dan Elysium."
+    "ogAlt": "Hevium: Terminal Saham dan Fair Launch Multi-Chain di Base, Robinhood Chain, BNB Chain, Solana, Elysium, dan HyperEVM."
   },
   "NAV": [
     {

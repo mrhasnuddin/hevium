@@ -28,7 +28,7 @@ test.describe('trust section', () => {
     await expect(section.locator('h2')).toHaveText('Don\'t trust. Verify.');
     await expect(section.locator('h2 .hl')).toHaveText('Verify');
     await expect(section.locator('header .lead')).toContainText('on-chain');
-    // it follows Five chains
+    // it follows the chains
     const order = await page.locator('main section').evaluateAll((sections) => sections.map((section) => section.id));
     expect(order.indexOf('trust')).toBeGreaterThan(order.indexOf('chains'));
   });

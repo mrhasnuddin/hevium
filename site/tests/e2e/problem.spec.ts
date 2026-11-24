@@ -2,7 +2,7 @@ import { expect, test } from './fixtures';
 import { read, snapshot } from './pixels';
 
 const WALLS = ['Crypto-only', 'Sniper bots', 'Humans only'];
-const FACTS = ['Live on 5 chains', '0% insider allocation'];
+const FACTS = ['Live on 6 chains', '0% insider allocation'];
 
 test.describe('problem section', () => {
   test('is a part of the What is Hevium section: a label, a headline, three cards and two facts', async ({ page }) => {
@@ -74,16 +74,17 @@ test.describe('problem section', () => {
     });
   });
 
-  test('shows the five chains by their logos, as the app does, with their names for a screen reader', async ({ page }) => {
+  test('shows the six chains by their logos, as the app does, with their names for a screen reader', async ({ page }) => {
     await page.goto('/');
     const logos = page.locator('#problem .card-stat').first().locator('img');
-    expect(await logos.evaluateAll((imgs) => imgs.map((img) => img.getAttribute('alt')))).toEqual(['Base', 'Robinhood Chain', 'BNB Chain', 'Solana', 'Elysium']);
+    expect(await logos.evaluateAll((imgs) => imgs.map((img) => img.getAttribute('alt')))).toEqual(['Base', 'Robinhood Chain', 'BNB Chain', 'Solana', 'Elysium', 'HyperEVM']);
     expect(await logos.evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')))).toEqual([
       '/chains/base.svg',
       '/chains/robinhood.webp',
       '/chains/bnb.svg',
       '/chains/solana.png',
       '/chains/elysium.svg',
+      '/chains/hyperevm.svg',
     ]);
     // each a round mark the same size, with room reserved before it loads
     for (const logo of await logos.all()) {

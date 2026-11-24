@@ -57,7 +57,7 @@ html[data-entrance="rise"] [data-hero] h1 { animation: head-rise 0.6s var(--ease
 [data-cards][data-enter]:not([data-seen]) { opacity: 0; }
 [data-cards][data-enter]:not([data-seen]) > li { transform: none; filter: none; }
 
-/* Five chains: the hub lands, the lanes run out from it, and each chain arrives as its lane does. */
+/* The chains: the hub lands, the lanes run out from it, and each chain arrives as its lane does. */
 #chains figure[data-enter] [data-hub] { transition: opacity 0.5s ease, scale 0.6s var(--ease-out); }
 #chains figure[data-enter] > div[aria-hidden] { clip-path: inset(-30% -5% -30% 0); transition: clip-path 0.7s var(--ease-out) 0.15s; }
 #chains figure[data-enter] li { transition: opacity 0.5s ease, translate 0.5s var(--ease-out); transition-delay: 350ms; }

@@ -1,9 +1,9 @@
 {
   "FACTS": [
     {
-      "value": "5",
+      "value": "6",
       "label": "Chuỗi",
-      "words": "năm chuỗi"
+      "words": "sáu chuỗi"
     },
     {
       "value": "1.0%",
@@ -17,14 +17,14 @@
     }
   ],
   "FOOTER": {
-    "headline": "Một terminal. Năm chuỗi.",
+    "headline": "Một terminal. Sáu chuỗi.",
     "copyright": "© 2026 Hevium",
     "backToTop": "Về đầu trang"
   },
   "META": {
     "title": "Hevium: Terminal đa chuỗi cho cổ phiếu và fair launch",
-    "description": "Giao dịch token fair launch ghép cặp với cổ phiếu và đô la số trên năm chuỗi. Phí 1.0%, phi lưu ký, một lần đăng nhập. Dành cho trader và AI agent.",
-    "whatIs": "Hevium là terminal giao dịch phi lưu ký kiêm launchpad fair launch trên năm chuỗi: Base, Robinhood Chain, BNB Chain, Solana và Elysium. Token ra mắt trên bonding curve và có thể ghép cặp với cổ phiếu và đô la số. Mỗi giao dịch tốn phí 1.0%, và 20% khoản phí đó thuộc về người giới thiệu."
+    "description": "Giao dịch token fair launch ghép cặp với cổ phiếu và đô la số trên sáu chuỗi. Phí 1.0%, phi lưu ký, một lần đăng nhập. Dành cho trader và AI agent.",
+    "whatIs": "Hevium là terminal giao dịch phi lưu ký kiêm launchpad fair launch trên sáu chuỗi: Base, Robinhood Chain, BNB Chain, Solana, Elysium và HyperEVM. Token ra mắt trên bonding curve và có thể ghép cặp với cổ phiếu và đô la số. Mỗi giao dịch tốn phí 1.0%, và 20% khoản phí đó thuộc về người giới thiệu."
   },
   "RISK_LINE": "Giao dịch token có rủi ro, và giá có thể giảm về không. Hevium là nền tảng phi lưu ký và không đưa ra lời khuyên đầu tư.",
   "AGENT_CHART": "Biểu đồ đường của giá trong một ngày, được vẽ dần theo diễn biến của phiên. Mỗi lần agent mua, một chữ B đánh dấu lên đường giá kèm số tiền, 0.1 ETH, tại một nhịp giá giảm. Lệnh mua thứ tư bị giữ lại vì chạm ngân sách ngày và được đánh dấu bằng màu hổ phách.",
@@ -113,9 +113,18 @@
         "HYPE",
         "USDC"
       ]
+    },
+    {
+      "name": "HyperEVM",
+      "suits": "Trader Hyperliquid và người nắm giữ HYPE",
+      "trades": [
+        "HYPE",
+        "USDC",
+        "USDT0"
+      ]
     }
   ],
-  "CHAIN_ROUTE": "Biểu tượng Hevium đứng làm trung tâm, từ đó mỗi làn đường chạy tới một trong năm chuỗi: Base, Robinhood Chain, BNB Chain, Solana và Elysium. Một xung tín hiệu chạy từ trung tâm dọc theo làn của chuỗi được chọn, và một lệnh mua đáp xuống đó.",
+  "CHAIN_ROUTE": "Biểu tượng Hevium đứng làm trung tâm, từ đó mỗi làn đường chạy tới một trong sáu chuỗi: Base, Robinhood Chain, BNB Chain, Solana, Elysium và HyperEVM. Một xung tín hiệu chạy từ trung tâm dọc theo làn của chuỗi được chọn, và một lệnh mua đáp xuống đó.",
   "CHAIN_STEPS": [
     "Đăng nhập",
     "Chọn chuỗi",
@@ -178,7 +187,7 @@
     },
     {
       "q": "Thanh khoản sẽ ra sao sau khi token tốt nghiệp?",
-      "a": "Thanh khoản được đưa ra ngoài tầm với. Trên Base, BNB Chain và Robinhood Chain, token LP được đốt bằng cách gửi về địa chỉ chết. Trên Elysium, vị thế được mint thẳng về địa chỉ chết, còn trên Solana thì bị khóa vĩnh viễn."
+      "a": "Thanh khoản được đưa ra ngoài tầm với. Trên Base, BNB Chain và Robinhood Chain, token LP được đốt bằng cách gửi về địa chỉ chết. Trên Elysium và HyperEVM, vị thế được mint thẳng về địa chỉ chết, còn trên Solana thì bị khóa vĩnh viễn."
     },
     {
       "q": "Phí giao dịch là bao nhiêu?",
@@ -190,7 +199,7 @@
     },
     {
       "q": "AI agent có thể giao dịch thay tôi không?",
-      "a": "Có, qua MCP. Kết nối Claude, Cursor hoặc một client khác tới mcp.hevium.xyz và tự duyệt từng giao dịch, hoặc tự chạy máy chủ với hạn mức mỗi giao dịch và ngân sách mỗi ngày. Agent giao dịch được trên cả năm chuỗi."
+      "a": "Có, qua MCP. Kết nối Claude, Cursor hoặc một client khác tới mcp.hevium.xyz và tự duyệt từng giao dịch, hoặc tự chạy máy chủ với hạn mức mỗi giao dịch và ngân sách mỗi ngày. Agent giao dịch được trên cả sáu chuỗi."
     },
     {
       "q": "Mã nguồn đã được kiểm toán bảo mật chưa?",
@@ -257,7 +266,7 @@
     }
   ],
   "PROBLEM_FACTS": [
-    "Hoạt động trên 5 chuỗi",
+    "Hoạt động trên 6 chuỗi",
     "0% phân bổ cho nội bộ"
   ],
   "SECTIONS": {
@@ -297,9 +306,9 @@
       "lead": "Chia sẻ link của bạn và nhận phần từ khoản phí 1.0% trên những gì họ giao dịch."
     },
     "chains": {
-      "eyebrow": "Năm chuỗi",
-      "title": "Một terminal, năm chuỗi.",
-      "highlight": "năm chuỗi",
+      "eyebrow": "Sáu chuỗi",
+      "title": "Một terminal, sáu chuỗi.",
+      "highlight": "sáu chuỗi",
       "lead": "Đăng nhập bằng Google, chọn chuỗi và giao dịch. Mỗi chuỗi có cộng đồng riêng và các cặp riêng, tất cả đều đang chạy trên mainnet."
     },
     "trust": {
@@ -311,7 +320,7 @@
     "final": {
       "title": "Bắt đầu giao dịch trong một terminal.",
       "highlight": "một terminal",
-      "lead": "Cặp cổ phiếu, fair launch, AI agent và hoa hồng giới thiệu trên năm chuỗi. Đăng nhập bằng Google là bạn vào ngay."
+      "lead": "Cặp cổ phiếu, fair launch, AI agent và hoa hồng giới thiệu trên sáu chuỗi. Đăng nhập bằng Google là bạn vào ngay."
     }
   },
   "STOCK_COUNT": {
@@ -343,7 +352,7 @@
     {
       "side": "sell",
       "what": "Bán trên bonding curve",
-      "where": "2 HYPE trên Elysium"
+      "where": "2 HYPE trên HyperEVM"
     }
   ],
   "TRUST_WORDS": [
@@ -399,14 +408,14 @@
     "referralLink": "Link giới thiệu của @{name}",
     "product": "Sản phẩm",
     "resources": "Tài nguyên",
-    "fiveChains": "Năm chuỗi",
+    "chains": "Sáu chuỗi",
     "docs": "Tài liệu",
     "mcpServer": "Máy chủ MCP",
     "trust": "Tin cậy",
     "brandKit": "Bộ nhận diện",
     "terms": "Điều khoản",
     "privacy": "Quyền riêng tư",
-    "ogAlt": "Hevium: Terminal đa chuỗi cho cổ phiếu và fair launch trên Base, Robinhood Chain, BNB Chain, Solana và Elysium."
+    "ogAlt": "Hevium: Terminal đa chuỗi cho cổ phiếu và fair launch trên Base, Robinhood Chain, BNB Chain, Solana, Elysium và HyperEVM."
   },
   "NAV": [
     {

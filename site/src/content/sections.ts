@@ -68,9 +68,9 @@ export const SECTIONS = {
     lead: 'Share your link and earn from the 1.0% fee on what they trade.',
   },
   chains: {
-    eyebrow: 'Five chains',
-    title: 'One terminal, five chains.',
-    highlight: 'five chains',
+    eyebrow: 'Six chains',
+    title: 'One terminal, six chains.',
+    highlight: 'six chains',
     lead: 'Sign in with Google, pick a chain and trade. Each chain brings its own crowd and its own pairs, all live on mainnet.',
   },
   // Guarantees and FAQ in one section.
@@ -84,7 +84,7 @@ export const SECTIONS = {
   final: {
     title: 'Start trading in one terminal.',
     highlight: 'one terminal',
-    lead: 'Stock pairs, fair launches, AI agents and referral fees on five chains. Sign in with Google and you are in.',
+    lead: 'Stock pairs, fair launches, AI agents and referral fees on six chains. Sign in with Google and you are in.',
   },
 } satisfies Record<string, SectionCopy>;
 
@@ -105,7 +105,7 @@ export const PROBLEMS = [
 ];
 
 // Two facts that stand beside the walls, both from the spec: where Hevium is live, and the launch split's insider share.
-export const PROBLEM_FACTS = ['Live on 5 chains', '0% insider allocation'];
+export const PROBLEM_FACTS = ['Live on 6 chains', '0% insider allocation'];
 
 // The ticker ring, in its order round the ring: ten stocks and funds with the three digital dollars among them.
 // Each is named in text. The coin also carries the app's icon for the one it lands on (config/site.ts tickerLogo).
@@ -184,25 +184,26 @@ export const EARN = {
   ],
 };
 
-// The five chains, in the order the page names them (config/site.ts CHAIN_LOGOS): who each suits, and a few
+// The six chains, in the order the page names them (config/site.ts CHAIN_LOGOS): who each suits, and a few
 // of the assets that trade there. Who it suits is the deck's reading (p7), put in a visitor's words. The
 // assets are from the docs' list for that chain (docs.hevium.xyz/llms-full.txt, section 1, read on
-// 2026-11-22), and each has an icon the app serves.
+// 2026-11-22; HyperEVM, the sixth, from the docs as read on 2026-11-24), and each has an icon in public/.
 export const CHAINS = [
   { name: 'Base', suits: 'Coinbase users and stable-yield holders', trades: ['ETH', 'USDC', 'USD+', 'COIN'] },
   { name: 'Robinhood Chain', suits: 'Stock traders, with markets open 24/7', trades: ['NVDA', 'TSLA', 'AAPL', 'SPY'] },
   { name: 'BNB Chain', suits: 'High-volume launches, worldwide', trades: ['BNB', 'USDT', 'USDC'] },
   { name: 'Solana', suits: 'Fast traders and bots', trades: ['SOL', 'USDC'] },
   { name: 'Elysium', suits: 'DeFi traders who like to be early', trades: ['HYPE', 'USDC'] },
+  { name: 'HyperEVM', suits: 'Hyperliquid traders and HYPE holders', trades: ['HYPE', 'USDC', 'USDT0'] },
 ];
 
 // How it works, in three words: the page's old "How it works" section, folded into this one.
 export const CHAIN_STEPS = ['Sign in', 'Pick a chain', 'Trade'];
 
-// What the piece shows, in words, for a screen reader and a crawler. Hevium is one terminal on five chains.
+// What the piece shows, in words, for a screen reader and a crawler. Hevium is one terminal on six chains.
 // It does not move funds from one chain to another, so nothing here says it does.
 export const CHAIN_ROUTE =
-  'The Hevium mark stands as a hub, with a lane running from it to each of five chains: Base, Robinhood Chain, BNB Chain, Solana and Elysium. A pulse travels from the hub down the lane of the chain that is picked, and a buy lands there.';
+  'The Hevium mark stands as a hub, with a lane running from it to each of six chains: Base, Robinhood Chain, BNB Chain, Solana, Elysium and HyperEVM. A pulse travels from the hub down the lane of the chain that is picked, and a buy lands there.';
 
 // The four guarantees, each with the fact behind it in `proof`. They say what the docs say and no more
 // (docs.hevium.xyz/llms-full.txt, read on 2026-11-22): Google sign-in makes a non-custodial wallet; supply is
@@ -229,13 +230,13 @@ export const TRUST_FEED = [
   { side: 'sell', what: 'Sell on the COIN pair', where: '0.25 ETH on Base' },
   { side: 'buy', what: 'Buy on a launch curve', where: '0.05 BNB on BNB Chain' },
   { side: 'buy', what: 'Buy on the USD+ pair', where: '120 USD+ on Base' },
-  { side: 'sell', what: 'Sell on a launch curve', where: '2 HYPE on Elysium' },
+  { side: 'sell', what: 'Sell on a launch curve', where: '2 HYPE on HyperEVM' },
 ] as const;
 
 // The questions. Each answer keeps to what the docs say (same file, sections 1, 3 and 6), and together they
 // carry what the sections above leave out: that a token graduates by itself, where a referral does not pay,
-// Solana's own swap fee, and the risk. Agents are said to trade on all five chains, which has to be true
-// before this page goes live: when it was written the docs had Solana as read and quote only.
+// Solana's own swap fee, and the risk. Agents are said to trade on all six chains, which has to be true
+// before this page goes live: on 2026-11-24 the docs had agents on the five EVM chains and Solana on the roadmap.
 export const FAQ = [
   {
     q: 'Who holds my funds?',
@@ -247,7 +248,7 @@ export const FAQ = [
   },
   {
     q: 'What happens to liquidity after a token graduates?',
-    a: 'It is put out of reach. On Base, BNB Chain and Robinhood Chain the pool tokens are burned to the dead address. On Elysium the position is minted straight to the dead address, and on Solana it is permanently locked.',
+    a: 'It is put out of reach. On Base, BNB Chain and Robinhood Chain the pool tokens are burned to the dead address. On Elysium and HyperEVM the position is minted straight to the dead address, and on Solana it is permanently locked.',
   },
   {
     q: 'What does trading cost?',
@@ -259,7 +260,7 @@ export const FAQ = [
   },
   {
     q: 'Can an AI agent trade for me?',
-    a: 'Yes, over MCP. Connect Claude, Cursor or another client to mcp.hevium.xyz and approve each transaction yourself, or run the server yourself with a cap per trade and a budget per day. Agents trade on all five chains.',
+    a: 'Yes, over MCP. Connect Claude, Cursor or another client to mcp.hevium.xyz and approve each transaction yourself, or run the server yourself with a cap per trade and a budget per day. Agents trade on all six chains.',
   },
   {
     q: 'Has the code had a security audit?',

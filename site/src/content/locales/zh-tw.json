@@ -1,9 +1,9 @@
 {
   "FACTS": [
     {
-      "value": "5",
+      "value": "6",
       "label": "條鏈",
-      "words": "五條鏈"
+      "words": "六條鏈"
     },
     {
       "value": "1.0%",
@@ -17,14 +17,14 @@
     }
   ],
   "FOOTER": {
-    "headline": "一個終端。五條鏈。",
+    "headline": "一個終端。六條鏈。",
     "copyright": "© 2026 Hevium",
     "backToTop": "回到頂端"
   },
   "META": {
     "title": "Hevium：多鏈股票與公平發射交易終端",
-    "description": "在五條鏈上交易與股票、數位美元配對的公平發射代幣。手續費 1.0%，非託管，一次登入。為交易者與 AI 代理打造。",
-    "whatIs": "Hevium 是非託管的交易終端與公平發射平台，支援五條鏈：Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。代幣在聯合曲線上發行，可與股票和數位美元配對。每筆交易收取 1.0% 的手續費，其中 20% 歸推薦人。"
+    "description": "在六條鏈上交易與股票、數位美元配對的公平發射代幣。手續費 1.0%，非託管，一次登入。為交易者與 AI 代理打造。",
+    "whatIs": "Hevium 是非託管的交易終端與公平發射平台，支援六條鏈：Base、Robinhood Chain、BNB Chain、Solana、Elysium 和 HyperEVM。代幣在聯合曲線上發行，可與股票和數位美元配對。每筆交易收取 1.0% 的手續費，其中 20% 歸推薦人。"
   },
   "RISK_LINE": "代幣交易有風險，價格可能跌至零。Hevium 為非託管平台，不提供投資建議。",
   "AGENT_CHART": "一張一日價格折線圖，隨交易時段推進逐步繪出。AI 代理每次買入時，折線上會在價格回檔處標出 B 與金額 0.1 ETH。第四筆買入因達到每日預算而被攔下，以琥珀色標示。",
@@ -113,9 +113,18 @@
         "HYPE",
         "USDC"
       ]
+    },
+    {
+      "name": "HyperEVM",
+      "suits": "Hyperliquid 交易者與 HYPE 持有者",
+      "trades": [
+        "HYPE",
+        "USDC",
+        "USDT0"
+      ]
     }
   ],
-  "CHAIN_ROUTE": "Hevium 標誌作為樞紐，從它各有一條通道連向五條鏈：Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。一道脈衝從樞紐沿著所選鏈的通道前進，一筆買入在該鏈落地。",
+  "CHAIN_ROUTE": "Hevium 標誌作為樞紐，從它各有一條通道連向六條鏈：Base、Robinhood Chain、BNB Chain、Solana、Elysium 和 HyperEVM。一道脈衝從樞紐沿著所選鏈的通道前進，一筆買入在該鏈落地。",
   "CHAIN_STEPS": [
     "登入",
     "選一條鏈",
@@ -178,7 +187,7 @@
     },
     {
       "q": "代幣畢業後，流動性會怎麼處理？",
-      "a": "任何人都無法再動用。在 Base、BNB Chain 和 Robinhood Chain 上，LP 代幣會打入黑洞地址銷毀。在 Elysium 上，流動性部位直接鑄造到黑洞地址；在 Solana 上則永久鎖定。"
+      "a": "任何人都無法再動用。在 Base、BNB Chain 和 Robinhood Chain 上，LP 代幣會打入黑洞地址銷毀。在 Elysium 和 HyperEVM 上，流動性部位直接鑄造到黑洞地址；在 Solana 上則永久鎖定。"
     },
     {
       "q": "交易手續費是多少？",
@@ -190,7 +199,7 @@
     },
     {
       "q": "AI 代理可以替我交易嗎？",
-      "a": "可以，透過 MCP。把 Claude、Cursor 或其他用戶端連上 mcp.hevium.xyz，並親自核准每一筆交易；或者自行架設伺服器，設定單筆上限與每日預算。AI 代理可在全部五條鏈上交易。"
+      "a": "可以，透過 MCP。把 Claude、Cursor 或其他用戶端連上 mcp.hevium.xyz，並親自核准每一筆交易；或者自行架設伺服器，設定單筆上限與每日預算。AI 代理可在全部六條鏈上交易。"
     },
     {
       "q": "程式碼做過安全審計嗎？",
@@ -257,7 +266,7 @@
     }
   ],
   "PROBLEM_FACTS": [
-    "已在 5 條鏈上線",
+    "已在 6 條鏈上線",
     "0% 內部人配額"
   ],
   "SECTIONS": {
@@ -297,9 +306,9 @@
       "lead": "分享你的連結，從他們每筆交易的 1.0% 手續費中分潤。"
     },
     "chains": {
-      "eyebrow": "五條鏈",
-      "title": "一個終端，五條鏈。",
-      "highlight": "五條鏈",
+      "eyebrow": "六條鏈",
+      "title": "一個終端，六條鏈。",
+      "highlight": "六條鏈",
       "lead": "用 Google 登入、選一條鏈，就能交易。每條鏈都有自己的社群與交易對，全部已在主網上線。"
     },
     "trust": {
@@ -311,7 +320,7 @@
     "final": {
       "title": "在一個終端，開始交易。",
       "highlight": "一個終端",
-      "lead": "股票交易對、公平發射、AI 代理和推薦分潤，橫跨五條鏈。用 Google 登入即可開始。"
+      "lead": "股票交易對、公平發射、AI 代理和推薦分潤，橫跨六條鏈。用 Google 登入即可開始。"
     }
   },
   "STOCK_COUNT": {
@@ -343,7 +352,7 @@
     {
       "side": "sell",
       "what": "在聯合曲線賣出",
-      "where": "2 HYPE，於 Elysium"
+      "where": "2 HYPE，於 HyperEVM"
     }
   ],
   "TRUST_WORDS": [
@@ -399,14 +408,14 @@
     "referralLink": "@{name} 的推薦連結",
     "product": "產品",
     "resources": "資源",
-    "fiveChains": "五條鏈",
+    "chains": "六條鏈",
     "docs": "文件",
     "mcpServer": "MCP 伺服器",
     "trust": "信任",
     "brandKit": "品牌素材",
     "terms": "服務條款",
     "privacy": "隱私權",
-    "ogAlt": "Hevium：多鏈股票與公平發射交易終端，支援 Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。"
+    "ogAlt": "Hevium：多鏈股票與公平發射交易終端，支援 Base、Robinhood Chain、BNB Chain、Solana、Elysium 和 HyperEVM。"
   },
   "NAV": [
     {

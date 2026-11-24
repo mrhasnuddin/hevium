@@ -13,7 +13,7 @@ type FooterGroup = { heading: string; links: FooterLink[] };
 const groups = ({ ENGINES, UI }: Copy): FooterGroup[] => [
   {
     heading: UI.product,
-    links: [...ENGINES.map(({ label, href }) => ({ label, href })), { label: UI.fiveChains, href: '#chains' }],
+    links: [...ENGINES.map(({ label, href }) => ({ label, href })), { label: UI.chains, href: '#chains' }],
   },
   {
     heading: UI.resources,

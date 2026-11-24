@@ -8,9 +8,9 @@ import { useWords } from '@/components/Words';
 import { FinalTokens, type TokenSpot } from './FinalTokens';
 import styles from './Final.module.css';
 
-// The page's logos as tokens, six to a side: the five chains and seven of the assets the page names
+// The page's logos as tokens, six to a side: the six chains and six of the assets the page names
 // (FinalTokens.tsx says what each number is).
-const TOKENS = ['NVDA', 'TSLA', 'AAPL', 'SPY', 'COIN', 'USDC', 'ETH'].map(tickerLogo);
+const TOKENS = ['NVDA', 'TSLA', 'AAPL', 'SPY', 'COIN', 'ETH'].map(tickerLogo);
 const CHAINS = CHAIN_LOGOS.map((chain) => chain.src);
 const SIDES: TokenSpot[][] = [
   [
@@ -25,9 +25,9 @@ const SIDES: TokenSpot[][] = [
     [TOKENS[3], 0.9, 0.08, 7.75, 0.85],
     [CHAINS[3], 0.2, 0.24, 5.75, 0.6],
     [TOKENS[4], 0.7, 0.44, 9, 1],
-    [TOKENS[5], 0.02, 0.58, 5.5, 0.55],
+    [CHAINS[5], 0.02, 0.58, 5.5, 0.55],
     [CHAINS[4], 0.95, 0.74, 6.75, 0.75],
-    [TOKENS[6], 0.35, 0.92, 7.5, 0.9],
+    [TOKENS[5], 0.35, 0.92, 7.5, 0.9],
   ],
 ];
 

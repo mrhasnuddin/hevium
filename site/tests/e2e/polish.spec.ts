@@ -31,7 +31,7 @@ test.describe('polish', () => {
     for (const button of await page.locator('main .btn:not(.btn-sm):visible').all()) expect((await button.boundingBox())!.width).toBeLessThan(320);
   });
 
-  test('ends each product section and Five chains in one tonal button, in the middle', async ({ page }) => {
+  test('ends each product section and the chains in one tonal button, in the middle', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     for (const id of ['stocks', 'launch', 'agents', 'earn', 'chains']) {
@@ -79,7 +79,7 @@ test.describe('polish', () => {
         };
       }),
     );
-    expect(pills.map((pill) => pill.text)).toEqual(['What is Hevium', 'The problem', 'The solution', 'Five chains', 'Trust', 'FAQ']);
+    expect(pills.map((pill) => pill.text)).toEqual(['What is Hevium', 'The problem', 'The solution', 'Six chains', 'Trust', 'FAQ']);
     expect(new Set(pills.map((pill) => pill.look)).size).toBe(1);
     for (const pill of pills) expect(pill.star, pill.text).toBe(true);
     // a headline stands the same distance under its eyebrow wherever it is (the statement is prose, not a headline)

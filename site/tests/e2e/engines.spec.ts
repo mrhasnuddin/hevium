@@ -219,7 +219,7 @@ test.describe('the solution frame on a phone', () => {
       await expect(page.locator(`#${IDS[n + 1]} h2`)).toBeInViewport();
     }
     // after Earn, the last, the way on leaves the frame
-    await expect(next).toHaveText('Next: Five chains');
+    await expect(next).toHaveText('Next: Six chains');
     await next.click();
     await expect(page.locator('#chains h2')).toBeInViewport();
   });

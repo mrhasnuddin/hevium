@@ -44,7 +44,7 @@ const never = () => () => {};
 // tabs: one engine shows at a time, a swipe or the button at its foot turns to the next, and a link to an
 // engine opens it. Which way it behaves is CSS (see the module). With scripts off it is the head, four links
 // and four sections one after another.
-// The last engine's way on leads to the section that follows the frame: Five chains.
+// The last engine's way on leads to the section that follows the frame: The chains.
 export function Engines({ children }: { children: ReactNode }) {
   const { ENGINES: engines, SECTIONS, UI } = useWords().copy;
   const scripted = useSyncExternalStore(never, () => true, () => false);

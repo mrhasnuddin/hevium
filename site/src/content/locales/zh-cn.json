@@ -1,9 +1,9 @@
 {
   "FACTS": [
     {
-      "value": "5",
+      "value": "6",
       "label": "支持的链",
-      "words": "五条链"
+      "words": "六条链"
     },
     {
       "value": "1.0%",
@@ -17,14 +17,14 @@
     }
   ],
   "FOOTER": {
-    "headline": "一个终端。五条链。",
+    "headline": "一个终端。六条链。",
     "copyright": "© 2026 Hevium",
     "backToTop": "回到顶部"
   },
   "META": {
     "title": "Hevium：多链股票与公平发射交易终端",
-    "description": "在五条链上交易与股票和数字美元配对的公平发射代币。手续费 1.0%，非托管，一次登录即可使用。为交易者和 AI 智能体打造。",
-    "whatIs": "Hevium 是一个非托管交易终端和公平发射平台，覆盖五条链：Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。代币在联合曲线上发射，可与股票和数字美元配对。每笔交易收取 1.0% 手续费，其中 20% 归邀请人。"
+    "description": "在六条链上交易与股票和数字美元配对的公平发射代币。手续费 1.0%，非托管，一次登录即可使用。为交易者和 AI 智能体打造。",
+    "whatIs": "Hevium 是一个非托管交易终端和公平发射平台，覆盖六条链：Base、Robinhood Chain、BNB Chain、Solana、Elysium 和 HyperEVM。代币在联合曲线上发射，可与股票和数字美元配对。每笔交易收取 1.0% 手续费，其中 20% 归邀请人。"
   },
   "RISK_LINE": "代币交易有风险，价格可能跌至零。Hevium 是非托管平台，不提供投资建议。",
   "AGENT_CHART": "一张价格折线图，展示一天内的价格走势，随交易时段推进逐步绘出。智能体每次买入，都会在价格回调处用 B 标出，并注明金额 0.1 ETH。第四笔买入因触及每日预算而被暂缓，以琥珀色标出。",
@@ -113,9 +113,18 @@
         "HYPE",
         "USDC"
       ]
+    },
+    {
+      "name": "HyperEVM",
+      "suits": "Hyperliquid 交易者和 HYPE 持有者",
+      "trades": [
+        "HYPE",
+        "USDC",
+        "USDT0"
+      ]
     }
   ],
-  "CHAIN_ROUTE": "Hevium 标志居中作为枢纽，各有一条通道通向五条链：Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。一道脉冲从枢纽出发，沿所选链的通道传去，一笔买入在那里落地。",
+  "CHAIN_ROUTE": "Hevium 标志居中作为枢纽，各有一条通道通向六条链：Base、Robinhood Chain、BNB Chain、Solana、Elysium 和 HyperEVM。一道脉冲从枢纽出发，沿所选链的通道传去，一笔买入在那里落地。",
   "CHAIN_STEPS": [
     "登录",
     "选择链",
@@ -178,7 +187,7 @@
     },
     {
       "q": "代币毕业后，流动性会怎样？",
-      "a": "流动性将无法再被任何人动用。在 Base、BNB Chain 和 Robinhood Chain 上，LP 代币会被销毁至黑洞地址。在 Elysium 上，流动性头寸直接铸造到黑洞地址；在 Solana 上则被永久锁定。"
+      "a": "流动性将无法再被任何人动用。在 Base、BNB Chain 和 Robinhood Chain 上，LP 代币会被销毁至黑洞地址。在 Elysium 和 HyperEVM 上，流动性头寸直接铸造到黑洞地址；在 Solana 上则被永久锁定。"
     },
     {
       "q": "交易费用是多少？",
@@ -190,7 +199,7 @@
     },
     {
       "q": "AI 智能体可以替我交易吗？",
-      "a": "可以，通过 MCP 实现。将 Claude、Cursor 或其他客户端连接到 mcp.hevium.xyz，并亲自批准每笔交易；也可以自行运行服务器，设置单笔上限和每日预算。智能体可在全部五条链上交易。"
+      "a": "可以，通过 MCP 实现。将 Claude、Cursor 或其他客户端连接到 mcp.hevium.xyz，并亲自批准每笔交易；也可以自行运行服务器，设置单笔上限和每日预算。智能体可在全部六条链上交易。"
     },
     {
       "q": "代码做过安全审计吗？",
@@ -257,7 +266,7 @@
     }
   ],
   "PROBLEM_FACTS": [
-    "已上线 5 条链",
+    "已上线 6 条链",
     "0% 内部分配"
   ],
   "SECTIONS": {
@@ -297,9 +306,9 @@
       "lead": "分享你的链接，从他们交易产生的 1.0% 手续费中获得收益。"
     },
     "chains": {
-      "eyebrow": "五条链",
-      "title": "一个终端，五条链。",
-      "highlight": "五条链",
+      "eyebrow": "六条链",
+      "title": "一个终端，六条链。",
+      "highlight": "六条链",
       "lead": "用 Google 登录，选一条链，开始交易。每条链都有自己的用户群和交易对，全部已在主网上线。"
     },
     "trust": {
@@ -311,7 +320,7 @@
     "final": {
       "title": "在一个终端里开始交易。",
       "highlight": "一个终端",
-      "lead": "股票交易对、公平发射、AI 智能体和返佣，覆盖五条链。用 Google 登录即可开始。"
+      "lead": "股票交易对、公平发射、AI 智能体和返佣，覆盖六条链。用 Google 登录即可开始。"
     }
   },
   "STOCK_COUNT": {
@@ -343,7 +352,7 @@
     {
       "side": "sell",
       "what": "在发射曲线上卖出",
-      "where": "2 HYPE · Elysium"
+      "where": "2 HYPE · HyperEVM"
     }
   ],
   "TRUST_WORDS": [
@@ -399,14 +408,14 @@
     "referralLink": "@{name} 的邀请链接",
     "product": "产品",
     "resources": "资源",
-    "fiveChains": "五条链",
+    "chains": "六条链",
     "docs": "文档",
     "mcpServer": "MCP 服务器",
     "trust": "信任",
     "brandKit": "品牌素材",
     "terms": "服务条款",
     "privacy": "隐私政策",
-    "ogAlt": "Hevium：多链股票与公平发射交易终端，支持 Base、Robinhood Chain、BNB Chain、Solana 和 Elysium。"
+    "ogAlt": "Hevium：多链股票与公平发射交易终端，支持 Base、Robinhood Chain、BNB Chain、Solana、Elysium 和 HyperEVM。"
   },
   "NAV": [
     {

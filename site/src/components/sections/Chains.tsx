@@ -6,7 +6,7 @@ import { useWords } from '@/components/Words';
 import { ChainRoute } from './ChainRoute';
 import styles from './Chains.module.css';
 
-// Five chains: the head, the three steps as pills, one piece (the hub with a lane to each chain), and the
+// The chains: the head, the three steps as pills, one piece (the hub with a lane to each chain), and the
 // button into the app. The page's "How it works" is those three steps, so the hero's button of that name
 // lands here: the empty anchor at the top holds the name `how`.
 export function Chains() {

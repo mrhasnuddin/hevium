@@ -15,7 +15,7 @@ test.describe('final call to action', () => {
     expect(await page.locator('main section').evaluateAll((sections) => sections.at(-1)!.id)).toBe('final');
     await expect(section.locator('h2')).toHaveText('Start trading in one terminal.');
     await expect(section.locator('h2 .hl')).toHaveText('one terminal');
-    await expect(section.locator('header .lead')).toContainText('five chains');
+    await expect(section.locator('header .lead')).toContainText('six chains');
     await expect(section.locator('.eyebrow')).toHaveCount(0); // the mark stands where a section's eyebrow would
     // the mark: the Hevium star, wider than it is tall, in the brand gradient, standing over the headline
     const mark = section.locator('[data-mark]');
@@ -55,7 +55,7 @@ test.describe('final call to action', () => {
       await expect(coins(page)).toHaveCount(12);
       const srcs = await coins(page).evaluateAll((imgs) => imgs.map((img) => img.getAttribute('src')!));
       for (const src of srcs) expect(src).toMatch(/^\/(chains|tokens)\//);
-      expect(srcs.filter((src) => src.includes('/chains/')).length).toBe(5); // all five chains
+      expect(srcs.filter((src) => src.includes('/chains/')).length).toBe(6); // all six chains
       expect(new Set(srcs).size).toBe(12);
       const words = await Promise.all(['[data-mark]', 'h2', 'header .lead', '[data-actions]'].map(async (part) => (await page.locator(`#final ${part}`).boundingBox())!));
       const section = (await page.locator('#final').boundingBox())!;

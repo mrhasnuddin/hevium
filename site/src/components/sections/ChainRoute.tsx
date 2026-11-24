@@ -9,13 +9,14 @@ import styles from './Chains.module.css';
 
 const never = () => () => {};
 const TURN = 3000; // ms a chain is lit for: the pulse runs its lane, the buy lands, and it stands for a second
-// A lane, in a box 100 by 100: out of the hub at the middle of the left side, to its chain's row on the right.
-const lane = (i: number) => {
-  const y = 10 + i * 20;
+// A lane, in a box 100 by 100: out of the hub at the middle of the left side, to the middle of its chain's row,
+// which is one of `rows` equal rows down the right side.
+const lane = (i: number, rows: number) => {
+  const y = ((i + 0.5) * 100) / rows;
   return `M0,50 C55,50 45,${y} 100,${y}`;
 };
 
-// The Five chains section's piece: the Hevium hub, a lane from it to each chain, and the chains in a list with
+// The chains section's piece: the Hevium hub, a lane from it to each chain, and the chains in a list with
 // who each suits and what trades there. One chain is lit at a time. A pulse runs from the hub down its lane, a
 // line draws on to its tokens, and a buy tag lands on its logo. It moves on by itself and goes to whichever
 // chain the pointer is on. Under the pointer the hub turns to its filled look. With scripts off all five
@@ -34,7 +35,7 @@ export function ChainRoute() {
   }, []);
 
   return (
-    <figure className={`section-piece ${styles.stage}`} data-live={scripted ? '' : undefined} style={{ '--turn': `${TURN}ms` } as CSSProperties}>
+    <figure className={`section-piece ${styles.stage}`} data-live={scripted ? '' : undefined} style={{ '--turn': `${TURN}ms`, '--n': chains.length } as CSSProperties}>
       <PixelField className={styles.ground} />
       <div className={styles.hub} data-hub>
         {/* keyed by the chain, so the hub sends its ring out afresh on every turn */}
@@ -45,13 +46,13 @@ export function ChainRoute() {
       <div className={styles.web} aria-hidden="true">
         <svg className={styles.lanes} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           {chains.map((chain, i) => (
-            <path key={chain.name} data-lane data-on={on === i ? '' : undefined} d={lane(i)} />
+            <path key={chain.name} data-lane data-on={on === i ? '' : undefined} d={lane(i, chains.length)} />
           ))}
         </svg>
         {/* the pulses: on each lane a short lit stretch, shown through a band that runs from the hub outward */}
         {chains.map((chain, i) => (
           <svg key={chain.name} className={styles.pulse} data-on={on === i ? '' : undefined} style={{ '--i': i } as CSSProperties} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <path d={lane(i)} />
+            <path d={lane(i, chains.length)} />
           </svg>
         ))}
       </div>

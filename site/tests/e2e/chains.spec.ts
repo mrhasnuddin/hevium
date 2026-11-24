@@ -1,25 +1,25 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from './fixtures';
 
-const NAMES = ['Base', 'Robinhood Chain', 'BNB Chain', 'Solana', 'Elysium'];
+const NAMES = ['Base', 'Robinhood Chain', 'BNB Chain', 'Solana', 'Elysium', 'HyperEVM'];
 const rows = (page: Page) => page.locator('#chains [data-chains] > li');
 // Which chains are lit, by their place in the list.
 const lit = (page: Page) => rows(page).evaluateAll((found) => found.flatMap((row, i) => (row.hasAttribute('data-on') ? [i] : [])));
 const wide = (page: Page) => page.viewportSize()!.width >= 1024; // where the lanes are drawn
 
-test.describe('five chains section', () => {
+test.describe('chains section', () => {
   test('opens with the shared head', async ({ page }) => {
     await page.goto('/');
     const section = page.locator('#chains');
-    await expect(section.locator('.eyebrow')).toHaveText('Five chains');
-    await expect(section.locator('h2')).toHaveText('One terminal, five chains.');
-    await expect(section.locator('h2 .hl')).toHaveText('five chains');
+    await expect(section.locator('.eyebrow')).toHaveText('Six chains');
+    await expect(section.locator('h2')).toHaveText('One terminal, six chains.');
+    await expect(section.locator('h2 .hl')).toHaveText('six chains');
     await expect(section.locator('header .lead')).toContainText('Sign in with Google');
   });
 
-  test('names the five chains in order, each with the app\'s own logo, who it suits and what trades there', async ({ page }) => {
+  test('names the six chains in order, each with the app\'s own logo, who it suits and what trades there', async ({ page }) => {
     await page.goto('/');
-    await expect(rows(page)).toHaveCount(5);
+    await expect(rows(page)).toHaveCount(6);
     await expect(rows(page).locator('[data-name]')).toHaveText(NAMES);
     for (const row of await rows(page).all()) {
       await expect(row.locator('img[data-logo]')).toHaveAttribute('src', /^\/chains\/[a-z]+\.(svg|png|webp)$/);
@@ -109,7 +109,7 @@ test.describe('five chains section', () => {
     const figure = page.locator('#chains figure');
     await expect(figure).toHaveCount(1);
     await expect(figure.locator('[data-hub]')).toBeVisible();
-    await expect(figure.locator('[data-lane]')).toHaveCount(5);
+    await expect(figure.locator('[data-lane]')).toHaveCount(6);
     for (const svg of await figure.locator('svg').all()) await expect(svg).toHaveAttribute('aria-hidden', 'true');
     for (const name of NAMES) await expect(figure.locator('figcaption')).toContainText(name);
   });
@@ -207,7 +207,7 @@ test.describe('five chains section', () => {
     expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   });
 
-  test('reads without JavaScript: the head, the steps, all five chains at full strength and the button', async ({ browser, baseURL }) => {
+  test('reads without JavaScript: the head, the steps, all six chains at full strength and the button', async ({ browser, baseURL }) => {
     const context = await browser.newContext({ javaScriptEnabled: false, baseURL, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto('/');

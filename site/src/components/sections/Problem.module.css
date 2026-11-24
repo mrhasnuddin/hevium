@@ -22,7 +22,7 @@
 .thumb > * { width: min(100%, 14rem); width: min(100cqw, 100cqh, 14rem); }
 .tall .thumb > * { width: min(100%, 18rem); width: min(100cqw, 100cqh, 18rem); }
 
-/* The marks on the two facts. The five chains' logos overlap like a row of faces, each ringed in the
+/* The marks on the two facts. The six chains' logos overlap like a row of faces, each ringed in the
    card's own colour so they read as separate; an empty ring stands for nought. */
 .chains { display: flex; flex: none; }
 .chains img { width: 1.75rem; height: 1.75rem; border-radius: 50%; background: var(--color-surface); box-shadow: 0 0 0 2px var(--card-bg); object-fit: cover; }

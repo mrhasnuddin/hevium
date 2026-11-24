@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { expect, test } from 'vitest';
 import * as meta from '@/content/meta';
 import * as sections from '@/content/sections';
@@ -26,7 +28,7 @@ test('title and description fit a search result', () => {
 });
 
 test('the what-is paragraph states the four facts answer engines need', () => {
-  for (const fact of ['five chains', '1.0%', '20%', 'non-custodial']) expect(meta.META.whatIs).toContain(fact);
+  for (const fact of ['six chains', '1.0%', '20%', 'non-custodial']) expect(meta.META.whatIs).toContain(fact);
 });
 
 test('every figure beside the what-is paragraph is stated in it, in reading order', () => {
@@ -123,21 +125,25 @@ test('the agent chart runs left to right through the session, and the agent buys
   }
 });
 
-test('the five chains are the ones the logos name, in that order, each with who it suits and what trades there', () => {
+test('the six chains are the ones the logos name, in that order, each with who it suits and what trades there', () => {
   expect(sections.CHAINS.map((chain) => chain.name)).toEqual(CHAIN_LOGOS.map((logo) => logo.name));
+  expect(sections.CHAINS.map((chain) => chain.name)).toEqual(['Base', 'Robinhood Chain', 'BNB Chain', 'Solana', 'Elysium', 'HyperEVM']);
   for (const chain of sections.CHAINS) {
     expect(chain.suits.trim().split(/\s+/).length, chain.name).toBeLessThanOrEqual(7);
     expect(chain.trades.length, chain.name).toBeGreaterThanOrEqual(2);
     expect(chain.trades.length, chain.name).toBeLessThanOrEqual(4);
     // every asset named has a self-hosted icon in public/
-    for (const ticker of chain.trades) expect(tickerLogo(ticker), ticker).toMatch(/^\/(tokens|chains)\/[a-z]+\.(svg|png)$/);
+    for (const ticker of chain.trades) {
+      expect(tickerLogo(ticker), ticker).toMatch(/^\/(tokens|chains)\/[a-z]+\.(svg|png)$/);
+      expect(fs.existsSync(path.join(__dirname, '../../public', tickerLogo(ticker))), ticker).toBe(true);
+    }
     expect(sections.CHAIN_ROUTE).toContain(chain.name);
   }
   expect(sections.CHAIN_STEPS).toEqual(['Sign in', 'Pick a chain', 'Trade']);
 });
 
 test('the chains section claims no bridge between chains and no speed', () => {
-  // Hevium is one terminal on five chains. It does not move funds between them, and the page gives no timing.
+  // Hevium is one terminal on six chains. It does not move funds between them, and the page gives no timing.
   expect(strings([sections.SECTIONS.chains, sections.CHAINS, sections.CHAIN_ROUTE]).join(' ')).not.toMatch(/bridg|cross-chain|any chain|millisecond|instant|\bseconds?\b/i);
 });
 
@@ -196,7 +202,7 @@ test('the faq asks six to eight questions and carries what the rest of the page 
   }
   const said = sections.FAQ.map((item) => item.a).join(' ');
   // graduation by itself; where referrals do not pay; Solana's own swap fee; agents on every chain; the risk line
-  for (const fact of ['graduates by itself', 'Curve sells', '0.50%', 'all five chains', 'can lose all of their value', 'not financial advice']) expect(said, fact).toContain(fact);
+  for (const fact of ['graduates by itself', 'Curve sells', '0.50%', 'all six chains', 'can lose all of their value', 'not financial advice']) expect(said, fact).toContain(fact);
 });
 
 test('the solution names the four sections that follow it, inside the Solution nav menu and their eyebrows', () => {

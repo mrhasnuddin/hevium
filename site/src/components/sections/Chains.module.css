@@ -1,5 +1,5 @@
-/* Five chains: under the section head, three step pills, then one piece. The Hevium hub stands on the left,
-   a lane runs from it to each of the five chains, and the chains stand in a list on the right, each with who
+/* The chains: under the section head, three step pills, then one piece. The Hevium hub stands on the left,
+   a lane runs from it to each of the six chains, and the chains stand in a list on the right, each with who
    it suits and what trades there. One chain is lit at a time: a pulse leaves the hub and runs down its lane to
    the chain, a line draws on from the chain to its tokens, and a buy tag lands on its logo. Below 1024px the
    lanes become one rail down the page with the chains as its stops. --turn is how long a chain is lit for; the
@@ -43,7 +43,7 @@
 /* The chains. On a narrow screen they are stops on one rail that drops from the hub. */
 .rows { display: grid; grid-auto-rows: 1fr; gap: var(--gap); }
 .rows::before {
-  content: ""; position: absolute; z-index: 0; left: calc(var(--hub) / 2 - var(--line-drawn) / 2); top: calc(-1 * var(--gap)); bottom: calc((100% - 4 * var(--gap)) / 10);
+  content: ""; position: absolute; z-index: 0; left: calc(var(--hub) / 2 - var(--line-drawn) / 2); top: calc(-1 * var(--gap)); bottom: calc((100% - (var(--n) - 1) * var(--gap)) / (2 * var(--n))); /* half of the last of --n rows */
   width: var(--line-drawn); background: var(--color-border-strong);
 }
 .rows::after { /* a pulse that runs down the rail */
@@ -121,17 +121,18 @@
 @keyframes draw { from { scale: 0 1; } }
 @keyframes show { from { opacity: 0.45; } }
 @keyframes arrive { from { box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 calc(3px + var(--line-drawn)) transparent; } }
-@keyframes fall { from { top: calc(-1 * var(--gap)); opacity: 1; } 85% { opacity: 1; } to { top: calc(100% - (100% - 4 * var(--gap)) / 10 - 3rem); opacity: 0; } }
+@keyframes fall { from { top: calc(-1 * var(--gap)); opacity: 1; } 85% { opacity: 1; } to { top: calc(100% - (100% - (var(--n) - 1) * var(--gap)) / (2 * var(--n)) - 3rem); opacity: 0; } }
 
 /* One screen (the query globals.css uses): the piece takes the height the head, the steps and the button
-   leave, the five chains share it evenly, and the hub, the logos and the type are sized from it. */
+   leave, the six chains share it evenly, and the hub, the logos and the type are sized from it. */
 @media (min-width: 64rem) and (min-height: 45rem) {
   .steps { flex: none; margin-bottom: var(--space-6); }
   .stage { grid-template-rows: minmax(0, 1fr); min-height: 15rem; max-height: 28rem; container-type: size; }
   /* set on the parts, not the stage: a container's own units measure the container round it */
-  .stage > * { --hub: min(9rem, 9vw, 40cqh); --logo: min(2.75rem, 13cqh); }
+  /* sized by a row, which is one of --n (the number of chains, set by the piece) */
+  .stage > * { --hub: min(9rem, 9vw, 40cqh); --logo: min(2.75rem, calc(65cqh / var(--n))); }
   .rows { min-height: 0; }
   .rows > li { padding-block: 0; }
-  .name { font-size: clamp(0.9375rem, 5.8cqh, 1.25rem); }
-  .suits { font-size: clamp(0.75rem, 4.5cqh, 0.9375rem); }
+  .name { font-size: clamp(0.9375rem, calc(29cqh / var(--n)), 1.25rem); }
+  .suits { font-size: clamp(0.75rem, calc(22.5cqh / var(--n)), 0.9375rem); }
 }

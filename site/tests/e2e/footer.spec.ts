@@ -5,7 +5,7 @@ test.describe('footer', () => {
     await page.goto('/');
     const footer = page.locator('footer[data-footer]');
     await expect(footer).toHaveCount(1);
-    await expect(footer.locator('[data-statement]')).toHaveText('One terminal. Five chains.');
+    await expect(footer.locator('[data-statement]')).toHaveText('One terminal. Six chains.');
     await expect(footer.locator('[data-footer-links] h3')).toHaveText(['Product', 'Resources']);
     await expect(footer.locator('[data-wordmark] img')).toHaveAttribute('src', /\/brand\/hevium-wordmark-white\.svg$/);
     await expect(footer.locator('a[href="#top"] img')).toHaveAttribute('src', /\/brand\/hevium-logo-dark\.svg$/);

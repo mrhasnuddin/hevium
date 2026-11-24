@@ -21,16 +21,18 @@ export const SITE = {
 
 export type AppTarget = keyof typeof SITE.appPaths;
 
-// The five chains, in the order the page names them, each with its self-hosted logo in public/chains/.
+// The six chains, in the order the page names them, each with its self-hosted logo in public/chains/.
 export const CHAIN_LOGOS = [
   { name: 'Base', file: 'base.svg' },
   { name: 'Robinhood Chain', file: 'robinhood.webp' },
   { name: 'BNB Chain', file: 'bnb.svg' },
   { name: 'Solana', file: 'solana.png' },
   { name: 'Elysium', file: 'elysium.svg' },
+  { name: 'HyperEVM', file: 'hyperevm.svg' },
 ].map((chain) => ({ name: chain.name, src: asset(`/chains/${chain.file}`) }));
 
 // Self-hosted token icon in public/tokens/ (SOL shares its chain mark in public/chains/solana.png). Most are <ticker>.svg; these are not.
-const TICKER_FILES: Record<string, string> = { 'USD+': 'usdplus.svg', USDG: 'usdg.png', DIS: 'dis.png', ETH: 'eth.png', HYPE: 'hype.png' };
+// USDT0 is Tether's own token on HyperEVM and wears Tether's mark.
+const TICKER_FILES: Record<string, string> = { 'USD+': 'usdplus.svg', USDT0: 'usdt.svg', USDG: 'usdg.png', DIS: 'dis.png', ETH: 'eth.png', HYPE: 'hype.png' };
 export const tickerLogo = (ticker: string) =>
   ticker === 'SOL' ? asset('/chains/solana.png') : asset(`/tokens/${TICKER_FILES[ticker] ?? `${ticker.toLowerCase()}.svg`}`);

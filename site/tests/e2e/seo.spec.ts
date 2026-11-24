@@ -9,7 +9,7 @@ test.describe('search and answer engines', () => {
     await page.goto('/');
     await expect(page).toHaveTitle(TITLE);
     const description = await page.locator('meta[name="description"]').getAttribute('content');
-    expect(description).toMatch(/five chains/);
+    expect(description).toMatch(/six chains/);
     expect(description!.length).toBeGreaterThanOrEqual(110);
     expect(description!.length).toBeLessThanOrEqual(160);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', HOME);
@@ -86,7 +86,7 @@ test.describe('search and answer engines', () => {
     expect(file.status()).toBe(200);
     const text = await file.text();
     expect(text).toMatch(/^# Hevium\n/);
-    expect(text).toContain('Hevium is a non-custodial trading terminal and fair-launch launchpad on five chains');
+    expect(text).toContain('Hevium is a non-custodial trading terminal and fair-launch launchpad on six chains');
     for (const link of ['https://hevium.xyz/', 'https://app.hevium.xyz/', 'https://docs.hevium.xyz/', 'https://mcp.hevium.xyz/']) expect(text).toContain(link);
     await page.goto('/');
     for (const question of await page.locator('#faq [data-question]').allTextContents()) expect(text, question).toContain(question);

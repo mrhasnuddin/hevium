@@ -30,7 +30,7 @@ test.describe('statement section', () => {
     await expect(about.locator('h2')).toHaveCount(1);
     await expect(about.locator('#what-is-hevium')).toContainText('non-custodial');
     await expect(page.locator('#problem #what-is-hevium')).toHaveCount(0);
-    await expect(about.locator('dd')).toHaveText(['5', '1.0%', '20%']);
+    await expect(about.locator('dd')).toHaveText(['6', '1.0%', '20%']);
     const [statement, problem] = await Promise.all([about.locator('#what-is-hevium').boundingBox(), page.locator('#problem').boundingBox()]);
     expect(statement!.y + statement!.height).toBeLessThanOrEqual(problem!.y);
   });
@@ -43,7 +43,7 @@ test.describe('statement section', () => {
     const mid = await readAt(page, 'partway');
     expect(mid.lit).toBeGreaterThan(0.2);
     expect(mid.lit).toBeLessThan(0.8);
-    expect(mid.figures[0]).toBe(1); // "five chains" is read by now
+    expect(mid.figures[0]).toBe(1); // "six chains" is read by now
     expect(mid.figures[2]).toBeLessThan(0.5); // "20%" is not
     const after = await readAt(page, 'centred');
     expect(after.lit).toBe(1);
@@ -67,7 +67,7 @@ test.describe('statement section', () => {
     const hidden = await page.locator('#about dd').evaluateAll((dds) => dds.map((dd) => getComputedStyle(dd).opacity));
     expect(hidden).toEqual(['0', '0', '0']);
     // out of sight, it still holds its finished figure, never a zero
-    await expect(page.locator('#about dd')).toHaveText(['5', '1.0%', '20%']);
+    await expect(page.locator('#about dd')).toHaveText(['6', '1.0%', '20%']);
   });
 
   test('counts each figure up from zero as it lights, and ends on the figure', async ({ page }) => {
@@ -76,10 +76,10 @@ test.describe('statement section', () => {
     await watchFigures(page);
     await readAt(page, 'centred');
     // each has counted and come to rest on its figure (the figure also stands there before the count starts)
-    await expect.poll(async () => (await shownFigures(page)).map((shown) => shown.at(-1)), { timeout: 5000 }).toEqual(['5', '1.0%', '20%']);
-    await expect(page.locator('#about dd')).toHaveText(['5', '1.0%', '20%']);
+    await expect.poll(async () => (await shownFigures(page)).map((shown) => shown.at(-1)), { timeout: 5000 }).toEqual(['6', '1.0%', '20%']);
+    await expect(page.locator('#about dd')).toHaveText(['6', '1.0%', '20%']);
     const [chains, fee, share] = await shownFigures(page);
-    for (const [shown, last, shape] of [[chains, '5', /^\d$/], [fee, '1.0%', /^\d\.\d%$/], [share, '20%', /^\d{1,2}%$/]] as const) {
+    for (const [shown, last, shape] of [[chains, '6', /^\d$/], [fee, '1.0%', /^\d\.\d%$/], [share, '20%', /^\d{1,2}%$/]] as const) {
       expect(shown.length, `${last} counted`).toBeGreaterThan(2);
       expect(parseFloat(shown[0])).toBeLessThan(parseFloat(last) / 2); // it started low
       for (const text of shown) expect(text).toMatch(shape);
@@ -97,7 +97,7 @@ test.describe('statement section', () => {
     await readAt(page, 'centred');
     await page.waitForTimeout(1200);
     expect(await shownFigures(page)).toEqual([[], [], []]);
-    await expect(page.locator('#about dd')).toHaveText(['5', '1.0%', '20%']);
+    await expect(page.locator('#about dd')).toHaveText(['6', '1.0%', '20%']);
   });
 
   test('with reduced motion is lit wherever it stands', async ({ page }) => {
@@ -160,7 +160,7 @@ test.describe('statement section, its eyebrow and its stars', () => {
         };
       }),
     );
-    expect(marks.length).toBeGreaterThanOrEqual(2); // What is Hevium, Five chains
+    expect(marks.length).toBeGreaterThanOrEqual(2); // What is Hevium, the chains
     for (const mark of marks) expect(mark).toEqual({ star: true, round: '0px', leans: true });
   });
 
