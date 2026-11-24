@@ -197,7 +197,7 @@ The only 3D on the page. Its code is in `site/src/hero/scene/`, with a lab page 
 | Part | What it is | States |
 |---|---|---|
 | Cube | A rounded glass block that does not move, with the star-H mark inside. It reflects the scene round it, redrawn live | Pointer on the cube: the mark brightens and breathes on a 2.6s loop. Pointer on Launch app: the top of the cube lights |
-| Logos | Ten assets extruded from their SVG outlines: BTC, ETH, SOL, Robinhood, SpaceX, Anthropic, NVIDIA, Tesla, Base, BNB. Five left of the cube, five right. Dark metal with a thin iridescent film, a polished rim and a face that lights mint | Rest: dark, rim only. Pointer on it or held: lit, 350ms up and 600ms down. Dragged: follows the pointer, collides with everything |
+| Logos | Eleven logos extruded from their SVG outlines: BTC, ETH, SOL, Robinhood, SpaceX, Anthropic, NVIDIA, Tesla, Base, BNB, and HyperEVM, which the user asked for on 2026-11-24 when the chain went live. Five left of the cube and five right; HyperEVM lies on top of the left pile. Dark metal with a thin iridescent film, a polished rim and a face that lights mint | Rest: dark, rim only. Pointer on it or held: lit, 350ms up and 600ms down. Dragged: follows the pointer, collides with everything |
 | Floor | A grid of JetBrains Mono characters, 9 by 15px, on a ramp from `.` to `@`. It mirrors what stands on it: lit parts by brightness, dark objects as an outline over a dotted fill | Rest: a slow ripple at each object's waterline. A hard landing: a ring spreads from it and clears the floor inside for a moment |
 | Fold | The hero is one viewport. The canvas runs 24vh past it and is masked out, so the floor dissolves into the next section | |
 

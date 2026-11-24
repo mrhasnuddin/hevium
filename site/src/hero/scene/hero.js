@@ -27,16 +27,17 @@ const MOBILE_MAX_PIXELS = 1.5e6;
 // cover the logos beside it, and three's glass does not show other glass through it.
 const CUBE_Z = CORRIDOR - CUBE / 2;
 // Where each logo is dropped from before the pile settles, in LOGOS order: [x, y, roll in degrees].
-// The first five land left of the cube, the last five right.
+// The first five land left of the cube and the next five right. The last, HyperEVM, comes down on the left pile.
 const DROP = [
   [-1.7, 0.9, 6], [-3.05, 1.0, -4], [-4.5, 0.9, 3], [-2.4, 3.2, 12], [-4.0, 3.4, -6],
   [1.8, 0.8, -3], [3.4, 0.8, 4], [4.3, 3.6, -14], [4.95, 0.9, 2], [2.7, 3.3, 10],
+  [-3.2, 5.4, 5],
 ];
 
 const rad = THREE.MathUtils.degToRad;
 
 /**
- * The hero scene: the Hevium mark in a fixed glass cube, with ten asset logos piled round it, on
+ * The hero scene: the Hevium mark in a fixed glass cube, with eleven logos piled round it, on
  * a floor of characters that mirrors them and pulses where a logo lands.
  * The logos are rigid bodies, so they can be dragged and thrown. Each is dark until the pointer is
  * on it, and glows for as long as it is pointed at or held. Pointing at the cube makes the mark breathe.
